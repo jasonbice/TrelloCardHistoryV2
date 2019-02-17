@@ -20,12 +20,13 @@
     </div>
   </div>
   <div class="col-sm-4 history-item-misc">
-    <strong>{{historyItem.trelloHistoryDataObj.date | date: 'shortDate'}}</strong> at
-    <strong>{{historyItem.trelloHistoryDataObj.date | date: 'shortTime'}}</strong><br>
-    <div class="history-item-misc-lane"
+    <strong>{{historyItem.trelloHistoryDataObj.date | date: 'fullDate'}}</strong><br>
+    <span>{{historyItem.trelloHistoryDataObj.date | date: 'mediumTime'}}</span><br>
+    <small>while in</small>
+    <span class="history-item-misc-lane"
       title="This change occurred while in {{historyItem.trelloHistoryDataObj.data.list.name}}">
       {{historyItem.trelloHistoryDataObj.data.list.name}}
-    </div>
+    </span>
     <span *ngIf="historyItem.isNew" class="badge badge-warning history-item-misc-new"
       title="This change occurred after your last viewing of this card's history">New</span>
   </div>

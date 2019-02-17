@@ -31,12 +31,17 @@
 }
 
 .history-item-misc {
-    font-size: 14px;
+    font-size: 11px;
     text-align: right;
+}
+
+.history-item-misc small {
+    color: #999;
 }
 
 .history-item-misc-lane {
     font-size: 11px;
+    font-weight: bold;
 }
 
 .history-item-misc-new {
