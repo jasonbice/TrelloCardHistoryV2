@@ -10,12 +10,12 @@
     </div>
     <div class="history-item-changes">
       <div class="history-item-changes-new">
-        <a *ngIf="historyItem.updateType === 0" href="">View changes</a>
-        <span *ngIf="historyItem.updateType === 0">{{historyItem.newValue}}</span>
+        <a *ngIf="historyItem.updateType === 'Description'" href="">View changes</a>
+        <span *ngIf="historyItem.updateType !== 'Description'">{{historyItem.newValue}}</span>
       </div>
       <div class="history-item-changes-old">
-        <br *ngIf="historyItem.updateType != 0">
-        <span *ngIf="historyItem.updateType != 0">{{historyItem.oldValue}}</span>
+        <br *ngIf="historyItem.updateType === 'Description'">
+        <span *ngIf="historyItem.updateType !== 'Description'">{{historyItem.oldValue}}</span>
       </div>
     </div>
   </div>
