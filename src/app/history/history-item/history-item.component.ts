@@ -8,10 +8,28 @@ import { HistoryItem } from 'src/app/shared/models/history-item.model';
 })
 export class HistoryItemComponent implements OnInit {
   @Input() historyItem: HistoryItem;
+  get updateVerb(): string {
+    switch (this.historyItem.updateType) {
+      case 'Created':
+        return null;
+      case 'Description':
+      case 'Title':
+        return 'changed';
+      case 'Points':
+      {
+        if (!this.historyItem.sanitizedOldPoints) {
+          return 'added';
+        } else {
+          return 'changed';
+        }
+      }
+    }
+  }
 
   constructor() { }
 
   ngOnInit() {
+    
   }
 
 }
