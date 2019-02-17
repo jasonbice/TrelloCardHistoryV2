@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TrelloDataService } from 'src/app/services/trello-data.service';
-import { ITrelloHistoryDataObj } from 'src/app/shared/models/trello/trello-history-data-obj.model';
-import { Observable } from 'rxjs';
+import { History } from 'src/app/shared/models/history.model';
 
 @Component({
   selector: 'app-history-container',
@@ -9,6 +8,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./history-container.component.css']
 })
 export class HistoryContainerComponent implements OnInit {
+  history: History;
   displayDescriptionChanges: boolean = true;
   displayTitleChanges: boolean = true;
   displayPointChanges: boolean = true;
@@ -16,7 +16,6 @@ export class HistoryContainerComponent implements OnInit {
   constructor(private trelloDataService: TrelloDataService) { }
 
   ngOnInit() {
-    this.trelloDataService.getTrelloHistoryDataObjects('ZBlI1CfQ').subscribe(r => console.log("r", r));
+    this.trelloDataService.getTrelloHistoryDataObjects('ZBlI1CfQ').subscribe(h => this.history = h);
   }
-
 }
