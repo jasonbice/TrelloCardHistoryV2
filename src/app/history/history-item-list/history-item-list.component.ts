@@ -8,11 +8,32 @@ import { HistoryItem } from 'src/app/shared/models/history-item.model';
 })
 export class HistoryItemListComponent implements OnInit {
   @Input() historyItems: HistoryItem[];
-  
+
   constructor() { }
 
   ngOnInit() {
-    console.log("History Items", this.historyItems);
+    this.sortHistoryItems(SortBy.Date, false);
   }
 
+  sortHistoryItems(sortBy: SortBy, ascending: boolean): void {
+    switch (sortBy) {
+      case SortBy.Date:
+      {
+        this.historyItems.sort((a, b) => {
+          if (a.trelloHistoryDataObj.date > b.trelloHistoryDataObj.date) {
+            return ascending ? 1 : -1;
+          } else {
+            return ascending? -1 : 1;
+          }
+
+          return 0;
+        });
+      }
+    }
+  }
+}
+
+export enum SortBy
+{
+  Date
 }
