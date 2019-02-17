@@ -8,19 +8,31 @@ import { HistoryItem } from 'src/app/shared/models/history-item.model';
 })
 export class HistoryItemComponent implements OnInit {
   @Input() historyItem: HistoryItem;
+
+  readonly VERB_ADDED: string = 'added';
+  readonly VERB_CHANGED: string = 'changed';
+  readonly VERB_CREATED: string = null;
+
   get updateVerb(): string {
     switch (this.historyItem.updateType) {
       case 'Created':
-        return null;
+        return this.VERB_CREATED;
       case 'Description':
+      {
+        if (!this.historyItem.sanitizedOldDescription) {
+          return this.VERB_ADDED;
+        } else {
+          return this.VERB_CHANGED;
+        }
+      }
       case 'Title':
-        return 'changed';
+        return this.VERB_CHANGED;
       case 'Points':
       {
         if (!this.historyItem.sanitizedOldPoints) {
-          return 'added';
+          return this.VERB_ADDED;
         } else {
-          return 'changed';
+          return this.VERB_CHANGED;
         }
       }
     }

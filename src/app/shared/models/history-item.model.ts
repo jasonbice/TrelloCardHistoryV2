@@ -4,6 +4,8 @@ import { ITrelloHistoryData } from './trello/trello-history-data.model';
 export class HistoryItem {
     isNew: boolean;
     updateType: string;
+    sanitizedOldDescription: string;
+    sanitizedNewDescription: string;
     sanitizedOldTitle: string;
     sanitizedNewTitle: string;
     sanitizedOldPoints?: number;
@@ -30,12 +32,18 @@ export class HistoryItem {
     }
 
     constructor(public trelloHistoryDataObj: ITrelloHistoryDataObj) {
+        this.initialize();
+    }
+
+    initialize(): void {
         this.sanitizedNewPoints = this.getSanitizedPoints(this.trelloHistoryDataObj.data.card.name);
         this.sanitizedNewTitle = this.getSanitizedTitle(this.trelloHistoryDataObj.data.card.name);
+        this.sanitizedNewDescription = this.getSanitizedDescription(this.trelloHistoryDataObj.data.card.desc);
 
         if (this.trelloHistoryDataObj.data.old) {
             this.sanitizedOldPoints = this.getSanitizedPoints(this.trelloHistoryDataObj.data.old.name);
             this.sanitizedOldTitle = this.getSanitizedTitle(this.trelloHistoryDataObj.data.old.name);
+            this.sanitizedOldDescription = this.getSanitizedDescription(this.trelloHistoryDataObj.data.old.desc);
         }
 
         this.updateType = this.getUpdateType();
@@ -63,6 +71,11 @@ export class HistoryItem {
         let points: number = rawTitle.match(/\d+/g).map(Number)[0];
 
         return points;
+    }
+
+    getSanitizedDescription(description: string): string {
+        // TODO: Preserve formatting
+        return description;
     }
 
     getUpdateType(): string {
