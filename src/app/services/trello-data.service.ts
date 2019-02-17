@@ -20,7 +20,7 @@ export class TrelloDataService {
     let cardDataUri = this.getRequestUri(shortLink);
 
     return this.http.get<ITrelloHistoryDataObj[]>(cardDataUri).pipe(
-      map<ITrelloHistoryDataObj[], History>(trelloHistoryDataObjects => new History(shortLink, trelloHistoryDataObjects))
+      map<ITrelloHistoryDataObj[], History>(trelloHistoryDataObjects => new History(shortLink, trelloHistoryDataObjects.filter(t => !t.data.old || !t.data.old.idList)))
     );
   }
 }
