@@ -1,0 +1,49 @@
+.history-item-avatar img {
+    height: 75px;
+    width: 75px;
+}
+
+.history-items {
+    border-top: solid 1px lightgray;
+    margin-top: 20px;
+}
+
+.history-item-container {
+    margin: 20px 0;
+}
+
+.history-item-title {
+    font-size: 14px;
+}
+
+.history-item {
+    border-left: solid 1px lightgray;
+    font-size: 12px;
+}
+
+.history-item-changes {
+    margin: 5px 0;
+}
+
+.history-item-changes-new {
+    font-weight: bold;
+    color: green;
+}
+
+.history-item-changes-old {
+    text-decoration: line-through;
+    color: gray;
+}
+
+.history-item-misc {
+    font-size: 14px;
+    text-align: right;
+}
+
+.history-item-misc-lane {
+    font-size: 11px;
+}
+
+.history-item-misc-new {
+    font-size: 10px;
+}

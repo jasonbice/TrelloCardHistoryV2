@@ -1,4 +1,3 @@
-import { ITrelloMemberCreator } from './trello-member-creator.model';
 import { ITrelloCard } from './trello-card.model';
 import { ITrelloCardOldValues } from './trello-card-old-values.model';
 import { ITrelloList } from './trello-list.model';
@@ -9,9 +8,4 @@ export interface ITrelloHistoryData {
     card: ITrelloCard;
     list: ITrelloList
     old: ITrelloCardOldValues;
-    date: string;
-    id: string;
-    idMemberCreator: string;
-    memberCreator: ITrelloMemberCreator;
-    type: string;
 }

@@ -25,7 +25,9 @@ export class HistoryItem {
         if (this.trelloHistoryDataObj.data.old) {
             this.sanitizedOldPoints = this.getSanitizedPoints(this.trelloHistoryDataObj.data.old.name);
             this.sanitizedOldTitle = this.getSanitizedTitle(this.trelloHistoryDataObj.data.old.name);
-        }        
+        }
+
+        this.updateType = this.getUpdateType();
     }
 
     getSanitizedTitle(rawTitle: string): string {
@@ -40,15 +42,23 @@ export class HistoryItem {
         if (rawTitle == null) {
             return null;
         }
+
+        let rawPoints: any = /^\(\d+\)/g.exec(rawTitle);
         
-        return +(/^\(\d+\)/g.exec(rawTitle));
+        if (rawPoints == null) {
+            return null;
+        }
+
+        let points: number = rawTitle.match(/\d+/g).map(Number)[0];
+
+        return points;
     }
 
-    getUpdateType(data: ITrelloHistoryData): UpdateType {
-        if (data.type === 'createCard') {
+    getUpdateType(): UpdateType {
+        if (this.trelloHistoryDataObj.type === 'createCard') {
             return UpdateType.Created;
-        } else if (data.type === 'updateCard') {
-            if (data.card.desc != data.old.desc) {
+        } else if (this.trelloHistoryDataObj.type === 'updateCard') {
+            if (this.trelloHistoryDataObj.data.card.desc != this.trelloHistoryDataObj.data.old.desc) {
                 return UpdateType.Description;
             } else if (this.sanitizedNewPoints != this.sanitizedOldPoints) {
                 return UpdateType.Points;
@@ -56,7 +66,9 @@ export class HistoryItem {
                 return UpdateType.Name;
             }
         } else {
-            throw new Error(`Unexpected data.type: ${data.type}`);
+            console.error(`Unexpected data.type: ${this.trelloHistoryDataObj.type}`, this);
+            
+            throw new Error(`Unexpected data.type: ${this.trelloHistoryDataObj.type}`);
         }
     }
 }

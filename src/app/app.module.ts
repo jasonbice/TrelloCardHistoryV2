@@ -5,13 +5,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HistoryContainerComponent } from './history/history-container/history-container.component';
 import { RouterModule } from '@angular/router';
-import { HistoryItemComponent } from './history/history-item/history-item.component';
+import { HistoryItemListComponent } from './history/history-item-list/history-item-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HistoryContainerComponent,
-    HistoryItemComponent
+    HistoryItemListComponent
   ],
   imports: [
     BrowserModule,
