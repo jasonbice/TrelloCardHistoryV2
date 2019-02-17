@@ -16,6 +16,6 @@ export class HistoryContainerComponent implements OnInit {
   constructor(private trelloDataService: TrelloDataService) { }
 
   ngOnInit() {
-    this.trelloDataService.getTrelloHistoryDataObjects('ZBlI1CfQ').subscribe(h => this.history = h);
+    this.trelloDataService.getHistory('ZBlI1CfQ').subscribe(h => this.history = h);
   }
 }

@@ -16,7 +16,7 @@ export class TrelloDataService {
     return `https://trello.com/1/cards/${shortLink}/actions?filter=createCard,convertToCardFromCheckItem,updateCard&limit=1000`
   }
 
-  getTrelloHistoryDataObjects(shortLink: string): Observable<History> {
+  getHistory(shortLink: string): Observable<History> {
     let cardDataUri = this.getRequestUri(shortLink);
 
     return this.http.get<ITrelloHistoryDataObj[]>(cardDataUri).pipe(
