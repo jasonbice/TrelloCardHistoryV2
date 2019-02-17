@@ -1,0 +1,32 @@
+<div class="row history-item-container">
+  <div class="col-sm-2 history-item-avatar">
+    <img src="{{historyItem.trelloHistoryDataObj.memberCreator.avatarUrl}}/170.png"
+      [title]="historyItem.trelloHistoryDataObj.memberCreator.fullName">
+  </div>
+  <div class="col-sm-6 history-item">
+    <div class="history-item-title">
+      <strong>{{historyItem.updateType}}</strong> changed by
+      <strong>{{historyItem.trelloHistoryDataObj.memberCreator.fullName}}</strong>
+    </div>
+    <div class="history-item-changes">
+      <div class="history-item-changes-new">
+        <a *ngIf="historyItem.updateType === 'Description'" href="">View changes</a>
+        <span *ngIf="historyItem.updateType !== 'Description'">{{historyItem.newValue}}</span>
+      </div>
+      <div class="history-item-changes-old">
+        <br *ngIf="historyItem.updateType === 'Description'">
+        <span *ngIf="historyItem.updateType !== 'Description'">{{historyItem.oldValue}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4 history-item-misc">
+    <strong>{{historyItem.trelloHistoryDataObj.date | date: 'shortDate'}}</strong> at
+    <strong>{{historyItem.trelloHistoryDataObj.date | date: 'shortTime'}}</strong><br>
+    <div class="history-item-misc-lane"
+      title="This change occurred while in {{historyItem.trelloHistoryDataObj.data.list.name}}">
+      {{historyItem.trelloHistoryDataObj.data.list.name}}
+    </div>
+    <span *ngIf="historyItem.isNew" class="badge badge-warning history-item-misc-new"
+      title="This change occurred after your last viewing of this card's history">New</span>
+  </div>
+</div>
