@@ -1,22 +1,24 @@
-<div class="history-title-popup">
-  <img src="/assets/images/icon48.png" />
-  <h6 *ngIf="history">
-    {{history?.title}}
-  </h6>
-</div>
-<div class="history-container">
-  <div class="input-group input-group-sm">
-    <input type="text" class="form-control" placeholder="Filter">
-    <div class="input-group-append" id="button-addon4">
-      <button class="btn btn-outline-secondary" type="button" [class.active]="displayDescriptionChanges"
-        (click)="displayDescriptionChanges = !displayDescriptionChanges">Description</button>
-      <button class="btn btn-outline-secondary" type="button" [class.active]="displayTitleChanges"
-        (click)="displayTitleChanges = !displayTitleChanges">Title</button>
-      <button class="btn btn-outline-secondary" type="button" [class.active]="displayPointChanges"
-        (click)="displayPointChanges = !displayPointChanges">Point</button>
-    </div>
+<div *ngIf="history">
+  <div class="history-title-popup">
+    <img src="/assets/images/icon48.png" />
+    <h6>
+      {{history.title}}
+    </h6>
   </div>
-  <div class="history-items" *ngIf="history">
-    <history-item-list [historyItems]="history.historyItems"></history-item-list>
+  <div class="history-container">
+    <div class="input-group input-group-sm">
+      <input type="text" class="form-control" placeholder="Filter">
+      <div class="input-group-append" id="button-addon4">
+        <button class="btn btn-outline-secondary" type="button" [class.active]="displayDescriptionChanges"
+          (click)="displayDescriptionChanges = !displayDescriptionChanges">Description</button>
+        <button class="btn btn-outline-secondary" type="button" [class.active]="displayTitleChanges"
+          (click)="displayTitleChanges = !displayTitleChanges">Title</button>
+        <button class="btn btn-outline-secondary" type="button" [class.active]="displayPointChanges"
+          (click)="displayPointChanges = !displayPointChanges">Point</button>
+      </div>
+    </div>
+    <div class="history-items">
+      <history-item-list [historyItems]="history.historyItems"></history-item-list>
+    </div>
   </div>
 </div>

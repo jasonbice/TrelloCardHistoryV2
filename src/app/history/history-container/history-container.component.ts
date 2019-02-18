@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { TrelloDataService } from 'src/app/services/trello-data.service';
 import { History } from 'src/app/shared/models/history/history.model';
-import { HistoryItem } from 'src/app/shared/models/history/history-item.model';
+import { LegacyCoreService } from 'src/app/services/legacy-core.service';
 
 @Component({
   selector: 'app-history-container',
@@ -14,9 +14,14 @@ export class HistoryContainerComponent implements OnInit {
   displayTitleChanges: boolean = true;
   displayPointChanges: boolean = true;
 
-  constructor(private trelloDataService: TrelloDataService) { }
+  constructor(private coreService: LegacyCoreService, private trelloDataService: TrelloDataService, private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.trelloDataService.getHistory('ZBlI1CfQ').subscribe(history => this.history = history);
+    this.coreService.getTrelloCardIdFromCurrentUrl((shortLink: string) => {
+      this.trelloDataService.getHistory(shortLink).subscribe(history => {
+        this.history = history;
+        this.changeDetector.detectChanges();
+      });
+    });
   }
 }
