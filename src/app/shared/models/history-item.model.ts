@@ -19,7 +19,7 @@ export class HistoryItem {
             default: throw new Error(`${this.updateType} not implemented`);
         }
     }
-    
+
     get newValue(): string {
         switch (this.updateType) {
             case 'Created': return null;
@@ -61,15 +61,13 @@ export class HistoryItem {
             return null;
         }
 
-        let rawPoints: any = /^\(\d+\)/g.exec(rawTitle);
+        let pointsRegEx: RegExpExecArray = /^\((\d+)\)/g.exec(rawTitle);
 
-        if (rawPoints == null) {
-            return null;
+        if (pointsRegEx && pointsRegEx[1]) {
+            return +pointsRegEx[1];
         }
 
-        let points: number = rawTitle.match(/\d+/g).map(Number)[0];
-
-        return points;
+        return null;
     }
 
     getSanitizedDescription(description: string): string {
