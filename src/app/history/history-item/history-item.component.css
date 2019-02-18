@@ -7,7 +7,8 @@
 .history-item-avatar span  {
     text-align: center;
     border-radius: 2em;
-    background-color: lightgray;
+    background-color: #ebebeb;
+    border: solid 1px lightgray;
     display: block;
     font-size: 34px;
     line-height: 75px;
@@ -16,6 +17,7 @@
     height: 75px;
     width: 75px;
     z-index: 1;
+    color: gray;
 }
 
 .history-item-container {
