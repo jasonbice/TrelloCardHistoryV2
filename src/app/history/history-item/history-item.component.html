@@ -13,10 +13,10 @@
     </div>
     <div class="history-item-changes">
       <div class="history-item-changes-new">
-        {{ historyItem.newValue?.length > MAX_VALUE_DISPLAY_LENGTH ? historyItem.newValue.substring(0, MAX_VALUE_DISPLAY_LENGTH) + '...' : historyItem.newValue }}
+        {{ historyItem.newValue | stringTruncate:MAX_VALUE_DISPLAY_LENGTH:'...' }}
       </div>
       <div class="history-item-changes-old">
-        {{ historyItem.oldValue?.length > MAX_VALUE_DISPLAY_LENGTH ? historyItem.oldValue.substring(0, MAX_VALUE_DISPLAY_LENGTH) + '...' : historyItem.oldValue }}
+        {{ historyItem.oldValue | stringTruncate:MAX_VALUE_DISPLAY_LENGTH:'...' }}
       </div>
     </div>
   </div>

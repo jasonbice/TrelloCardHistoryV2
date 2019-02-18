@@ -7,13 +7,15 @@ import { HistoryContainerComponent } from './history/history-container/history-c
 import { RouterModule } from '@angular/router';
 import { HistoryItemListComponent } from './history/history-item-list/history-item-list.component';
 import { HistoryItemComponent } from './history/history-item/history-item.component';
+import { StringTruncatePipe } from './shared/pipes/string-truncate.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     HistoryContainerComponent,
     HistoryItemListComponent,
-    HistoryItemComponent
+    HistoryItemComponent,
+    StringTruncatePipe
   ],
   imports: [
     BrowserModule,
