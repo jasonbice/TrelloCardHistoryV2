@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { HistoryItem } from 'src/app/shared/models/history-item.model';
+import { HistoryItem } from 'src/app/shared/models/history/history-item.model';
 
 @Component({
   selector: 'history-item',

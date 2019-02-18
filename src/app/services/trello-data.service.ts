@@ -3,7 +3,7 @@ import { ITrelloHistoryDataObj } from '../shared/models/trello/trello-history-da
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import { map } from 'rxjs/operators';
-import { History } from '../shared/models/history.model';
+import { History } from '../shared/models/history/history.model';
 
 @Injectable({
   providedIn: 'root'

@@ -1,5 +1,5 @@
 import { HistoryItem } from './history-item.model';
-import { ITrelloHistoryDataObj } from './trello/trello-history-data-obj.model';
+import { ITrelloHistoryDataObj } from '../trello/trello-history-data-obj.model';
 
 export class History {
     id: string;
