@@ -5,8 +5,8 @@ export class History {
     id: string;
     lastViewed: Date;
     historyItems: HistoryItem[] = new Array<HistoryItem>();
-    badgeColor: string;
-    badgeText: string;
+    badgeColor: string = '#000000'; //TODO
+    badgeText: string = '?'; //TODO
     totalUpdateCount: number;
     newUpdates: number;
     title: string;

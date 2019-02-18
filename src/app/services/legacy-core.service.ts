@@ -142,6 +142,7 @@ export class LegacyCoreService {
   * @param {TrelloDataService} trelloService - Service providing interactions with the Trello API
   */
   refreshIcon(trelloDataService: TrelloDataService): void {
+    this.console.log("Refreshing icon...");
     let that = this;
 
     // TODO: Use core.getActiveTab(callback)
@@ -167,14 +168,14 @@ export class LegacyCoreService {
   };
 
   applyCardResultToIcon(tabId: number, history?: History): void {
-    // if (history != null) {
-    //   chrome.browserAction.setBadgeText({ text: history.badgeText, tabId: tabId });
-    //   chrome.browserAction.setBadgeBackgroundColor({ color: history.badgeColor, tabId: tabId });
-    //   chrome.browserAction.setTitle({ title: history.title });
-    // } else {
-    //   chrome.browserAction.setBadgeBackgroundColor({ color: BADGE_COLOR_ERROR, tabId: tabId });
-    //   chrome.browserAction.setBadgeText({ text: BADGE_TEXT_ERROR, tabId: tabId });
-    // }
+    if (history != null) {
+      chrome.browserAction.setBadgeText({ text: history.badgeText, tabId: tabId });
+      chrome.browserAction.setBadgeBackgroundColor({ color: history.badgeColor, tabId: tabId });
+      chrome.browserAction.setTitle({ title: history.title });
+    } else {
+      chrome.browserAction.setBadgeBackgroundColor({ color: BADGE_COLOR_ERROR, tabId: tabId });
+      chrome.browserAction.setBadgeText({ text: BADGE_TEXT_ERROR, tabId: tabId });
+    }
   };
 
   /**

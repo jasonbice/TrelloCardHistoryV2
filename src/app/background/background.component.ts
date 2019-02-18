@@ -10,16 +10,16 @@ export class BackgroundComponent implements OnInit {
   constructor(private coreService: LegacyCoreService, private trelloDataService: TrelloDataService) { }
 
   ngOnInit() {
-    console.log("Background running");
+    console.log("Tello Card History background component intialized and running");
 
-    //this.coreService.resetExtension(null);
-    //this.coreService.cleanUpStorage();
+    this.coreService.resetExtension(null);
+    this.coreService.cleanUpStorage();
 
-    // this.coreService.addTabsUpdatedListener((tabId, changeInfo, tab) => {
-    //   if (changeInfo.status === 'complete') {
-    //     this.coreService.refreshIcon(this.trelloDataService);
-    //   }
-    // });
+    this.coreService.addTabsUpdatedListener((tabId, changeInfo, tab) => {
+      if (changeInfo.status === 'complete') {
+        this.coreService.refreshIcon(this.trelloDataService);
+      }
+    });
   }
 
 }
