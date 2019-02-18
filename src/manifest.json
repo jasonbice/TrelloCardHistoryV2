@@ -7,7 +7,7 @@
     "version_name": "1.0.0",
     "browser_action": {
       "default_icon": "/assets/images/icon16.png",
-      "default_popup": "/index.html"
+      "default_popup": "index.html#/history"
     },
     "permissions": [
       "activeTab",
@@ -17,7 +17,7 @@
       "https://www.trello.com/"
     ],
     "background": {
-      "page": "/index.html#/background"
+      "page": "index.html"
     },
     "icons": {
       "16": "/assets/images/icon16.png",

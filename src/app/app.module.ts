@@ -8,6 +8,7 @@ import { RouterModule } from '@angular/router';
 import { HistoryItemListComponent } from './history/history-item-list/history-item-list.component';
 import { HistoryItemComponent } from './history/history-item/history-item.component';
 import { StringTruncatePipe } from './shared/pipes/string-truncate.pipe';
+import { BackgroundComponent } from './background/background.component';
 
 @NgModule({
   declarations: [
@@ -15,15 +16,17 @@ import { StringTruncatePipe } from './shared/pipes/string-truncate.pipe';
     HistoryContainerComponent,
     HistoryItemListComponent,
     HistoryItemComponent,
-    StringTruncatePipe
+    StringTruncatePipe,
+    BackgroundComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     RouterModule.forRoot([
-      { path: '**', component: HistoryContainerComponent }
-    ])
+      { path: 'history', component: HistoryContainerComponent },
+      { path: '', component: BackgroundComponent }
+    ], { useHash: true })
   ],
   providers: [],
   bootstrap: [AppComponent]
