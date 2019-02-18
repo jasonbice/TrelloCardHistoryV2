@@ -1,5 +1,4 @@
 import { ITrelloHistoryDataObj } from './trello/trello-history-data-obj.model';
-import { ITrelloHistoryData } from './trello/trello-history-data.model';
 
 export class HistoryItem {
     isNew: boolean;
