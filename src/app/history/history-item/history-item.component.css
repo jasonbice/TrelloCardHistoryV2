@@ -39,13 +39,14 @@
 }
 
 .history-item-changes-new {
-    font-weight: bold;
-    color: green;
+    border-top: solid 1px #ebebeb;
+    padding-top: 5px;
+    color: black;
 }
 
 .history-item-changes-old {
     text-decoration: line-through;
-    color: gray;
+    color: #999;
 }
 
 .history-item-misc {
