@@ -13,12 +13,10 @@
     </div>
     <div class="history-item-changes">
       <div class="history-item-changes-new">
-        <a *ngIf="historyItem.updateType === 'Description'" href="">View changes</a>
-        <span *ngIf="historyItem.updateType !== 'Description'">{{historyItem.newValue}}</span>
+        {{ historyItem.newValue?.length > MAX_VALUE_DISPLAY_LENGTH ? historyItem.newValue.substring(0, MAX_VALUE_DISPLAY_LENGTH) + '...' : historyItem.newValue }}
       </div>
       <div class="history-item-changes-old">
-        <br *ngIf="historyItem.updateType === 'Description'">
-        <span *ngIf="historyItem.updateType !== 'Description'">{{historyItem.oldValue}}</span>
+        {{ historyItem.oldValue?.length > MAX_VALUE_DISPLAY_LENGTH ? historyItem.oldValue.substring(0, MAX_VALUE_DISPLAY_LENGTH) + '...' : historyItem.oldValue }}
       </div>
     </div>
   </div>

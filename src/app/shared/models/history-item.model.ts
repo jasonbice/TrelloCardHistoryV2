@@ -11,21 +11,21 @@ export class HistoryItem {
     sanitizedOldPoints?: number;
     sanitizedNewPoints?: number;
 
-    get oldValue(): any {
+    get oldValue(): string {
         switch (this.updateType) {
             case 'Created': return null;
-            case 'Description': return null;
-            case 'Points': return this.sanitizedOldPoints;
+            case 'Description': return this.sanitizedOldDescription;
+            case 'Points': return String(this.sanitizedOldPoints ? this.sanitizedOldPoints + ' points' : 'None');
             case 'Title': return this.sanitizedOldTitle;
             default: throw new Error(`${this.updateType} not implemented`);
         }
     }
     
-    get newValue(): any {
+    get newValue(): string {
         switch (this.updateType) {
             case 'Created': return null;
-            case 'Description': return null;
-            case 'Points': return this.sanitizedNewPoints;
+            case 'Description': return this.sanitizedNewDescription;
+            case 'Points': return String(this.sanitizedNewPoints ? this.sanitizedNewPoints + ' points' : 'None');
             case 'Title': return this.sanitizedNewTitle;
             default: throw new Error(`${this.updateType} not implemented`);
         }

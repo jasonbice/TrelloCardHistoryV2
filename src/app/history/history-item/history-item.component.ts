@@ -7,11 +7,12 @@ import { HistoryItem } from 'src/app/shared/models/history-item.model';
   styleUrls: ['./history-item.component.css']
 })
 export class HistoryItemComponent implements OnInit {
-  @Input() historyItem: HistoryItem;
-
+  readonly MAX_VALUE_DISPLAY_LENGTH: number = 50;
   readonly VERB_ADDED: string = 'added';
   readonly VERB_CHANGED: string = 'changed';
   readonly VERB_CREATED: string = null;
+
+  @Input() historyItem: HistoryItem;
 
   get updateVerb(): string {
     switch (this.historyItem.updateType) {
