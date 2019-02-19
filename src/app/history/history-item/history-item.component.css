@@ -1,14 +1,31 @@
+.history-item {
+    border: solid 1px lightgray;
+    border-radius: 0.25em;
+    display: table;
+    width: 100%;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.history-item-avatar {
+    text-align: center;
+    display: table-cell;
+    width: 60px;
+    padding: 10px;
+}
+
 .history-item-avatar img {
     height: 60px;
     width: 60px;
     border-radius: 0.25em;
 }
 
-.row {
-    padding: 0;
+.history-item-avatar div {
+    padding-right: 10px;
+    border-right: solid 1px #ebebeb;
 }
 
-.history-item-avatar span  {
+.history-item-avatar span {
     text-align: center;
     border-radius: 2em;
     background-color: #ebebeb;
@@ -24,39 +41,41 @@
     color: gray;
 }
 
-.history-item-container {
-    margin: 10px 0;
-    padding: 10px 0;
-    border: solid 1px lightgray;
-    border-radius: 0.25em;
-}
-
-.history-item-title {
-    font-size: 12px;
-}
-
-.history-item {
-    border-left: solid 1px lightgray;
-    font-size: 11px;
+.history-item-details {
+    display: table-cell;
+    vertical-align: top;
 }
 
 .history-item-changes {
-    margin: 5px 0;
+    width: 60%;
+    float: left;
+    margin-top: 10px;
 }
 
 .history-item-changes-new {
-    border-top: solid 1px #ebebeb;
-    padding-top: 5px;
     color: black;
+    font-size: 11px;
 }
 
 .history-item-changes-old {
     text-decoration: line-through;
     color: #999;
+    font-size: 11px;
+}
+
+.history-item-changes-title {
+    border-bottom: solid 1px #ebebeb;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 .history-item-misc {
-    font-size: 11px;
+    float: left;
+    width: 40%;
+}
+
+.history-item-misc div {
+    padding: 10px;
     text-align: right;
 }
 
@@ -67,8 +86,4 @@
 .history-item-misc-lane {
     font-size: 11px;
     font-weight: bold;
-}
-
-.history-item-misc-new {
-    font-size: 10px;
 }

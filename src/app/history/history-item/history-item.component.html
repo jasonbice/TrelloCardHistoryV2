@@ -1,17 +1,19 @@
-<div class="row history-item-container">
-  <div class="col-sm-2 history-item-avatar">
-    <img *ngIf="historyItem.trelloHistoryDataObj.memberCreator.avatarUrl" src="{{historyItem.trelloHistoryDataObj.memberCreator.avatarUrl}}/170.png"
-      [title]="historyItem.trelloHistoryDataObj.memberCreator.fullName">
-      <span *ngIf="!historyItem.trelloHistoryDataObj.memberCreator.avatarUrl">
-        {{historyItem.trelloHistoryDataObj.memberCreator.initials}}
-      </span>
-  </div>
-  <div class="col-sm-6 history-item">
-    <div class="history-item-title">
-      <strong>{{historyItem.updateType}}</strong> {{updateVerb}} by
-      <strong>{{historyItem.trelloHistoryDataObj.memberCreator.fullName}}</strong>
+<div class="history-item">
+  <div class="history-item-avatar">
+    <div>
+      <img *ngIf="historyItem.trelloHistoryDataObj.memberCreator.avatarUrl"
+        src="{{historyItem.trelloHistoryDataObj.memberCreator.avatarUrl}}/170.png"
+        [title]="historyItem.trelloHistoryDataObj.memberCreator.fullName">
+      <span
+        *ngIf="!historyItem.trelloHistoryDataObj.memberCreator.avatarUrl">{{historyItem.trelloHistoryDataObj.memberCreator.initials}}</span>
     </div>
+  </div>
+  <div class="history-item-details">
     <div class="history-item-changes">
+      <div class="history-item-changes-title">
+        <strong>{{historyItem.updateType}}</strong> {{updateVerb}} by
+        <strong>{{historyItem.trelloHistoryDataObj.memberCreator.fullName}}</strong>
+      </div>
       <div class="history-item-changes-new">
         {{ historyItem.newValue | stringTruncate:MAX_VALUE_DISPLAY_LENGTH:'...' }}
       </div>
@@ -19,16 +21,19 @@
         {{ historyItem.oldValue | stringTruncate:MAX_VALUE_DISPLAY_LENGTH:'...' }}
       </div>
     </div>
-  </div>
-  <div class="col-sm-4 history-item-misc">
-    <strong>{{historyItem.trelloHistoryDataObj.date | date: 'fullDate'}}</strong><br>
-    <span>{{historyItem.trelloHistoryDataObj.date | date: 'mediumTime'}}</span><br>
-    <small>while in</small>
-    <span class="history-item-misc-lane"
-      title="This change occurred while in {{historyItem.trelloHistoryDataObj.data.list.name}}">
-      {{historyItem.trelloHistoryDataObj.data.list.name}}
-    </span>
-    <span *ngIf="historyItem.isNew" class="badge badge-warning history-item-misc-new"
-      title="This change occurred after your last viewing of this card's history">New</span>
+    <div class="history-item-misc">
+      <div>
+        <strong>{{historyItem.trelloHistoryDataObj.date | date: 'mediumDate'}}</strong>
+        <small>&nbsp;at&nbsp;</small>
+        <strong>{{historyItem.trelloHistoryDataObj.date | date: 'mediumTime'}}</strong><br>
+        <small>while in</small><br>
+        <span class="history-item-misc-lane"
+          title="This change occurred while in {{historyItem.trelloHistoryDataObj.data.list.name}}">
+          {{historyItem.trelloHistoryDataObj.data.list.name}}
+        </span>
+        <span *ngIf="historyItem.isNew" class="badge badge-warning"
+          title="This change occurred after your last viewing of this card's history">New</span>
+      </div>
+    </div>
   </div>
 </div>

@@ -7,7 +7,7 @@ import { HistoryItem } from 'src/app/shared/models/history/history-item.model';
   styleUrls: ['./history-item.component.css']
 })
 export class HistoryItemComponent implements OnInit {
-  readonly MAX_VALUE_DISPLAY_LENGTH: number = 50;
+  readonly MAX_VALUE_DISPLAY_LENGTH: number = 60;
   readonly VERB_ADDED: string = 'added';
   readonly VERB_CHANGED: string = 'changed';
   readonly VERB_CREATED: string = null;
