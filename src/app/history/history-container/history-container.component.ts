@@ -20,7 +20,10 @@ export class HistoryContainerComponent implements OnInit {
     this.coreService.getTrelloCardIdFromCurrentUrl((shortLink: string) => {
       this.trelloDataService.getHistory(shortLink).subscribe(history => {
         this.history = history;
-        this.changeDetector.detectChanges();
+        
+        this.trelloDataService.applyLastViewedToHistory(this.history, true, () => {
+          this.changeDetector.detectChanges();
+        });
       });
     });
   }

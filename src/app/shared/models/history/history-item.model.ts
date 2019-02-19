@@ -1,7 +1,7 @@
 import { ITrelloHistoryDataObj } from '../trello/trello-history-data-obj.model';
+import { LegacyCoreService } from 'src/app/services/legacy-core.service';
 
 export class HistoryItem {
-    isNew: boolean;
     updateType: string;
     sanitizedOldDescription: string;
     sanitizedNewDescription: string;
@@ -87,8 +87,6 @@ export class HistoryItem {
                 return "Title";
             }
         } else {
-            console.error(`Unexpected data.type: ${this.trelloHistoryDataObj.type}`, this);
-
             throw new Error(`Unexpected data.type: ${this.trelloHistoryDataObj.type}`);
         }
     }

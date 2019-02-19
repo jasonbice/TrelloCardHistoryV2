@@ -159,7 +159,9 @@ export class LegacyCoreService {
         chrome.browserAction.enable(tabId);
 
         trelloDataService.getHistory(trelloCardId).subscribe(history => {
-          that.applyCardResultToIcon(tabId, history);
+          trelloDataService.applyLastViewedToHistory(history, false, () => {
+            that.applyCardResultToIcon(tabId, history);
+          });          
         }, err => this.applyCardResultToIcon(tabId, null));
       } else {
         this.resetExtension(tabId);

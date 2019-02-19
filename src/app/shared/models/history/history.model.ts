@@ -10,6 +10,14 @@ export class History {
     totalUpdateCount: number;
     newUpdates: number;
     title: string;
+    
+    get totalUpdatecount(): number {
+        return this.historyItems.filter(h => h.updateType !== 'createCard').length;
+    }
+
+    get newHistoryItems(): number {
+        return this.historyItems.filter(h => h.trelloHistoryDataObj.date > this.lastViewed).length;
+    }
 
     constructor(shortLink: string, trelloHistoryItemObjects: ITrelloHistoryDataObj[]) {
         this.id = shortLink;
