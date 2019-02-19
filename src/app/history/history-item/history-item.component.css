@@ -47,7 +47,7 @@
 }
 
 .history-item-changes {
-    width: 60%;
+    width: 65%;
     float: left;
     margin-top: 10px;
 }
@@ -71,7 +71,7 @@
 
 .history-item-misc {
     float: left;
-    width: 40%;
+    width: 35%;
 }
 
 .history-item-misc div {
@@ -84,6 +84,6 @@
 }
 
 .history-item-misc-lane {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: bold;
 }
