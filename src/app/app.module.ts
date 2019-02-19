@@ -25,6 +25,7 @@ import { BackgroundComponent } from './background/background.component';
     HttpClientModule,
     RouterModule.forRoot([
       { path: 'history', component: HistoryContainerComponent },
+      { path: 'history/:shortLink', component: HistoryContainerComponent },
       { path: '', component: BackgroundComponent }
     ], { useHash: true })
   ],

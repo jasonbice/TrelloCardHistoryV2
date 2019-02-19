@@ -63,25 +63,18 @@ export const TITLE = "Trello Card History";
  */
 export const TRELLO_CARD_ID_BEGIN_IDX = BASE_OPEN_CARD_URL.length;
 
-/**
- * Shortcut to the extension's background page/object
- */
-export let background = chrome.extension.getBackgroundPage();
-
-/**
- * Shortcut to an always-available storage object
- */
-export let storage = chrome.storage.local;
-
 @Injectable({
   providedIn: 'root'
 })
 
 export class LegacyCoreService {
-  //console: Console = console;
-  console: Console = chrome.extension.getBackgroundPage().console;
+  isRunningInExtensionMode: boolean = chrome && chrome.extension && chrome.storage !== null;
+  console: Console = this.isRunningInExtensionMode ? chrome.extension.getBackgroundPage().console : console;
+  storage: chrome.storage.LocalStorageArea = this.isRunningInExtensionMode ? chrome.storage.local : null;
 
-  constructor() { }
+  constructor() {
+    this.console.log(`Execution Mode is ${this.isRunningInExtensionMode ? 'EXTENSION' : 'BROWSER'}`);
+  }
 
   /**
    * Gets the active tab
@@ -200,7 +193,7 @@ export class LegacyCoreService {
     * @param {function(tab):void} callback - Function to invoke with the acquired tab data
     */
   getCardData(callback): void {
-    storage.get("cardData", function (result) {
+    this.storage.get("cardData", function (result) {
       if (!result.cardData) {
         result.cardData = [];
       }
@@ -214,7 +207,7 @@ export class LegacyCoreService {
   * @param {function():void} callback - Function to invoke once the save has completed
   */
   saveCardData(cardData, callback): void {
-    storage.set({ cardData: cardData }, callback);
+    this.storage.set({ cardData: cardData }, callback);
   };
 
   /**
@@ -243,7 +236,9 @@ export class LegacyCoreService {
         cardData.sort((a, b) => new Date(a.lastViewed).valueOf() - new Date(b.lastViewed).valueOf());
         cardData.splice(cardDataStorageInfo.cleanUpStartIndex, cardDataStorageInfo.itemsToCleanUp);
 
-        this.saveCardData(cardData, null);
+        if (this.storage) {
+          this.saveCardData(cardData, null);
+        }
 
         this.console.debug("Cleaned up " + cardDataStorageInfo.itemsToCleanUp + " cardData items");
       }
@@ -254,6 +249,6 @@ export class LegacyCoreService {
   * Performs a wholesale reset of the extension's storage
   */
   clearStorage(): void {
-    chrome.storage.local.clear();
+    this.storage.clear();
   };
 }
