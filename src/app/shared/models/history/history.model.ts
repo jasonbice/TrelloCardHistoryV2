@@ -5,13 +5,10 @@ export class History {
     id: string;
     lastViewed: Date;
     historyItems: HistoryItem[] = new Array<HistoryItem>();
-    badgeColor: string = '#000000'; //TODO
-    badgeText: string = '?'; //TODO
-    totalUpdateCount: number;
     newUpdates: number;
     title: string;
     
-    get totalUpdatecount(): number {
+    get totalUpdateCount(): number {
         return this.historyItems.filter(h => h.updateType !== 'createCard').length;
     }
 

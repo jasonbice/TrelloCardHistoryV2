@@ -161,7 +161,7 @@ export class LegacyCoreService {
         trelloDataService.getHistory(trelloCardId).subscribe(history => {
           trelloDataService.applyLastViewedToHistory(history, false, () => {
             that.applyCardResultToIcon(tabId, history);
-          });          
+          });
         }, err => this.applyCardResultToIcon(tabId, null));
       } else {
         this.resetExtension(tabId);
@@ -171,9 +171,24 @@ export class LegacyCoreService {
 
   applyCardResultToIcon(tabId: number, history?: History): void {
     if (history != null) {
-      chrome.browserAction.setBadgeText({ text: history.badgeText, tabId: tabId });
-      chrome.browserAction.setBadgeBackgroundColor({ color: history.badgeColor, tabId: tabId });
-      chrome.browserAction.setTitle({ title: history.title });
+      let totalUpdateCount = history.totalUpdateCount;
+
+      let badgeColor = (totalUpdateCount > 0 ? BADGE_COLOR_CHANGES : BADGE_COLOR_CHANGES_NONE);
+      let badgeText = totalUpdateCount.toString();
+      let title = TITLE + " - " + totalUpdateCount.toString() + " total changes";
+
+      if (!history.lastViewed && totalUpdateCount > 0) {
+        badgeColor = BADGE_COLOR_UNSEEN;
+        title = TITLE + " - never viewed";
+      } else if (history.newHistoryItems) {
+        badgeColor = BADGE_COLOR_CHANGES_NEW;
+        badgeText = history.newHistoryItems.toString();
+        title = TITLE + " - " + history.newHistoryItems + " NEW change(s)";
+      }
+
+      chrome.browserAction.setBadgeText({ text: badgeText, tabId: tabId });
+      chrome.browserAction.setBadgeBackgroundColor({ color: badgeColor, tabId: tabId });
+      chrome.browserAction.setTitle({ title: title });
     } else {
       chrome.browserAction.setBadgeBackgroundColor({ color: BADGE_COLOR_ERROR, tabId: tabId });
       chrome.browserAction.setBadgeText({ text: BADGE_TEXT_ERROR, tabId: tabId });

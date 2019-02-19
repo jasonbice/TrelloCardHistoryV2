@@ -63,23 +63,6 @@ export class TrelloDataService {
         }
       }
 
-      let totalUpdateCount = history.historyItems.length - 1; // Subtract 1 for type createCard
-
-      // TODO: Get badge assignment out of here
-
-      history.badgeColor = (totalUpdateCount > 0 ? BADGE_COLOR_CHANGES : BADGE_COLOR_CHANGES_NONE);
-      history.badgeText = totalUpdateCount.toString();
-      history.title = TITLE + " - " + totalUpdateCount.toString() + " total changes";
-
-      if (!history.lastViewed && totalUpdateCount > 0) {
-        history.badgeColor = BADGE_COLOR_UNSEEN;
-        history.title = TITLE + " - never viewed";
-      } else if (history.newHistoryItems) {
-        history.badgeColor = BADGE_COLOR_CHANGES_NEW;
-        history.badgeText = history.newHistoryItems.toString();
-        history.title = TITLE + " - " + history.newHistoryItems + " NEW change(s)";
-      }
-
       if (callback) {
         callback();
       }
