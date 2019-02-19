@@ -10,7 +10,6 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./history-container.component.css']
 })
 export class HistoryContainerComponent implements OnInit {
-  shortLink: string;
   history: History;
   displayDescriptionChanges: boolean = true;
   displayTitleChanges: boolean = true;
@@ -21,24 +20,22 @@ export class HistoryContainerComponent implements OnInit {
   ngOnInit() {
     if (this.coreService.isRunningInExtensionMode) {
       this.coreService.getTrelloCardIdFromCurrentUrl((shortLink: string) => {
-        this.trelloDataService.getHistory(shortLink).subscribe(history => {
-          this.history = history;
-          
-          this.trelloDataService.applyLastViewedToHistory(this.history, true, () => {
-            this.changeDetector.detectChanges();
-          });
-        });
+        this.getHistory(shortLink);
       });
     } else {
-      this.shortLink = this.activatedRoute.snapshot.params['shortLink'];
-      
-      this.trelloDataService.getHistory(this.shortLink).subscribe(history => {
-        this.history = history;
-        
-        this.trelloDataService.applyLastViewedToHistory(this.history, true, () => {
-          this.changeDetector.detectChanges();
-        });
-      });
+      let shortLink = this.activatedRoute.snapshot.params['shortLink'];
+
+      this.getHistory(shortLink);
     }
+  }
+
+  getHistory(shortLink: string) {
+    this.trelloDataService.getHistory(shortLink).subscribe(history => {
+      this.history = history;
+      
+      this.trelloDataService.applyLastViewedToHistory(this.history, true, () => {
+        this.changeDetector.detectChanges();
+      });
+    });
   }
 }
