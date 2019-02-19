@@ -29,14 +29,8 @@ export class History {
     }
 
     getMostRecentHistoryItem(): HistoryItem {
-        return this.historyItems.sort((a, b) => {
-            if (a.trelloHistoryDataObj.date > b.trelloHistoryDataObj.date) {
-                return 1;
-            } else if (a.trelloHistoryDataObj.date < b.trelloHistoryDataObj.date) {
-                return -1;
-            }
+        let maxDate: Date = this.historyItems.reduce((max, p) => p.trelloHistoryDataObj.date > max ? p.trelloHistoryDataObj.date : max, this.historyItems[0].trelloHistoryDataObj.date);
 
-            return 0;
-        })[0];
+        return this.historyItems.filter((h) => h.trelloHistoryDataObj.date === maxDate)[0];
     }
 }
