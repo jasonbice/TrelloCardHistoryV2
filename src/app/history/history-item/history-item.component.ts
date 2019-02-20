@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, ChangeDetectorRef } from '@angular/core';
 import { HistoryItem } from 'src/app/shared/models/history/history-item.model';
 
 @Component({
@@ -6,13 +6,16 @@ import { HistoryItem } from 'src/app/shared/models/history/history-item.model';
   templateUrl: './history-item.component.html',
   styleUrls: ['./history-item.component.css']
 })
-export class HistoryItemComponent implements OnInit {
+export class HistoryItemComponent {
   readonly MAX_VALUE_DISPLAY_LENGTH: number = 65;
   readonly VERB_ADDED: string = 'added';
   readonly VERB_CHANGED: string = 'changed';
   readonly VERB_CREATED: string = null;
 
   @Input() historyItem: HistoryItem;
+
+  newValueCollapsed: boolean = true;
+  oldValueCollapsed: boolean = true;
 
   get updateVerb(): string {
     switch (this.historyItem.updateType) {
@@ -39,10 +42,18 @@ export class HistoryItemComponent implements OnInit {
     }
   }
 
-  constructor() { }
+  constructor(private changeDetector: ChangeDetectorRef) { }
 
-  ngOnInit() {
-    
+  toggleNewValueCollapse(): void {
+    this.newValueCollapsed = !this.newValueCollapsed;
+
+    this.changeDetector.detectChanges();
+  }
+
+  toggleOldValueCollapse(): void {
+    this.oldValueCollapsed = !this.oldValueCollapsed;
+
+    this.changeDetector.detectChanges();
   }
 
 }

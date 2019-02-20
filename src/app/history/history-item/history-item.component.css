@@ -50,17 +50,22 @@
     width: 65%;
     float: left;
     margin-top: 10px;
+    font-size: 11px;
 }
 
 .history-item-changes-new {
     color: black;
-    font-size: 11px;
 }
 
 .history-item-changes-old {
     text-decoration: line-through;
     color: #999;
-    font-size: 11px;
+}
+
+.history-item-changes-old-expanded {
+    text-decoration: none;;
+    color: #444444;
+    background-color: #ebebeb;
 }
 
 .history-item-changes-title {
@@ -86,4 +91,10 @@
 .history-item-misc-lane {
     font-size: 10px;
     font-weight: bold;
+}
+
+.toggle-collapse:hover {
+    cursor: pointer;
+    color: black;
+    background-color: #f6ef9d;
 }

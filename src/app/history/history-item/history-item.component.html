@@ -14,11 +14,11 @@
         <strong>{{historyItem.updateType}}</strong> {{updateVerb}} by
         <strong>{{historyItem.trelloHistoryDataObj.memberCreator.fullName}}</strong>
       </div>
-      <div class="history-item-changes-new">
-        {{ historyItem.newValue | stringTruncate:MAX_VALUE_DISPLAY_LENGTH:'...' }}
+      <div class="history-item-changes-new" (click)="toggleNewValueCollapse()" [ngClass]="{'toggle-collapse' : historyItem.newValue?.length > MAX_VALUE_DISPLAY_LENGTH}">
+          {{newValueCollapsed ? (historyItem.newValue | stringTruncate:MAX_VALUE_DISPLAY_LENGTH:'...') : historyItem.newValue}}
       </div>
-      <div class="history-item-changes-old">
-        {{ historyItem.oldValue | stringTruncate:MAX_VALUE_DISPLAY_LENGTH:'...' }}
+      <div class="history-item-changes-old" (click)="toggleOldValueCollapse()" [ngClass]="{'toggle-collapse' : historyItem.oldValue?.length > MAX_VALUE_DISPLAY_LENGTH, 'history-item-changes-old-expanded': !oldValueCollapsed}">
+          {{oldValueCollapsed ? (historyItem.oldValue | stringTruncate:MAX_VALUE_DISPLAY_LENGTH:'...') : historyItem.oldValue}}
       </div>
     </div>
     <div class="history-item-misc">
