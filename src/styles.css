@@ -1,9 +1,9 @@
 body {
     overflow: hidden;
     position: relative;
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Roboto', sans-serif;
     width: 650px;
-    color: #444;
+    color: #333;
 }
 
 a {

@@ -1,28 +1,24 @@
+strong {
+    font-weight: 500;
+}
+
 .history-item {
-    border: solid 1px lightgray;
-    border-radius: 0.25em;
     display: table;
     width: 100%;
     font-size: 12px;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .history-item-avatar {
     text-align: center;
     display: table-cell;
     width: 60px;
-    padding: 10px;
 }
 
 .history-item-avatar img {
     height: 60px;
     width: 60px;
     border-radius: 0.25em;
-}
-
-.history-item-avatar div {
-    padding-right: 10px;
-    border-right: solid 1px #ebebeb;
 }
 
 .history-item-avatar span {
@@ -44,22 +40,21 @@
 .history-item-details {
     display: table-cell;
     vertical-align: top;
+    padding-left: 10px;
 }
 
 .history-item-changes {
     width: 65%;
     float: left;
-    margin-top: 10px;
     font-size: 11px;
 }
 
 .history-item-changes-new {
-    color: black;
+    color: #000000;
 }
 
 .history-item-changes-old {
-    text-decoration: line-through;
-    color: #999;
+    color: #999999;
 }
 
 .history-item-changes-old-expanded {
@@ -69,7 +64,7 @@
 }
 
 .history-item-changes-title {
-    border-bottom: solid 1px #ebebeb;
+    font-size: 12px;
     padding-bottom: 5px;
     margin-bottom: 5px;
 }
@@ -80,17 +75,15 @@
 }
 
 .history-item-misc div {
-    padding: 10px;
     text-align: right;
 }
 
 .history-item-misc small {
-    color: #999;
+    color: #999999;
 }
 
 .history-item-misc-lane {
-    font-size: 10px;
-    font-weight: bold;
+    font-size: 11px;
 }
 
 .toggle-collapse:hover {
