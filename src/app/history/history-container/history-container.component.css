@@ -8,15 +8,16 @@
     .history-title-popup img {
         vertical-align: middle;
         margin-right: 5px;
-        height: 32px;
-        width: 32px;
+        height: 24px;
+        width: 24px;
     }
 
     .history-title-popup h6 {
         display: inline;
         font-weight: normal;
         vertical-align: middle;
-        font-weight: bold;
+        font-weight: 500;
+        font-size: 16px;
     }
 
 .history-container {
