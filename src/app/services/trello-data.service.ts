@@ -21,7 +21,10 @@ export class TrelloDataService {
     let cardDataUri = this.getRequestUri(shortLink);
 
     return this.http.get<ITrelloHistoryDataObj[]>(cardDataUri).pipe(
-      map<ITrelloHistoryDataObj[], History>(trelloHistoryDataObjects => new History(shortLink, trelloHistoryDataObjects.filter(t => !t.data.old || !t.data.old.idList)))
+      map<ITrelloHistoryDataObj[], History>(trelloHistoryDataObjects => new History(shortLink, trelloHistoryDataObjects.filter(t => 
+        t.type === 'createCard' ||
+        (t.type === 'updateCard' && !t.data.old.idList && (t.data.old.name || t.data.old.desc)) // Exclude updateCard events that don't update the description or title (such as list moves, due date changes, etc.)
+      )))
     );
   }
 
