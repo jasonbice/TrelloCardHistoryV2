@@ -1,8 +1,14 @@
 import { ITrelloHistoryDataObj } from '../trello/trello-history-data-obj.model';
-import { LegacyCoreService } from 'src/app/services/legacy-core.service';
+
+export enum UpdateType {
+    Created = 'Created',
+    Description = 'Description',
+    Points = 'Points',
+    Title = 'Title'
+}
 
 export class HistoryItem {
-    updateType: string;
+    updateType: UpdateType;
     sanitizedOldDescription: string;
     sanitizedNewDescription: string;
     sanitizedOldTitle: string;
@@ -75,16 +81,16 @@ export class HistoryItem {
         return description;
     }
 
-    getUpdateType(): string {
+    getUpdateType(): UpdateType {
         if (this.trelloHistoryDataObj.type === 'createCard') {
-            return "Created";
+            return UpdateType.Created;
         } else if (this.trelloHistoryDataObj.type === 'updateCard') {
             if (this.trelloHistoryDataObj.data.card.desc != this.trelloHistoryDataObj.data.old.desc) {
-                return "Description";
+                return UpdateType.Description;
             } else if (this.sanitizedNewPoints != this.sanitizedOldPoints) {
-                return "Points";
+                return UpdateType.Points;
             } else if (this.sanitizedNewTitle != this.sanitizedOldTitle) {
-                return "Title";
+                return UpdateType.Title;
             }
         } else {
             throw new Error(`Unexpected data.type: ${this.trelloHistoryDataObj.type}`);

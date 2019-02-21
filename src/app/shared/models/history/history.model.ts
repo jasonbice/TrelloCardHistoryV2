@@ -1,4 +1,4 @@
-import { HistoryItem } from './history-item.model';
+import { HistoryItem, UpdateType } from './history-item.model';
 import { ITrelloHistoryDataObj } from '../trello/trello-history-data-obj.model';
 
 export class History {
@@ -9,7 +9,7 @@ export class History {
     title: string;
     
     get totalUpdateCount(): number {
-        return this.historyItems.filter(h => h.updateType !== 'createCard').length;
+        return this.historyItems.filter(h => h.updateType !== UpdateType.Created).length;
     }
 
     get newHistoryItems(): number {
