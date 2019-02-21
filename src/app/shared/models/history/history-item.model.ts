@@ -7,6 +7,10 @@ export enum UpdateType {
     Title = 'Title'
 }
 
+export enum SortBy {
+    Date
+}
+
 export class HistoryItem {
     updateType: UpdateType;
     sanitizedOldDescription: string;
@@ -94,6 +98,21 @@ export class HistoryItem {
             }
         } else {
             throw new Error(`Unexpected data.type: ${this.trelloHistoryDataObj.type}`);
+        }
+    }
+
+    static sort(historyItems: HistoryItem[], sortBy: SortBy, ascending: boolean): void {
+        switch (sortBy) {
+            case SortBy.Date:
+                {
+                    historyItems.sort((a, b) => {
+                        if (a.trelloHistoryDataObj.date > b.trelloHistoryDataObj.date) {
+                            return ascending ? 1 : -1;
+                        } else {
+                            return ascending ? -1 : 1;
+                        }
+                    });
+                }
         }
     }
 }

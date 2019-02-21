@@ -9,6 +9,7 @@ import { HistoryItemListComponent } from './history/history-item-list/history-it
 import { HistoryItemComponent } from './history/history-item/history-item.component';
 import { StringTruncatePipe } from './shared/pipes/string-truncate.pipe';
 import { BackgroundComponent } from './background/background.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { BackgroundComponent } from './background/background.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    FormsModule,
     RouterModule.forRoot([
       { path: 'history', component: HistoryContainerComponent },
       { path: 'history/:shortLink', component: HistoryContainerComponent },

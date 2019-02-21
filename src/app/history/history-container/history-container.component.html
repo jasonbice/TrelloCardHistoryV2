@@ -7,18 +7,20 @@
   </div>
   <div class="history-container">
     <div class="input-group input-group-sm">
-      <input type="text" class="form-control" placeholder="Filter">
+      <input type="text" class="form-control" placeholder="Filter" [(ngModel)]="historyItemFilter.filterBy" (ngModelChange)="applyHistoryItemFilterAndSort()">
       <div class="input-group-append" id="button-addon4">
-        <button class="btn btn-outline-secondary" type="button" [class.active]="displayDescriptionChanges"
-          (click)="displayDescriptionChanges = !displayDescriptionChanges">Description</button>
-        <button class="btn btn-outline-secondary" type="button" [class.active]="displayTitleChanges"
-          (click)="displayTitleChanges = !displayTitleChanges">Title</button>
-        <button class="btn btn-outline-secondary" type="button" [class.active]="displayPointChanges"
-          (click)="displayPointChanges = !displayPointChanges">Point</button>
+        <span class="input-group-text">Include</span>
+        <button class="btn btn-outline-secondary" type="button"
+          [class.active]="historyItemFilter.includeDescriptionChanges"
+          (click)="historyItemFilter.includeDescriptionChanges = !historyItemFilter.includeDescriptionChanges; applyHistoryItemFilterAndSort()">Description</button>
+        <button class="btn btn-outline-secondary" type="button" [class.active]="historyItemFilter.includeTitleChanges"
+          (click)="historyItemFilter.includeTitleChanges = !historyItemFilter.includeTitleChanges; applyHistoryItemFilterAndSort()">Title</button>
+        <button class="btn btn-outline-secondary" type="button" [class.active]="historyItemFilter.includePointsChanges"
+          (click)="historyItemFilter.includePointsChanges = !historyItemFilter.includePointsChanges; applyHistoryItemFilterAndSort()">Point</button>
       </div>
     </div>
     <div class="history-items">
-      <history-item-list [historyItems]="history.historyItems"></history-item-list>
+      <history-item-list [historyItems]="filteredHistoryItems"></history-item-list>
     </div>
   </div>
 </div>
