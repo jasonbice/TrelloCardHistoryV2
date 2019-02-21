@@ -14,10 +14,10 @@ export class HistoryItemFilter {
                 (this.includePointsChanges || historyItem.updateType !== UpdateType.Points) &&
                 (this.includeTitleChanges || historyItem.updateType !== UpdateType.Title) &&
                 (!filterByString || 
-                    (historyItem.sanitizedNewTitle && historyItem.sanitizedNewTitle.toLowerCase().indexOf(filterByString) > -1) || 
-                    (historyItem.sanitizedOldTitle && historyItem.sanitizedOldTitle.toLowerCase().indexOf(filterByString) > -1) ||
-                    (historyItem.sanitizedNewDescription && historyItem.sanitizedNewDescription.toLowerCase().indexOf(filterByString) > -1) || 
-                    (historyItem.sanitizedOldDescription && historyItem.sanitizedOldDescription.toLowerCase().indexOf(filterByString) > -1) ||
+                    (historyItem.updateType === UpdateType.Title && historyItem.sanitizedNewTitle && historyItem.sanitizedNewTitle.toLowerCase().indexOf(filterByString) > -1) || 
+                    (historyItem.updateType === UpdateType.Title && historyItem.sanitizedOldTitle && historyItem.sanitizedOldTitle.toLowerCase().indexOf(filterByString) > -1) ||
+                    (historyItem.updateType === UpdateType.Description && historyItem.sanitizedNewDescription && historyItem.sanitizedNewDescription.toLowerCase().indexOf(filterByString) > -1) || 
+                    (historyItem.updateType === UpdateType.Description && historyItem.sanitizedOldDescription && historyItem.sanitizedOldDescription.toLowerCase().indexOf(filterByString) > -1) ||
                     (historyItem.trelloHistoryDataObj.memberCreator && historyItem.trelloHistoryDataObj.memberCreator.fullName && historyItem.trelloHistoryDataObj.memberCreator.fullName.toLowerCase().indexOf(filterByString) > -1) ||
                     (historyItem.trelloHistoryDataObj.memberCreator && historyItem.trelloHistoryDataObj.memberCreator.initials && historyItem.trelloHistoryDataObj.memberCreator.initials.toLowerCase().indexOf(filterByString) > -1))
         });
