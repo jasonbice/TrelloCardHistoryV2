@@ -29,6 +29,8 @@ export class HistoryContainerComponent implements OnInit {
 
       this.loadHistory(shortLink);
     }
+
+    this.coreService.refreshIcon(this.trelloDataService);
   }
 
   loadHistory(shortLink: string): void {
