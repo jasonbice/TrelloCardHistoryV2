@@ -92,7 +92,11 @@ strong {
 }
 
 .history-item-misc-lane {
-    font-size: 10px;
+    font-size: 11px;
+}
+
+.history-item-misc-lane-unavailable {
+    font-style: italic;
 }
 
 .toggle-collapse:hover {

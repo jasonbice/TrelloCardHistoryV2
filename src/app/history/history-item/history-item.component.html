@@ -33,6 +33,7 @@
         <div class="history-item-misc-lane"
           title="This change occurred while in {{historyItem.trelloHistoryDataObj.data.list.name}}">
           {{historyItem.trelloHistoryDataObj.data.list.name}}
+          <div *ngIf="!historyItem.trelloHistoryDataObj.data.list?.name" class="history-item-misc-lane-unavailable">This card was assigned to a different board when this change occurred</div>
         </div>
       </div>
     </div>
