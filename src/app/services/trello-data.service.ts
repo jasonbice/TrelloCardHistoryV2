@@ -4,7 +4,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import { map } from 'rxjs/operators';
 import { History } from '../shared/models/history/history.model';
-import { LegacyCoreService, BADGE_COLOR_CHANGES, BADGE_COLOR_CHANGES_NONE, TITLE, BADGE_COLOR_UNSEEN, BADGE_COLOR_CHANGES_NEW } from './legacy-core.service';
+import { LegacyCoreService } from './legacy-core.service';
+import deepcopy from 'deepcopy';
+
+/**
+ * The maximium number of card data items the extension is permitted to keep in browser storage
+ */
+export const STORAGE_LIMIT_CARD_DATA_ITEMS = 1000;
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +35,7 @@ export class TrelloDataService {
   }
 
   applyLastViewedToHistory(history: History, refresh: boolean, callback): void {
-    this.coreService.getCardData((cardData) => {
+    this.getCardDataFromLocalStorage((cardData) => {
       let cardDataItem = {
         cardId: history.id,
         lastViewed: null
@@ -61,7 +67,7 @@ export class TrelloDataService {
             cardData.push(cardDataItem);
           }
 
-          this.coreService.saveCardData(cardData, null);
+          this.saveCardDataToLocalStorage(cardData, null);
         } catch (err) {
           this.coreService.console.error(err);
         }
@@ -71,5 +77,69 @@ export class TrelloDataService {
         callback();
       }
     });
-  };
+  }
+
+  /**
+    * Gets the card data from storage
+    * @param {function(tab):void} callback - Function to invoke with the acquired tab data
+    */
+   getCardDataFromLocalStorage(callback): void {
+    this.coreService.storage.get("cardData", function (result) {
+      if (!result.cardData) {
+        result.cardData = [];
+      }
+
+      callback(result.cardData);
+    });
+  }
+
+  /**
+  * Saves the card data to storage
+  * @param {function():void} callback - Function to invoke once the save has completed
+  */
+  saveCardDataToLocalStorage(cardData, callback): void {
+    this.coreService.storage.set({ cardData: cardData }, callback);
+  }
+
+  /**
+  * Purges storage of the minimum number of ("old") items necessary to remain under STORAGE_LIMIT_CARD_DATA_ITEMS
+  */
+  cleanUpLocalStorage(): void {
+    this.getCardDataFromLocalStorage(function (cardData) {
+      if (cardData.length === 0) {
+        return;
+      }
+
+      let cardDataStorageInfo = {
+        cardDataItems: cardData.length,
+        itemLimit: STORAGE_LIMIT_CARD_DATA_ITEMS,
+        cardDataStorageBytes: JSON.stringify(cardData).length,
+        averageCardDataItemSizeBytes: null,
+        itemsToCleanUp: null,
+        cleanUpStartIndex: null
+      };
+
+      cardDataStorageInfo.averageCardDataItemSizeBytes = cardDataStorageInfo.cardDataStorageBytes / cardData.length;
+      cardDataStorageInfo.itemsToCleanUp = Math.max(cardData.length - STORAGE_LIMIT_CARD_DATA_ITEMS, 0);
+      cardDataStorageInfo.cleanUpStartIndex = deepcopy(cardData.length - cardDataStorageInfo.itemsToCleanUp - 1);
+
+      if (cardDataStorageInfo.itemsToCleanUp) {
+        cardData.sort((a, b) => new Date(a.lastViewed).valueOf() - new Date(b.lastViewed).valueOf());
+        cardData.splice(cardDataStorageInfo.cleanUpStartIndex, cardDataStorageInfo.itemsToCleanUp);
+
+        if (this.storage) {
+          this.saveCardDataToLocalStorage(cardData, null);
+        }
+
+        this.console.debug("Cleaned up " + cardDataStorageInfo.itemsToCleanUp + " cardData items");
+      }
+    });
+  }
+
+  /**
+  * Performs a wholesale reset of the extension's storage
+  */
+  clearLocalStorage(): void {
+    this.coreService.storage.clear();
+  }
 }

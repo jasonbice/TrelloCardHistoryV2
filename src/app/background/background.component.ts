@@ -14,7 +14,7 @@ export class BackgroundComponent implements OnInit {
 
     if (this.coreService.isRunningInExtensionMode) {
       this.coreService.resetExtension(null);
-      this.coreService.cleanUpStorage();
+      this.trelloDataService.cleanUpLocalStorage();
 
       this.coreService.addTabsUpdatedListener((tabId, changeInfo, tab) => {
         if (changeInfo.status === 'complete') {
