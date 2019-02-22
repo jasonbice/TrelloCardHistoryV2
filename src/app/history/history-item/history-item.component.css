@@ -6,7 +6,9 @@ strong {
     display: table;
     width: 100%;
     font-size: 12px;
-    margin-top: 20px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: solid 1px #f0f0f0;
 }
 
 .history-item-avatar {
