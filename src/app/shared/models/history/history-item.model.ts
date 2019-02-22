@@ -55,6 +55,8 @@ export class HistoryItem {
             this.sanitizedOldDescription = this.getSanitizedDescription(this.trelloHistoryDataObj.data.old.desc);
         }
 
+        this.trelloHistoryDataObj.date = new Date(this.trelloHistoryDataObj.date);
+
         this.updateType = this.getUpdateType();
     }
 
