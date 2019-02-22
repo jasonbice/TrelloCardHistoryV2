@@ -20,7 +20,7 @@ strong {
 .history-item-avatar img {
     height: 60px;
     width: 60px;
-    border-radius: 0.25em;
+    border-radius: 0.5em;
 }
 
 .history-item-avatar span {
@@ -29,7 +29,7 @@ strong {
     background-color: #ebebeb;
     border: solid 1px lightgray;
     display: block;
-    font-size: 34px;
+    font-size: 30px;
     line-height: 60px;
     overflow: hidden;
     top: 0;
