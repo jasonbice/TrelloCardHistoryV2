@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "author": "Jason T. Bice",
     "name": "Trello Card History",
-    "description": "View a Trello card's name and description histories, which are not available through the standard Trello interface.",
+    "description": "View a Trello card's description, name, and points histories, which are not available through the standard Trello interface.",
     "version": "1.0.0",
     "version_name": "1.0.0",
     "browser_action": {
