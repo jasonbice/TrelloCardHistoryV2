@@ -9,18 +9,22 @@
     <div class="input-group input-group-sm">
       <input type="text" class="form-control" placeholder="Filter" [(ngModel)]="historyItemFilter.filterBy" (ngModelChange)="applyHistoryItemFilterAndSort()">
       <div class="input-group-append" id="button-addon4">
-        <span class="input-group-text">Include</span>
+        <span class="input-group-text">Include changes to</span>
         <button class="btn btn-outline-secondary" type="button"
           [class.active]="historyItemFilter.includeDescriptionChanges"
           (click)="historyItemFilter.includeDescriptionChanges = !historyItemFilter.includeDescriptionChanges; applyHistoryItemFilterAndSort()">Description</button>
         <button class="btn btn-outline-secondary" type="button" [class.active]="historyItemFilter.includeTitleChanges"
           (click)="historyItemFilter.includeTitleChanges = !historyItemFilter.includeTitleChanges; applyHistoryItemFilterAndSort()">Title</button>
         <button class="btn btn-outline-secondary" type="button" [class.active]="historyItemFilter.includePointsChanges"
-          (click)="historyItemFilter.includePointsChanges = !historyItemFilter.includePointsChanges; applyHistoryItemFilterAndSort()">Point</button>
+          (click)="historyItemFilter.includePointsChanges = !historyItemFilter.includePointsChanges; applyHistoryItemFilterAndSort()">Points</button>
       </div>
     </div>
     <div class="history-items">
       <history-item-list [historyItems]="filteredHistoryItems"></history-item-list>
+    </div>
+    <div class="last-viewed">
+      <span *ngIf="history.lastViewed">You last viewed this history on {{history.lastViewed | date:'fullDate'}} at {{history.lastViewed | date:'mediumTime'}}</span>
+      <span *ngIf="!history.lastViewed">This is the first time you've viewed this card's history.</span>
     </div>
   </div>
 </div>

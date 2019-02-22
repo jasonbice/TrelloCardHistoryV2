@@ -23,3 +23,9 @@
 .history-container {
     margin: 10px;
 }
+
+.last-viewed {
+    margin-top: 20px;
+    font-style: italic;
+    font-size: 11px;
+}
