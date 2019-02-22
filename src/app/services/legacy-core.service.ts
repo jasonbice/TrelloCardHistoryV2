@@ -72,9 +72,7 @@ export class LegacyCoreService {
   console: Console = this.isRunningInExtensionMode ? chrome.extension.getBackgroundPage().console : console;
   storage: chrome.storage.LocalStorageArea = this.isRunningInExtensionMode ? chrome.storage.local : null;
 
-  constructor() {
-    this.console.log(`Execution Mode is ${this.isRunningInExtensionMode ? 'EXTENSION' : 'BROWSER'}`);
-  }
+  constructor() {}
 
   /**
    * Gets the active tab

@@ -10,7 +10,7 @@ export class BackgroundComponent implements OnInit {
   constructor(private coreService: LegacyCoreService, private trelloDataService: TrelloDataService) { }
 
   ngOnInit() {
-    console.log("Tello Card History background component intialized and running");
+    console.log(`Tello Card History background component intialized and running in ${this.coreService.isRunningInExtensionMode ? 'EXTENSION' : 'BROWSER'} mode`);
 
     if (this.coreService.isRunningInExtensionMode) {
       this.coreService.resetExtension(null);
