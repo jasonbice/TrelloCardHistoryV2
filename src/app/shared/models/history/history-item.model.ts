@@ -12,6 +12,7 @@ export enum SortBy {
 }
 
 export class HistoryItem {
+    isNew: boolean;
     updateType: UpdateType;
     sanitizedOldDescription: string;
     sanitizedNewDescription: string;

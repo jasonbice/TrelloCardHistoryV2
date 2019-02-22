@@ -13,25 +13,27 @@
       <div class="history-item-changes-title">
         <strong>{{historyItem.updateType}}</strong> {{updateVerb}} by
         <strong>{{historyItem.trelloHistoryDataObj.memberCreator.fullName}}</strong>
+        <div *ngIf="historyItem.isNew" class="badge badge-warning"
+          title="This change occurred after your last viewing of this card's history">New</div>
       </div>
-      <div class="history-item-changes-new" (click)="toggleNewValueCollapse()" [ngClass]="{'toggle-collapse' : historyItem.newValue?.length > MAX_VALUE_DISPLAY_LENGTH}">
-          {{newValueCollapsed ? (historyItem.newValue | stringTruncate:MAX_VALUE_DISPLAY_LENGTH:'...') : historyItem.newValue}}
+      <div class="history-item-changes-new" (click)="toggleNewValueCollapse()"
+        [ngClass]="{'toggle-collapse' : historyItem.newValue?.length > MAX_VALUE_DISPLAY_LENGTH}">
+        {{newValueCollapsed ? (historyItem.newValue | stringTruncate:MAX_VALUE_DISPLAY_LENGTH:'...') : historyItem.newValue}}
       </div>
-      <div class="history-item-changes-old" (click)="toggleOldValueCollapse()" [ngClass]="{'toggle-collapse' : historyItem.oldValue?.length > MAX_VALUE_DISPLAY_LENGTH, 'history-item-changes-old-expanded': !oldValueCollapsed}">
-          {{oldValueCollapsed ? (historyItem.oldValue | stringTruncate:MAX_VALUE_DISPLAY_LENGTH:'...') : historyItem.oldValue}}
+      <div class="history-item-changes-old" (click)="toggleOldValueCollapse()"
+        [ngClass]="{'toggle-collapse' : historyItem.oldValue?.length > MAX_VALUE_DISPLAY_LENGTH, 'history-item-changes-old-expanded': !oldValueCollapsed}">
+        {{oldValueCollapsed ? (historyItem.oldValue | stringTruncate:MAX_VALUE_DISPLAY_LENGTH:'...') : historyItem.oldValue}}
       </div>
     </div>
     <div class="history-item-misc">
       <div>
         <strong>{{historyItem.trelloHistoryDataObj.date | date: 'mediumDate'}}</strong>
         <small>&nbsp;at&nbsp;</small>
-        <strong>{{historyItem.trelloHistoryDataObj.date | date: 'mediumTime'}}</strong><br>
-        <span class="history-item-misc-lane"
+        <strong>{{historyItem.trelloHistoryDataObj.date | date: 'mediumTime'}}</strong>
+        <div class="history-item-misc-lane"
           title="This change occurred while in {{historyItem.trelloHistoryDataObj.data.list.name}}">
           {{historyItem.trelloHistoryDataObj.data.list.name}}
-        </span>
-        <span *ngIf="historyItem.isNew" class="badge badge-warning"
-          title="This change occurred after your last viewing of this card's history">New</span>
+        </div>
       </div>
     </div>
   </div>

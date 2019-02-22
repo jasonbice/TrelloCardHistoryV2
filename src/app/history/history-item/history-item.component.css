@@ -69,6 +69,13 @@ strong {
     margin-bottom: 5px;
 }
 
+.badge {
+    display: inline;
+    margin-left: 5px;
+    font-weight: 500;
+    font-size: 11px;
+}
+
 .history-item-misc {
     float: left;
     width: 35%;
