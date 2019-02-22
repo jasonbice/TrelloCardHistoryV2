@@ -84,7 +84,10 @@ export class HistoryItem {
     }
 
     getSanitizedDescription(description: string): string {
-        // TODO: Preserve formatting
+        if (description) {
+            return description.replace(/\n/g, '<br />').replace(/[\r]/g, '<br />');
+        }
+        
         return description;
     }
 

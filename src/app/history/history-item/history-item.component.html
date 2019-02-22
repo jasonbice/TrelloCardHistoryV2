@@ -17,12 +17,12 @@
           title="This change occurred after your last viewing of this card's history">New</div>
       </div>
       <div class="history-item-changes-new" (click)="toggleNewValueCollapse()"
-        [ngClass]="{'toggle-collapse' : historyItem.newValue?.length > MAX_VALUE_DISPLAY_LENGTH}">
-        {{newValueCollapsed ? (historyItem.newValue | stringTruncate:MAX_VALUE_DISPLAY_LENGTH:'...') : historyItem.newValue}}
+        [ngClass]="{'toggle-collapse' : historyItem.newValue?.length > MAX_VALUE_DISPLAY_LENGTH}" 
+        [innerHTML]="newValueCollapsed ? (historyItem.newValue | stringTruncate:MAX_VALUE_DISPLAY_LENGTH:'...') : historyItem.newValue">
       </div>
       <div class="history-item-changes-old" (click)="toggleOldValueCollapse()"
-        [ngClass]="{'toggle-collapse' : historyItem.oldValue?.length > MAX_VALUE_DISPLAY_LENGTH, 'history-item-changes-old-expanded': !oldValueCollapsed}">
-        {{oldValueCollapsed ? (historyItem.oldValue | stringTruncate:MAX_VALUE_DISPLAY_LENGTH:'...') : historyItem.oldValue}}
+        [ngClass]="{'toggle-collapse' : historyItem.oldValue?.length > MAX_VALUE_DISPLAY_LENGTH, 'history-item-changes-old-expanded': !oldValueCollapsed}" 
+        [innerHTML]="oldValueCollapsed ? (historyItem.oldValue | stringTruncate:MAX_VALUE_DISPLAY_LENGTH:'...') : historyItem.oldValue">
       </div>
     </div>
     <div class="history-item-misc">
