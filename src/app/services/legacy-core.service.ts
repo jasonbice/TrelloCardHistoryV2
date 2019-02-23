@@ -105,13 +105,15 @@ export class LegacyCoreService {
     chrome.browserAction.setTitle({ title: TITLE });
   }
 
-  getCurrentUrl(callback): void {
-    chrome.tabs.query({ "active": true, "lastFocusedWindow": true }, (tabs) => {
-      if (!tabs || tabs.length === 0) {
-        callback(null);
-      }
+  getCurrentUrl(): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      chrome.tabs.query({ "active": true, "lastFocusedWindow": true }, (tabs) => {
+        if (!tabs || tabs.length === 0) {
+          resolve(null);
+        }
 
-      callback(tabs[0].url);
+        resolve(tabs[0].url);
+      });
     });
   }
 
@@ -122,11 +124,17 @@ export class LegacyCoreService {
     return trelloCardId;
   }
 
-  getTrelloCardIdFromCurrentUrl(callback): void {
-    this.getCurrentUrl((url: string) => {
-      let shortLink: string = this.getTrelloCardIdFromUrl(url)
+  getTrelloCardIdFromCurrentUrl(): Promise<string> {
+    const t = this;
 
-      callback(shortLink);
+    return new Promise<string>((resolve, reject) => {
+      t.getCurrentUrl().then(url => {
+        if (url) {
+          resolve(t.getTrelloCardIdFromUrl(url));
+        } else {
+          resolve(null);
+        }
+      });
     });
   }
 

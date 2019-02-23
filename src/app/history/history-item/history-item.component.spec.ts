@@ -91,7 +91,7 @@ describe('HistoryItemComponent', () => {
     it('should be VERB_ADDED when a Description is added for the first time', () => {
       component.historyItem = MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description && !history.trelloHistoryDataObj.data.old.desc);
 
-      const actual = component.updateVerb();
+      const actual = component.updateVerb;
       const expected = component.VERB_ADDED;
 
       expect(actual).toBe(expected);
@@ -100,7 +100,7 @@ describe('HistoryItemComponent', () => {
     it('should be VERB_ADDED when Points are added for the first time', () => {
       component.historyItem = MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Points && history.sanitizedNewPoints && !history.sanitizedOldPoints);
 
-      const actual = component.updateVerb();
+      const actual = component.updateVerb;
       const expected = component.VERB_ADDED;
 
       expect(actual).toBe(expected);
@@ -109,7 +109,7 @@ describe('HistoryItemComponent', () => {
     it('should be VERB_CHANGED when the Description is changed from an existing non-null value to a new value', () => {
       component.historyItem = MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description && history.trelloHistoryDataObj.data.card.desc !== null && history.trelloHistoryDataObj.data.old.desc !== null);
 
-      const actual = component.updateVerb();
+      const actual = component.updateVerb;
       const expected = component.VERB_CHANGED;
 
       expect(actual).toBe(expected);
@@ -118,7 +118,7 @@ describe('HistoryItemComponent', () => {
     it('should be VERB_CHANGED when the Title is changed from an existing non-null value to a new value', () => {
       component.historyItem = MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Title && history.trelloHistoryDataObj.data.card.name !== null && history.trelloHistoryDataObj.data.old.name !== null);
 
-      const actual = component.updateVerb();
+      const actual = component.updateVerb;
       const expected = component.VERB_CHANGED;
 
       expect(actual).toBe(expected);
@@ -127,7 +127,7 @@ describe('HistoryItemComponent', () => {
     it('should be VERB_CREATED when the card has been created', () => {
       component.historyItem = MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Created);
 
-      const actual = component.updateVerb();
+      const actual = component.updateVerb;
       const expected = component.VERB_CREATED;
 
       expect(actual).toBe(expected);

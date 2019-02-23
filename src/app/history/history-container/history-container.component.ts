@@ -12,6 +12,7 @@ import { HistoryItem, SortBy } from 'src/app/shared/models/history/history-item.
   styleUrls: ['./history-container.component.css']
 })
 export class HistoryContainerComponent implements OnInit {
+  shortLink: string;
   history: History;
   filteredHistoryItems: HistoryItem[];
   historyItemFilter: HistoryItemFilter = new HistoryItemFilter();
@@ -20,20 +21,22 @@ export class HistoryContainerComponent implements OnInit {
 
   ngOnInit() {
     if (this.coreService.isRunningInExtensionMode) {
-      this.coreService.getTrelloCardIdFromCurrentUrl((shortLink: string) => {
-        this.loadHistory(shortLink);
+      this.coreService.getTrelloCardIdFromCurrentUrl().then(shortLink => {
+        this.shortLink = shortLink;
+
+        this.loadHistory();
       });
     } else {
-      let shortLink = this.activatedRoute.snapshot.params['shortLink'];
+      this.shortLink = this.activatedRoute.snapshot.params['shortLink'];
 
-      this.loadHistory(shortLink);
+      this.loadHistory();
     }
 
     this.coreService.refreshIcon(this.trelloDataService);
   }
 
-  loadHistory(shortLink: string): void {
-    this.trelloDataService.getHistory(shortLink).subscribe(history => {
+  loadHistory(): void {
+    this.trelloDataService.getHistory(this.shortLink).subscribe(history => {
       this.history = history;
 
       this.trelloDataService.applyLastViewedToHistory(this.history, true, () => {

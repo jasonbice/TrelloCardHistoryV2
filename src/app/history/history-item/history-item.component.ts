@@ -18,7 +18,7 @@ export class HistoryItemComponent {
   newValueCollapsed: boolean = true;
   oldValueCollapsed: boolean = true;
 
-  updateVerb(): string {
+  get updateVerb(): string {
     switch (this.historyItem.updateType) {
       case UpdateType.Created:
         return this.VERB_CREATED;
