@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BackgroundComponent } from './background.component';
+import { HttpClient, HttpHandler } from '@angular/common/http';
 
 describe('BackgroundComponent', () => {
   let component: BackgroundComponent;
@@ -8,7 +9,11 @@ describe('BackgroundComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BackgroundComponent ]
+      declarations: [ BackgroundComponent ],
+      providers: [
+        HttpClient,
+        HttpHandler
+      ]
     })
     .compileComponents();
   }));

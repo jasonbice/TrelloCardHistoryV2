@@ -42,7 +42,7 @@ export class HistoryItemComponent {
     }
   }
 
-  constructor(private changeDetector: ChangeDetectorRef) { }
+  constructor(private changeDetector: ChangeDetectorRef) {}
 
   toggleNewValueCollapse(): void {
     this.newValueCollapsed = !this.newValueCollapsed;

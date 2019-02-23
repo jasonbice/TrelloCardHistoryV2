@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HistoryItemListComponent } from './history-item-list.component';
+import { HistoryItemComponent } from '../history-item/history-item.component';
+import { StringTruncatePipe } from 'src/app/shared/pipes/string-truncate.pipe';
 
 describe('HistoryItemListComponent', () => {
   let component: HistoryItemListComponent;
@@ -8,7 +10,11 @@ describe('HistoryItemListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HistoryItemListComponent ]
+      declarations: [ 
+        HistoryItemComponent,
+        HistoryItemListComponent,
+        StringTruncatePipe
+      ]
     })
     .compileComponents();
   }));

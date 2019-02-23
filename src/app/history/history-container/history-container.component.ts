@@ -5,7 +5,6 @@ import { LegacyCoreService } from 'src/app/services/legacy-core.service';
 import { ActivatedRoute } from '@angular/router';
 import { HistoryItemFilter } from 'src/app/shared/models/history/history-item-filter.model';
 import { HistoryItem, SortBy } from 'src/app/shared/models/history/history-item.model';
-import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-history-container',
