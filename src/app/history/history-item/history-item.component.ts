@@ -8,6 +8,7 @@ import { HistoryItem, UpdateType } from 'src/app/shared/models/history/history-i
 })
 export class HistoryItemComponent {
   readonly MAX_VALUE_DISPLAY_LENGTH: number = 65;
+  readonly TRUNCATE_APPEND = '...';
   readonly VERB_ADDED: string = 'added';
   readonly VERB_CHANGED: string = 'changed';
   readonly VERB_CREATED: string = null;
