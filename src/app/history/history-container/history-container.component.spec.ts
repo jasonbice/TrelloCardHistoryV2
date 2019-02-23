@@ -84,7 +84,6 @@ describe('HistoryContainerComponent', () => {
       });
 
       spyOn(coreService, 'getTrelloCardIdFromCurrentUrl').and.returnValue(qShortLink);
-
       spyOn(trelloDataService, 'getHistory').and.returnValue(of(MOCK_HISTORY));
     });
 
@@ -108,6 +107,15 @@ describe('HistoryContainerComponent', () => {
 
       expect(component.shortLink).toBe(MOCK_SHORT_LINK);
       expect(component.loadHistory).toHaveBeenCalled();
+    });
+
+    it('should refresh the extension icon and badge', () => {
+      coreService.isRunningInExtensionMode = false;
+      spyOn(coreService, 'refreshIcon');
+
+      component.ngOnInit();
+
+      expect(coreService.refreshIcon).toHaveBeenCalled();
     });
   });
 });
