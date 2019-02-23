@@ -63,10 +63,18 @@ export const TRELLO_CARD_ID_BEGIN_IDX = BASE_OPEN_CARD_URL.length;
 
 export class LegacyCoreService {
   isRunningInExtensionMode: boolean = chrome && chrome.extension && chrome.storage !== null;
-  console: Console = this.isRunningInExtensionMode ? chrome.extension.getBackgroundPage().console : console;
+  console: Console = console;
   storage: chrome.storage.LocalStorageArea = this.isRunningInExtensionMode ? chrome.storage.local : null;
 
-  constructor() {}
+  constructor() {
+    if (this.isRunningInExtensionMode && chrome.extension) {
+      const backgroundPage: Window = chrome.extension.getBackgroundPage();
+
+      if (backgroundPage) {
+        this.console = backgroundPage.console;
+      }
+    }
+  }
 
   /**
    * Gets the active tab

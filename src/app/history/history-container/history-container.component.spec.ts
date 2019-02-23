@@ -6,10 +6,15 @@ import { HistoryItemComponent } from '../history-item/history-item.component';
 import { StringTruncatePipe } from 'src/app/shared/pipes/string-truncate.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from 'src/app/app-routing.module';
+import chrome from 'sinon-chrome';
 
 describe('HistoryContainerComponent', () => {
   let component: HistoryContainerComponent;
   let fixture: ComponentFixture<HistoryContainerComponent>;
+
+  beforeAll(() => {
+    window.chrome = chrome;
+  });
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -20,12 +25,12 @@ describe('HistoryContainerComponent', () => {
       ],
       declarations: [
         HistoryItemComponent,
-        HistoryItemListComponent, 
+        HistoryItemListComponent,
         HistoryContainerComponent,
         StringTruncatePipe
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -36,5 +41,10 @@ describe('HistoryContainerComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  afterAll(() => {
+    chrome.flush();
+    delete window.chrome;
   });
 });
