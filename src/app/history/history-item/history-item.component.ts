@@ -1,5 +1,5 @@
 import { Component, Input, ChangeDetectorRef } from '@angular/core';
-import { HistoryItem } from 'src/app/shared/models/history/history-item.model';
+import { HistoryItem, UpdateType } from 'src/app/shared/models/history/history-item.model';
 
 @Component({
   selector: 'history-item',
@@ -17,11 +17,11 @@ export class HistoryItemComponent {
   newValueCollapsed: boolean = true;
   oldValueCollapsed: boolean = true;
 
-  get updateVerb(): string {
+  updateVerb(): string {
     switch (this.historyItem.updateType) {
-      case 'Created':
+      case UpdateType.Created:
         return this.VERB_CREATED;
-      case 'Description':
+      case UpdateType.Description:
       {
         if (!this.historyItem.sanitizedOldDescription) {
           return this.VERB_ADDED;
@@ -29,9 +29,9 @@ export class HistoryItemComponent {
           return this.VERB_CHANGED;
         }
       }
-      case 'Title':
+      case UpdateType.Title:
         return this.VERB_CHANGED;
-      case 'Points':
+      case UpdateType.Points:
       {
         if (!this.historyItem.sanitizedOldPoints) {
           return this.VERB_ADDED;
@@ -39,6 +39,8 @@ export class HistoryItemComponent {
           return this.VERB_CHANGED;
         }
       }
+      default:
+        throw new Error(`Unexpected updateType: ${this.historyItem.updateType}`);
     }
   }
 
