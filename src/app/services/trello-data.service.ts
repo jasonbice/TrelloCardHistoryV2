@@ -24,12 +24,12 @@ export class TrelloDataService {
   }
 
   getHistory(shortLink: string): Observable<History> {
-    let cardDataUri = this.getRequestUri(shortLink);
+    const cardDataUri = this.getRequestUri(shortLink);
 
     return this.http.get<ITrelloHistoryDataObj[]>(cardDataUri).pipe(
       map<ITrelloHistoryDataObj[], History>(trelloHistoryDataObjects => new History(shortLink, trelloHistoryDataObjects.filter(t =>
         t.type === 'createCard' ||
-        (t.type === 'updateCard' && !t.data.old.idList && (t.data.old.name || t.data.card.desc))
+        (t.type === 'updateCard' && !t.data.old.idList && (t.data.old.name || t.data.card.desc || t.data.old.desc))
       )))
     );
   }
@@ -113,7 +113,7 @@ export class TrelloDataService {
         return;
       }
 
-      let cardDataStorageInfo = {
+      const cardDataStorageInfo = {
         cardDataItems: cardData.length,
         itemLimit: STORAGE_LIMIT_CARD_DATA_ITEMS,
         cardDataStorageBytes: JSON.stringify(cardData).length,

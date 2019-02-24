@@ -12,6 +12,7 @@ export class HistoryItemComponent {
   readonly VERB_ADDED: string = 'added';
   readonly VERB_CHANGED: string = 'changed';
   readonly VERB_CREATED: string = null;
+  readonly VERB_REMOVED: string = 'removed'
 
   @Input() historyItem: HistoryItem;
 
@@ -26,6 +27,8 @@ export class HistoryItemComponent {
       {
         if (!this.historyItem.sanitizedOldDescription) {
           return this.VERB_ADDED;
+        } else if (this.historyItem.sanitizedOldDescription && !this.historyItem.sanitizedNewDescription) {
+          return this.VERB_REMOVED;
         } else {
           return this.VERB_CHANGED;
         }
@@ -36,6 +39,8 @@ export class HistoryItemComponent {
       {
         if (!this.historyItem.sanitizedOldPoints) {
           return this.VERB_ADDED;
+        } else if (this.historyItem.sanitizedOldPoints && !this.historyItem.sanitizedNewPoints) {
+          return this.VERB_REMOVED;
         } else {
           return this.VERB_CHANGED;
         }
