@@ -87,7 +87,52 @@ describe('HistoryContainerComponent', () => {
       spyOn(trelloDataService, 'getHistory').and.returnValue(of(MOCK_HISTORY));
     });
 
-    it('should load the history when running in extension mode', async (() => {
+    it('should set the title', async(() => {
+      component.ngOnInit();
+
+      fixture.whenStable().then(() => {
+        const titleElement: HTMLElement = fixture.nativeElement.querySelector('h6');
+
+        const actual = titleElement.innerHTML.trim();
+        const expected = MOCK_HISTORY.title;
+
+        expect(actual).toBe(expected);
+      });
+    }));
+
+    it('should show the last viewed date if the history has been previously viewed', async(() => {
+      component.ngOnInit();
+
+      fixture.whenStable().then(() => {
+        component.history.lastViewed = new Date();
+
+        fixture.detectChanges();
+
+        const lastViewedElement: HTMLElement = fixture.nativeElement.querySelector('#lastViewed');
+        const firstViewingElement: HTMLElement = fixture.nativeElement.querySelector('#firstViewing');
+
+        expect(lastViewedElement).toBeTruthy();
+        expect(firstViewingElement).toBeNull();
+      });
+    }));
+
+    it('should show the last viewed data if the history has been previously viewed', async(() => {
+      component.ngOnInit();
+
+      fixture.whenStable().then(() => {
+        component.history.lastViewed = null;
+
+        fixture.detectChanges();
+
+        const lastViewedElement: HTMLElement = fixture.nativeElement.querySelector('#lastViewed');
+        const firstViewingElement: HTMLElement = fixture.nativeElement.querySelector('#firstViewing');
+
+        expect(lastViewedElement).toBeNull();
+        expect(firstViewingElement).toBeTruthy();
+      });
+    }));
+
+    it('should load the history when running in extension mode', async(() => {
       coreService.isRunningInExtensionMode = true;
 
       component.ngOnInit();
@@ -99,7 +144,7 @@ describe('HistoryContainerComponent', () => {
       });
     }));
 
-    it('should load the history when running in browser mode', async (() => {
+    it('should load the history when running in browser mode', async(() => {
       coreService.isRunningInExtensionMode = false;
 
       component.ngOnInit();
@@ -112,8 +157,8 @@ describe('HistoryContainerComponent', () => {
     }));
 
     it('should refresh the extension icon and badge', () => {
-      coreService.isRunningInExtensionMode = false;
-      spyOn(coreService, 'refreshIcon');
+      coreService.isRunningInExtensionMode = true;
+      spyOn(coreService, 'refreshIcon').and.callThrough();
 
       component.ngOnInit();
 

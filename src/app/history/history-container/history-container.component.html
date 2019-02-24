@@ -23,8 +23,8 @@
       <history-item-list [historyItems]="filteredHistoryItems"></history-item-list>
     </div>
     <div class="last-viewed">
-      <span *ngIf="history.lastViewed">You last viewed this history on {{history.lastViewed | date:'fullDate'}} at {{history.lastViewed | date:'mediumTime'}}</span>
-      <span *ngIf="!history.lastViewed">This is the first time you've viewed this card's history.</span>
+      <span *ngIf="history.lastViewed" id="lastViewed">You last viewed this history on {{history.lastViewed | date:'fullDate'}} at {{history.lastViewed | date:'mediumTime'}}</span>
+      <span *ngIf="!history.lastViewed" id="firstViewing">This is the first time you've viewed this card's history.</span>
     </div>
   </div>
 </div>
