@@ -31,15 +31,21 @@ export class HistoryContainerComponent implements OnInit {
 
       this.loadHistory();
     }
-
-    this.coreService.refreshIcon(this.trelloDataService);
   }
 
-  loadHistory(): void {
-    this.trelloDataService.getHistory(this.shortLink).subscribe(history => {
-      this.history = history;
-      this.applyHistoryItemFilterAndSort();
-      this.trelloDataService.applyLastViewedToHistory(this.history, true);
+  loadHistory(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.trelloDataService.getHistory(this.shortLink).subscribe(history => {
+        this.history = history;
+  
+        this.applyHistoryItemFilterAndSort();
+  
+        this.trelloDataService.applyLastViewedToHistory(this.history, true).then(() => {
+          this.coreService.updateBadgeForCurrentTabByHistory(this.history);
+
+          resolve();
+        }).catch(err => (reject(err)));
+      });
     });
   }
 

@@ -134,35 +134,62 @@ describe('HistoryContainerComponent', () => {
 
     it('should load the history when running in extension mode', async(() => {
       coreService.isRunningInExtensionMode = true;
+      spyOn(component, 'loadHistory').and.callThrough();
 
       component.ngOnInit();
 
       fixture.whenStable().then(() => {
-        expect(component.shortLink).toBe(MOCK_SHORT_LINK);
-        expect(component.history).toBe(MOCK_HISTORY);
-        expect(component.filteredHistoryItems).toBeTruthy();
+        expect(component.loadHistory).toHaveBeenCalled();
       });
     }));
 
     it('should load the history when running in browser mode', async(() => {
       coreService.isRunningInExtensionMode = false;
+      spyOn(component, 'loadHistory').and.callThrough();
 
       component.ngOnInit();
 
       fixture.whenStable().then(() => {
-        expect(component.shortLink).toBe(MOCK_SHORT_LINK);
-        expect(component.history).toBe(MOCK_HISTORY);
-        expect(component.filteredHistoryItems).toBeTruthy();
+        expect(component.loadHistory).toHaveBeenCalled();
       });
     }));
 
-    it('should refresh the extension icon and badge', () => {
-      coreService.isRunningInExtensionMode = true;
-      spyOn(coreService, 'refreshIcon').and.callThrough();
+    describe('loadHistory', () => {
+      it('should refresh the extension icon and badge', async(() => {
+        coreService.isRunningInExtensionMode = true;
+        spyOn(coreService, 'updateBadgeForCurrentTabByHistory').and.callThrough();
+  
+        component.loadHistory().then(() => {
+          expect(coreService.updateBadgeForCurrentTabByHistory).toHaveBeenCalled();
+        });
+      }));
 
-      component.ngOnInit();
+      it('should set the component\'s shortLink', async(() => {
+        coreService.isRunningInExtensionMode = true;
+        spyOn(coreService, 'updateBadgeForCurrentTabByHistory').and.callThrough();
+  
+        component.loadHistory().then(() => {
+          expect(component.shortLink).toBe(MOCK_SHORT_LINK);
+        });
+      }));
 
-      expect(coreService.refreshIcon).toHaveBeenCalled();
+      it('should set the component\'s history', async(() => {
+        coreService.isRunningInExtensionMode = true;
+        spyOn(coreService, 'updateBadgeForCurrentTabByHistory').and.callThrough();
+  
+        component.loadHistory().then(() => {
+          expect(component.history).toBe(MOCK_HISTORY);
+        });
+      }));
+
+      it('should set the component\'s filteredHistoryItems', async(() => {
+        coreService.isRunningInExtensionMode = true;
+        spyOn(coreService, 'updateBadgeForCurrentTabByHistory').and.callThrough();
+  
+        component.loadHistory().then(() => {
+          expect(component.filteredHistoryItems).toBeTruthy();
+        });
+      }));
     });
   });
 });
