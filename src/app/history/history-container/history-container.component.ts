@@ -38,10 +38,8 @@ export class HistoryContainerComponent implements OnInit {
   loadHistory(): void {
     this.trelloDataService.getHistory(this.shortLink).subscribe(history => {
       this.history = history;
-
-      this.trelloDataService.applyLastViewedToHistory(this.history, true, () => {
-        this.applyHistoryItemFilterAndSort();
-      });
+      this.applyHistoryItemFilterAndSort();
+      this.trelloDataService.applyLastViewedToHistory(this.history, true);
     });
   }
 

@@ -34,62 +34,65 @@ export class TrelloDataService {
     );
   }
 
-  applyLastViewedToHistory(history: History, refresh: boolean, callback): void {
-    this.getCardDataFromLocalStorage((cardData) => {
-      let cardDataItem = {
-        cardId: history.id,
-        lastViewed: null
-      };
+  applyLastViewedToHistory(history: History, refresh: boolean): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.getCardDataFromLocalStorage().then((cardData) => {
+        let cardDataItem = {
+          cardId: history.id,
+          lastViewed: null
+        };
 
-      let cardDataItemPos;
+        let cardDataItemPos;
 
-      for (let i in cardData) {
-        if (cardData[i].cardId == history.id) {
-          cardDataItem = cardData[i];
-          cardDataItemPos = i;
+        for (let i in cardData) {
+          if (cardData[i].cardId == history.id) {
+            cardDataItem = cardData[i];
+            cardDataItemPos = i;
 
-          break;
-        }
-      }
-
-      if (cardDataItem.lastViewed) {
-        history.lastViewed = new Date(cardDataItem.lastViewed);
-        history.historyItems.map(historyItem => historyItem.isNew = historyItem.trelloHistoryDataObj.date > history.lastViewed);
-      }
-
-      if (refresh) {
-        try {
-          cardDataItem.lastViewed = new Date().toUTCString();
-
-          if (cardDataItemPos >= 0) {
-            cardData[cardDataItemPos] = cardDataItem;
-          } else {
-            cardData.push(cardDataItem);
+            break;
           }
-
-          this.saveCardDataToLocalStorage(cardData, null);
-        } catch (err) {
-          this.coreService.console.error(err);
         }
-      }
 
-      if (callback) {
-        callback();
-      }
+        if (cardDataItem.lastViewed) {
+          history.lastViewed = new Date(cardDataItem.lastViewed);
+          history.historyItems.map(historyItem => historyItem.isNew = historyItem.trelloHistoryDataObj.date > history.lastViewed);
+        }
+
+        if (refresh) {
+          try {
+            cardDataItem.lastViewed = new Date().toUTCString();
+
+            if (cardDataItemPos >= 0) {
+              cardData[cardDataItemPos] = cardDataItem;
+            } else {
+              cardData.push(cardDataItem);
+            }
+
+            this.saveCardDataToLocalStorage(cardData, null);
+          } catch (err) {
+            this.coreService.console.error(err);
+          }
+        }
+      }).catch((err) => {
+
+      }).finally(() => {
+        resolve();
+      });
     });
   }
 
   /**
     * Gets the card data from storage
-    * @param {function(tab):void} callback - Function to invoke with the acquired tab data
     */
-   getCardDataFromLocalStorage(callback): void {
-    this.coreService.storage.get("cardData", function (result) {
-      if (!result.cardData) {
-        result.cardData = [];
-      }
+  getCardDataFromLocalStorage(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.coreService.storage.get("cardData", (result) => {
+        if (!result.cardData) {
+          result.cardData = [];
+        }
 
-      callback(result.cardData);
+        resolve(result.cardData);
+      });
     });
   }
 
@@ -105,7 +108,7 @@ export class TrelloDataService {
   * Purges storage of the minimum number of ("old") items necessary to remain under STORAGE_LIMIT_CARD_DATA_ITEMS
   */
   cleanUpLocalStorage(): void {
-    this.getCardDataFromLocalStorage(function (cardData) {
+    this.getCardDataFromLocalStorage().then((cardData) => {
       if (cardData.length === 0) {
         return;
       }
@@ -127,11 +130,9 @@ export class TrelloDataService {
         cardData.sort((a, b) => new Date(a.lastViewed).valueOf() - new Date(b.lastViewed).valueOf());
         cardData.splice(cardDataStorageInfo.cleanUpStartIndex, cardDataStorageInfo.itemsToCleanUp);
 
-        if (this.storage) {
+        if (chrome.storage) {
           this.saveCardDataToLocalStorage(cardData, null);
         }
-
-        this.console.debug("Cleaned up " + cardDataStorageInfo.itemsToCleanUp + " cardData items");
       }
     });
   }

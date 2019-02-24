@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync, tick, discardPeriodicTasks, flush, flushMicrotasks } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HistoryContainerComponent } from './history-container.component';
 import { HistoryItemListComponent } from '../history-item-list/history-item-list.component';
@@ -87,27 +87,29 @@ describe('HistoryContainerComponent', () => {
       spyOn(trelloDataService, 'getHistory').and.returnValue(of(MOCK_HISTORY));
     });
 
-    it('should invoke loadHistory() when running in extension mode', fakeAsync(async () => {
+    it('should load the history when running in extension mode', async (() => {
       coreService.isRunningInExtensionMode = true;
-      spyOn(component, 'loadHistory');
 
       component.ngOnInit();
 
       fixture.whenStable().then(() => {
         expect(component.shortLink).toBe(MOCK_SHORT_LINK);
-        expect(component.loadHistory).toHaveBeenCalled();
+        expect(component.history).toBe(MOCK_HISTORY);
+        expect(component.filteredHistoryItems).toBeTruthy();
       });
     }));
 
-    it('should invoke loadHistory() when running in browser mode', () => {
+    it('should load the history when running in browser mode', async (() => {
       coreService.isRunningInExtensionMode = false;
-      spyOn(component, 'loadHistory');
 
       component.ngOnInit();
 
-      expect(component.shortLink).toBe(MOCK_SHORT_LINK);
-      expect(component.loadHistory).toHaveBeenCalled();
-    });
+      fixture.whenStable().then(() => {
+        expect(component.shortLink).toBe(MOCK_SHORT_LINK);
+        expect(component.history).toBe(MOCK_HISTORY);
+        expect(component.filteredHistoryItems).toBeTruthy();
+      });
+    }));
 
     it('should refresh the extension icon and badge', () => {
       coreService.isRunningInExtensionMode = false;

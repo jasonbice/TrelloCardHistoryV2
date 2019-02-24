@@ -125,12 +125,10 @@ export class LegacyCoreService {
   }
 
   getTrelloCardIdFromCurrentUrl(): Promise<string> {
-    const t = this;
-
     return new Promise<string>((resolve, reject) => {
-      t.getCurrentUrl().then(url => {
+      this.getCurrentUrl().then(url => {
         if (url) {
-          resolve(t.getTrelloCardIdFromUrl(url));
+          resolve(this.getTrelloCardIdFromUrl(url));
         } else {
           resolve(null);
         }
@@ -142,31 +140,40 @@ export class LegacyCoreService {
   * Refreshes the extension's icon for the active tab
   * @param {TrelloDataService} trelloService - Service providing interactions with the Trello API
   */
-  refreshIcon(trelloDataService: TrelloDataService): void {
-    this.console.log("Refreshing icon...");
-    let that = this;
+  refreshIcon(trelloDataService: TrelloDataService): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.console.log("Refreshing icon...");
+      let that = this;
 
-    // TODO: Use core.getActiveTab(callback)
-    chrome.tabs.query({ "active": true, "lastFocusedWindow": true }, (tabs) => {
-      if (!tabs || tabs.length === 0) {
-        return;
-      }
+      chrome.tabs.query({ "active": true, "lastFocusedWindow": true }, (tabs) => {
+        if (!tabs || tabs.length === 0) {
+          return;
+        }
 
-      let url: string = tabs[0].url;
-      let trelloCardId: string = this.getTrelloCardIdFromUrl(url);
-      let tabId: number = tabs[0].id;
+        let url: string = tabs[0].url;
+        let trelloCardId: string = this.getTrelloCardIdFromUrl(url);
+        let tabId: number = tabs[0].id;
 
-      if (url.indexOf(BASE_OPEN_CARD_URL) === 0) {
-        chrome.browserAction.enable(tabId);
+        if (url.indexOf(BASE_OPEN_CARD_URL) === 0) {
+          chrome.browserAction.enable(tabId);
 
-        trelloDataService.getHistory(trelloCardId).subscribe(history => {
-          trelloDataService.applyLastViewedToHistory(history, false, () => {
-            that.applyCardResultToIcon(tabId, history);
+          trelloDataService.getHistory(trelloCardId).subscribe(history => {
+            trelloDataService.applyLastViewedToHistory(history, false).then(() => {
+              that.applyCardResultToIcon(tabId, history);
+
+              resolve();
+            });
+          }, err => {
+            this.applyCardResultToIcon(tabId, null);
+
+            reject();
           });
-        }, err => this.applyCardResultToIcon(tabId, null));
-      } else {
-        this.resetExtension(tabId);
-      }
+        } else {
+          this.resetExtension(tabId);
+
+          resolve();
+        }
+      });
     });
   }
 
