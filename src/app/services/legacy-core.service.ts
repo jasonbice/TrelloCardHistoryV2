@@ -140,38 +140,35 @@ export class LegacyCoreService {
     });
   }
 
-  updateBadgeForTab(tabId: number, trelloDataService: TrelloDataService): Promise<any> {
+  updateBadgeForTab(tab: any, trelloDataService: TrelloDataService): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.console.log("Refreshing icon...");
-      let that = this;
+      if (tab) {
+        const trelloCardId: string = this.getTrelloCardIdFromUrl(tab.url);
 
-      this.getActiveTab((tab) => {
-        if (tab) {
-          const trelloCardId: string = this.getTrelloCardIdFromUrl(tab.url);
+        if (trelloCardId) {
+          chrome.browserAction.enable(tab.id);
 
-          if (trelloCardId) {
-            chrome.browserAction.enable(tab.id);
+          trelloDataService.getHistory(trelloCardId).subscribe(history => {
+            trelloDataService.applyLastViewedToHistory(history, false).then(() => {
+              this.updateBadge(tab.id, history);
 
-            trelloDataService.getHistory(trelloCardId).subscribe(history => {
-              trelloDataService.applyLastViewedToHistory(history, false).then(() => {
-                that.updateBadge(tab.id, history);
-
-                resolve();
-              });
-            }, err => {
-              this.updateBadge(tab.id, null);
-
-              reject();
+              resolve();
             });
-          } else {
-            this.resetExtension(tab.id);
+          }, err => {
+            this.updateBadge(tab.id, null);
 
-            resolve();
-          }
+            reject();
+          });
         } else {
+          this.resetExtension(tab.id);
+
           resolve();
         }
-      });
+      } else {
+        this.resetExtension();
+
+        resolve();
+      }
     });
   }
 

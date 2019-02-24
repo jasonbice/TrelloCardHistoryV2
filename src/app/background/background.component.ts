@@ -18,7 +18,7 @@ export class BackgroundComponent implements OnInit {
 
       this.coreService.addTabsUpdatedListener((tabId, changeInfo, tab) => {
         if (changeInfo.status === 'complete') {
-          this.coreService.updateBadgeForTab(tabId, this.trelloDataService);
+          this.coreService.updateBadgeForTab(tab, this.trelloDataService);
         }
       });
     }
