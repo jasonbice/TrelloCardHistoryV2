@@ -16,8 +16,13 @@ export class HistoryContainerComponent implements OnInit {
   history: History;
   filteredHistoryItems: HistoryItem[];
   historyItemFilter: HistoryItemFilter = new HistoryItemFilter();
+  sortBy: SortBy;
+  sortAscending: boolean;
 
-  constructor(private coreService: LegacyCoreService, private trelloDataService: TrelloDataService, private changeDetector: ChangeDetectorRef, private activatedRoute: ActivatedRoute) { }
+  constructor(private coreService: LegacyCoreService, private trelloDataService: TrelloDataService, private changeDetector: ChangeDetectorRef, private activatedRoute: ActivatedRoute) {
+    this.sortBy = SortBy.Date;
+    this.sortAscending = false;
+  }
 
   ngOnInit() {
     if (this.coreService.isRunningInExtensionMode) {
@@ -37,9 +42,9 @@ export class HistoryContainerComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.trelloDataService.getHistory(this.shortLink).subscribe(history => {
         this.history = history;
-  
+
         this.applyHistoryItemFilterAndSort();
-  
+
         this.trelloDataService.applyLastViewedToHistory(this.history, true).then(() => {
           this.coreService.updateBadgeForCurrentTabByHistory(this.history);
 
@@ -51,7 +56,7 @@ export class HistoryContainerComponent implements OnInit {
 
   applyHistoryItemFilterAndSort(): void {
     this.filteredHistoryItems = this.historyItemFilter.filter(this.history.historyItems);
-    HistoryItem.sort(this.filteredHistoryItems, SortBy.Date, false);
+    HistoryItem.sort(this.filteredHistoryItems, this.sortBy, this.sortAscending);
 
     this.changeDetector.detectChanges();
   }
