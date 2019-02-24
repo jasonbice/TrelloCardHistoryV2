@@ -118,8 +118,12 @@ export class LegacyCoreService {
   }
 
   getTrelloCardIdFromUrl(trelloCardUrl: string): string {
-    let endOfCardIdIdx = trelloCardUrl.indexOf('/', TRELLO_CARD_ID_BEGIN_IDX + 1);
-    let trelloCardId = trelloCardUrl.substring(TRELLO_CARD_ID_BEGIN_IDX, endOfCardIdIdx);
+    if (!trelloCardUrl.startsWith(BASE_OPEN_CARD_URL)) {
+      return null;
+    }
+
+    const endOfCardIdIdx = trelloCardUrl.indexOf('/', TRELLO_CARD_ID_BEGIN_IDX + 1);
+    const trelloCardId = trelloCardUrl.substring(TRELLO_CARD_ID_BEGIN_IDX, endOfCardIdIdx);
 
     return trelloCardId;
   }
@@ -142,29 +146,29 @@ export class LegacyCoreService {
       let that = this;
 
       this.getActiveTab((tab) => {
-        if (!tab) {
-          return;
-        }
+        if (tab) {
+          const trelloCardId: string = this.getTrelloCardIdFromUrl(tab.url);
 
-        let trelloCardId: string = this.getTrelloCardIdFromUrl(tab.url);
+          if (trelloCardId) {
+            chrome.browserAction.enable(tab.id);
 
-        if (tab.url.indexOf(BASE_OPEN_CARD_URL) === 0) {
-          chrome.browserAction.enable(tab.id);
+            trelloDataService.getHistory(trelloCardId).subscribe(history => {
+              trelloDataService.applyLastViewedToHistory(history, false).then(() => {
+                that.updateBadge(tab.id, history);
 
-          trelloDataService.getHistory(trelloCardId).subscribe(history => {
-            trelloDataService.applyLastViewedToHistory(history, false).then(() => {
-              that.updateBadge(tab.id, history);
+                resolve();
+              });
+            }, err => {
+              this.updateBadge(tab.id, null);
 
-              resolve();
+              reject();
             });
-          }, err => {
-            this.updateBadge(tab.id, null);
+          } else {
+            this.resetExtension(tab.id);
 
-            reject();
-          });
+            resolve();
+          }
         } else {
-          this.resetExtension(tab.id);
-
           resolve();
         }
       });
@@ -182,8 +186,8 @@ export class LegacyCoreService {
   }
 
   updateBadge(tabId: number, history?: History): void {
-    if (history != null) {
-      let totalUpdateCount = history.totalUpdateCount;
+    if (history !== null) {
+      const totalUpdateCount = history.totalUpdateCount;
 
       let badgeColor = (totalUpdateCount > 0 ? BADGE_COLOR_CHANGES : BADGE_COLOR_CHANGES_NONE);
       let badgeText = totalUpdateCount.toString();
