@@ -27,6 +27,17 @@ describe('HistoryItemComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should display a \'new\' badge if the item has not been seen before', () => {
+    component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description && history.sanitizedNewDescription && history.sanitizedNewDescription.length > PrettifyHistoryValuePipe.DEFAULT_MAX_LENGTH);
+    component.historyItem.isNew = true;
+
+    fixture.detectChanges();
+
+    const isNewBadge: HTMLElement = fixture.nativeElement.querySelector('.badge-warning');
+
+    expect(isNewBadge).toBeTruthy();
+  });
+
   describe('toggleNewValueCollapse', () => {
     it('should be collapsed by default', () => {
       component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description && history.sanitizedNewDescription && history.sanitizedNewDescription.length > PrettifyHistoryValuePipe.DEFAULT_MAX_LENGTH);
