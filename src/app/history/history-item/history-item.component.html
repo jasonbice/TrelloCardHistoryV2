@@ -18,11 +18,11 @@
         </div>
         <div class="history-item-changes-new" (click)="toggleNewValueCollapse()"
           [ngClass]="{'toggle-collapse' : historyItem.newValue?.length > MAX_VALUE_DISPLAY_LENGTH}"
-          [innerHTML]="newValueCollapsed ? (historyItem.newValue | prettifyHistoryValue) : historyItem.newValue">
+          [innerHTML]="historyItem.updateType === 'Created' ? '' : (newValueCollapsed ? (historyItem.newValue | prettifyHistoryValue) : historyItem.newValue)">
         </div>
         <div class="history-item-changes-old" (click)="toggleOldValueCollapse()"
           [ngClass]="{'toggle-collapse' : historyItem.oldValue?.length > MAX_VALUE_DISPLAY_LENGTH, 'history-item-changes-old-expanded': !oldValueCollapsed}"
-          [innerHTML]="oldValueCollapsed ? (historyItem.oldValue | prettifyHistoryValue) : historyItem.oldValue">
+          [innerHTML]="historyItem.updateType === 'Created' ? '' : (oldValueCollapsed ? (historyItem.oldValue | prettifyHistoryValue) : historyItem.oldValue)">
         </div>
     </div>
     <div class="history-item-misc">
