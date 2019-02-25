@@ -42,6 +42,8 @@ export class HistoryItem {
     }
 
     constructor(public trelloHistoryDataObj: ITrelloHistoryDataObj) {
+        this.trelloHistoryDataObj.type = this.trelloHistoryDataObj.type === 'convertToCardFromCheckItem' ? 'createCard' : this.trelloHistoryDataObj.type;
+
         this.initialize();
     }
 

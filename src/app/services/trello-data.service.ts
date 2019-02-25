@@ -29,6 +29,7 @@ export class TrelloDataService {
     return this.http.get<ITrelloHistoryDataObj[]>(cardDataUri).pipe(
       map<ITrelloHistoryDataObj[], History>(trelloHistoryDataObjects => new History(shortLink, trelloHistoryDataObjects.filter(t =>
         t.type === 'createCard' ||
+        t.type === 'convertToCardFromCheckItem' ||
         (t.type === 'updateCard' && !t.data.old.idList && (t.data.old.name || t.data.card.desc || t.data.old.desc))
       )))
     );
