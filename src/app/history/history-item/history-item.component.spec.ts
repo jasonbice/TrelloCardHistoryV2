@@ -28,7 +28,7 @@ describe('HistoryItemComponent', () => {
   });
 
   it('should display a \'new\' badge if the item has not been seen before', () => {
-    component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description && history.sanitizedNewDescription && history.sanitizedNewDescription.length > PrettifyHistoryValuePipe.DEFAULT_MAX_LENGTH);
+    component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description);
     component.historyItem.isNew = true;
 
     fixture.detectChanges();
@@ -36,6 +36,17 @@ describe('HistoryItemComponent', () => {
     const isNewBadge: HTMLElement = fixture.nativeElement.querySelector('.badge-warning');
 
     expect(isNewBadge).toBeTruthy();
+  });
+
+  it('should not display a \'new\' badge if the item has been seen before', () => {
+    component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description);
+    component.historyItem.isNew = false;
+
+    fixture.detectChanges();
+
+    const isNewBadge: HTMLElement = fixture.nativeElement.querySelector('.badge-warning');
+
+    expect(isNewBadge).toBeNull();
   });
 
   describe('toggleNewValueCollapse', () => {
