@@ -25,7 +25,7 @@ export class HistoryItem {
         switch (this.updateType) {
             case 'Created': return null;
             case 'Description': return this.sanitizedOldDescription;
-            case 'Points': return String(this.sanitizedOldPoints ? this.sanitizedOldPoints + ' points' : 'None');
+            case 'Points': return String(this.sanitizedOldPoints ? this.sanitizedOldPoints + ' points' : '');
             case 'Title': return this.sanitizedOldTitle;
             default: throw new Error(`${this.updateType} not implemented`);
         }
@@ -35,7 +35,7 @@ export class HistoryItem {
         switch (this.updateType) {
             case 'Created': return null;
             case 'Description': return this.sanitizedNewDescription;
-            case 'Points': return String(this.sanitizedNewPoints ? this.sanitizedNewPoints + ' points' : 'None');
+            case 'Points': return String(this.sanitizedNewPoints ? this.sanitizedNewPoints + ' points' : '');
             case 'Title': return this.sanitizedNewTitle;
             default: throw new Error(`${this.updateType} not implemented`);
         }
