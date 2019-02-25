@@ -27,6 +27,34 @@ describe('HistoryItemComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should display the author\'s avatar if they have one', () => {
+    component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description);
+    component.historyItem.trelloHistoryDataObj.memberCreator.avatarUrl = 'https://trello-avatars.s3.amazonaws.com/bf043662d540a9c0e405e4df1f30479e';
+    component.historyItem.trelloHistoryDataObj.memberCreator.initials = 'JB';
+
+    fixture.detectChanges();
+
+    const avatarElement: HTMLElement = fixture.nativeElement.querySelector('#memberCreatorAvatar');
+    const initialsElement: HTMLElement = fixture.nativeElement.querySelector('#memberCreatorInitials');
+
+    expect(avatarElement).toBeTruthy();
+    expect(initialsElement).toBeNull();
+  });
+
+  it('should display the author\'s initials if they don\'t have an avatar', () => {
+    component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description);
+    component.historyItem.trelloHistoryDataObj.memberCreator.avatarUrl = null;
+    component.historyItem.trelloHistoryDataObj.memberCreator.initials = 'JB';
+
+    fixture.detectChanges();
+
+    const avatarElement: HTMLElement = fixture.nativeElement.querySelector('#memberCreatorAvatar');
+    const initialsElement: HTMLElement = fixture.nativeElement.querySelector('#memberCreatorInitials');
+
+    expect(avatarElement).toBeNull();
+    expect(initialsElement).toBeTruthy();
+  });
+
   it('should display a \'new\' badge if the item has not been seen before', () => {
     component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description);
     component.historyItem.isNew = true;

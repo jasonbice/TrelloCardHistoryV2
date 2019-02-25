@@ -1,10 +1,10 @@
 <div class="history-item">
   <div class="history-item-avatar">
     <div>
-      <img *ngIf="historyItem.trelloHistoryDataObj.memberCreator.avatarUrl"
+      <img *ngIf="historyItem.trelloHistoryDataObj.memberCreator.avatarUrl" id="memberCreatorAvatar"
         src="{{historyItem.trelloHistoryDataObj.memberCreator.avatarUrl}}/170.png"
         [title]="historyItem.trelloHistoryDataObj.memberCreator.fullName">
-      <span
+      <span id="memberCreatorInitials"
         *ngIf="!historyItem.trelloHistoryDataObj.memberCreator.avatarUrl">{{historyItem.trelloHistoryDataObj.memberCreator.initials}}</span>
     </div>
   </div>
