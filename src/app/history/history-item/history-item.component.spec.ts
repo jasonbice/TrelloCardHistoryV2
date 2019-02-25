@@ -1,9 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HistoryItemComponent } from './history-item.component';
-import { StringTruncatePipe } from 'src/app/shared/pipes/string-truncate.pipe';
 import { UpdateType } from 'src/app/shared/models/history/history-item.model';
 import { HistoryMock } from 'src/app/shared/models/history/history.model.mock';
 import { IsNullOrWhiteSpace } from 'src/app/shared/utils';
+import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-value.pipe';
 
 describe('HistoryItemComponent', () => {
   let component: HistoryItemComponent;
@@ -11,7 +11,7 @@ describe('HistoryItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [HistoryItemComponent, StringTruncatePipe]
+      declarations: [HistoryItemComponent, PrettifyHistoryValuePipe]
     })
       .compileComponents();
   }));
@@ -29,20 +29,20 @@ describe('HistoryItemComponent', () => {
 
   describe('toggleNewValueCollapse', () => {
     it('should be collapsed by default', () => {
-      component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description && history.sanitizedNewDescription && history.sanitizedNewDescription.length > component.MAX_VALUE_DISPLAY_LENGTH);
+      component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description && history.sanitizedNewDescription && history.sanitizedNewDescription.length > PrettifyHistoryValuePipe.DEFAULT_MAX_LENGTH);
 
-      const stringTruncatePipe: StringTruncatePipe = new StringTruncatePipe();
+      const pipe: PrettifyHistoryValuePipe = new PrettifyHistoryValuePipe();
 
       fixture.detectChanges();
-      
+
       const actual = fixture.nativeElement.querySelector('.history-item-changes-new').innerHTML;
-      const expected = stringTruncatePipe.transform(component.historyItem.sanitizedNewDescription, component.MAX_VALUE_DISPLAY_LENGTH, component.TRUNCATE_APPEND);
+      const expected = pipe.transform(component.historyItem.sanitizedNewDescription);
 
       expect(actual).toBe(expected);
     });
 
     it('should be expanded when clicked', () => {
-      component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description && history.sanitizedNewDescription && history.sanitizedNewDescription.length > component.MAX_VALUE_DISPLAY_LENGTH);
+      component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description && history.sanitizedNewDescription && history.sanitizedNewDescription.length > PrettifyHistoryValuePipe.DEFAULT_MAX_LENGTH);
 
       const newValueElement: HTMLElement = fixture.nativeElement.querySelector('.history-item-changes-new');
 
@@ -57,20 +57,20 @@ describe('HistoryItemComponent', () => {
 
   describe('toggleOldValueCollapse', () => {
     it('should be collapsed by default', () => {
-      component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description && history.sanitizedOldDescription && history.sanitizedOldDescription.length > component.MAX_VALUE_DISPLAY_LENGTH);
+      component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description && history.sanitizedOldDescription && history.sanitizedOldDescription.length > PrettifyHistoryValuePipe.DEFAULT_MAX_LENGTH);
 
-      const stringTruncatePipe: StringTruncatePipe = new StringTruncatePipe();
+      const pipe: PrettifyHistoryValuePipe = new PrettifyHistoryValuePipe();
 
       fixture.detectChanges();
-      
+
       const actual = fixture.nativeElement.querySelector('.history-item-changes-old').innerHTML;
-      const expected = stringTruncatePipe.transform(component.historyItem.sanitizedOldDescription, component.MAX_VALUE_DISPLAY_LENGTH, component.TRUNCATE_APPEND);
+      const expected = pipe.transform(component.historyItem.sanitizedOldDescription);
 
       expect(actual).toBe(expected);
     });
 
     it('should be expanded when clicked', () => {
-      component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description && history.sanitizedOldDescription && history.sanitizedOldDescription.length > component.MAX_VALUE_DISPLAY_LENGTH);
+      component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Description && history.sanitizedOldDescription && history.sanitizedOldDescription.length > PrettifyHistoryValuePipe.DEFAULT_MAX_LENGTH);
 
       const oldValueElement: HTMLElement = fixture.nativeElement.querySelector('.history-item-changes-old');
 
@@ -138,7 +138,7 @@ describe('HistoryItemComponent', () => {
       expect(actual).toBe(expected);
     });
 
-    it('should be VERB_REMOVED when the Points is changed from a non-null value to a null value', () => {
+    it('should be VERB_REMOVED when the Points are changed from a non-null value to a null value', () => {
       component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Points && history.sanitizedNewPoints === null && history.sanitizedOldPoints !== null);
 
       const actual = component.updateVerb;

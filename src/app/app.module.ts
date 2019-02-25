@@ -7,9 +7,9 @@ import { HistoryContainerComponent } from './history/history-container/history-c
 import { RouterModule } from '@angular/router';
 import { HistoryItemListComponent } from './history/history-item-list/history-item-list.component';
 import { HistoryItemComponent } from './history/history-item/history-item.component';
-import { StringTruncatePipe } from './shared/pipes/string-truncate.pipe';
 import { BackgroundComponent } from './background/background.component';
 import { FormsModule } from '@angular/forms';
+import { PrettifyHistoryValuePipe } from './shared/pipes/prettify-history-value.pipe';
 
 @NgModule({
   declarations: [
@@ -17,7 +17,7 @@ import { FormsModule } from '@angular/forms';
     HistoryContainerComponent,
     HistoryItemListComponent,
     HistoryItemComponent,
-    StringTruncatePipe,
+    PrettifyHistoryValuePipe,
     BackgroundComponent
   ],
   imports: [

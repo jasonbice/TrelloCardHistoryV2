@@ -1,5 +1,6 @@
 import { Component, Input, ChangeDetectorRef } from '@angular/core';
 import { HistoryItem, UpdateType } from 'src/app/shared/models/history/history-item.model';
+import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-value.pipe';
 
 @Component({
   selector: 'history-item',
@@ -7,12 +8,12 @@ import { HistoryItem, UpdateType } from 'src/app/shared/models/history/history-i
   styleUrls: ['./history-item.component.css']
 })
 export class HistoryItemComponent {
-  readonly MAX_VALUE_DISPLAY_LENGTH: number = 65;
+  readonly MAX_VALUE_DISPLAY_LENGTH: number = PrettifyHistoryValuePipe.DEFAULT_MAX_LENGTH
   readonly TRUNCATE_APPEND = '...';
   readonly VERB_ADDED: string = 'added';
   readonly VERB_CHANGED: string = 'changed';
   readonly VERB_CREATED: string = null;
-  readonly VERB_REMOVED: string = 'removed'
+  readonly VERB_REMOVED: string = 'removed';
 
   @Input() historyItem: HistoryItem;
 

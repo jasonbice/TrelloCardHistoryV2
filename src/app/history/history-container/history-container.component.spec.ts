@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { HistoryContainerComponent } from './history-container.component';
 import { HistoryItemListComponent } from '../history-item-list/history-item-list.component';
 import { HistoryItemComponent } from '../history-item/history-item.component';
-import { StringTruncatePipe } from 'src/app/shared/pipes/string-truncate.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import chrome from 'sinon-chrome';
@@ -13,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LegacyCoreService } from 'src/app/services/legacy-core.service';
 import { SortBy, HistoryItem } from 'src/app/shared/models/history/history-item.model';
 import { HistoryMock } from 'src/app/shared/models/history/history.model.mock';
+import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-value.pipe';
 
 describe('HistoryContainerComponent', () => {
   let component: HistoryContainerComponent;
@@ -33,7 +33,7 @@ describe('HistoryContainerComponent', () => {
         HistoryItemComponent,
         HistoryItemListComponent,
         HistoryContainerComponent,
-        StringTruncatePipe
+        PrettifyHistoryValuePipe
       ],
       providers: [
         {

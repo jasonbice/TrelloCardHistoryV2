@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HistoryItemListComponent } from './history-item-list.component';
 import { HistoryItemComponent } from '../history-item/history-item.component';
-import { StringTruncatePipe } from 'src/app/shared/pipes/string-truncate.pipe';
+import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-value.pipe';
 
 describe('HistoryItemListComponent', () => {
   let component: HistoryItemListComponent;
@@ -13,7 +13,7 @@ describe('HistoryItemListComponent', () => {
       declarations: [ 
         HistoryItemComponent,
         HistoryItemListComponent,
-        StringTruncatePipe
+        PrettifyHistoryValuePipe
       ]
     })
     .compileComponents();
