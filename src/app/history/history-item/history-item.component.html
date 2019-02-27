@@ -4,26 +4,26 @@
       <img *ngIf="historyItem.trelloHistoryDataObj.memberCreator.avatarUrl" id="memberCreatorAvatar"
         src="{{historyItem.trelloHistoryDataObj.memberCreator.avatarUrl}}/170.png"
         [title]="historyItem.trelloHistoryDataObj.memberCreator.fullName">
-      <span id="memberCreatorInitials"
-        *ngIf="!historyItem.trelloHistoryDataObj.memberCreator.avatarUrl">{{historyItem.trelloHistoryDataObj.memberCreator.initials}}</span>
+      <span id="memberCreatorInitials" *ngIf="!historyItem.trelloHistoryDataObj.memberCreator.avatarUrl"
+        [title]="historyItem.trelloHistoryDataObj.memberCreator.fullName">{{historyItem.trelloHistoryDataObj.memberCreator.initials}}</span>
     </div>
   </div>
   <div class="history-item-details">
     <div class="history-item-changes">
-        <div class="history-item-changes-title">
-          <strong>{{historyItem.updateType}}</strong> {{updateVerb}} by
-          <strong>{{historyItem.trelloHistoryDataObj.memberCreator.fullName}}</strong>
-          <div *ngIf="historyItem.isNew" class="badge badge-warning"
-            title="This change occurred after your last viewing of this card's history">New</div>
-        </div>
-        <div class="history-item-changes-new" (click)="toggleNewValueCollapse()"
-          [ngClass]="{'toggle-collapse' : historyItem.newValue?.length > MAX_VALUE_DISPLAY_LENGTH}"
-          [innerHTML]="historyItem.updateType === 'Created' ? '' : (newValueCollapsed ? (historyItem.newValue | prettifyHistoryValue) : historyItem.newValue)">
-        </div>
-        <div class="history-item-changes-old" (click)="toggleOldValueCollapse()"
-          [ngClass]="{'toggle-collapse' : historyItem.oldValue?.length > MAX_VALUE_DISPLAY_LENGTH, 'history-item-changes-old-expanded': !oldValueCollapsed}"
-          [innerHTML]="historyItem.updateType === 'Created' ? '' : (oldValueCollapsed ? (historyItem.oldValue | prettifyHistoryValue) : historyItem.oldValue)">
-        </div>
+      <div class="history-item-changes-title">
+        <strong>{{historyItem.updateType}}</strong> {{updateVerb}} by
+        <strong>{{historyItem.trelloHistoryDataObj.memberCreator.fullName}}</strong>
+        <div *ngIf="historyItem.isNew" class="badge badge-warning"
+          title="This change occurred after your last viewing of this card's history">New</div>
+      </div>
+      <div class="history-item-changes-new" (click)="toggleNewValueCollapse()"
+        [ngClass]="{'toggle-collapse' : historyItem.newValue?.length > MAX_VALUE_DISPLAY_LENGTH}"
+        [innerHTML]="historyItem.updateType === 'Created' ? '' : (newValueCollapsed ? (historyItem.newValue | prettifyHistoryValue) : historyItem.newValue)">
+      </div>
+      <div class="history-item-changes-old" (click)="toggleOldValueCollapse()"
+        [ngClass]="{'toggle-collapse' : historyItem.oldValue?.length > MAX_VALUE_DISPLAY_LENGTH, 'history-item-changes-old-expanded': !oldValueCollapsed}"
+        [innerHTML]="historyItem.updateType === 'Created' ? '' : (oldValueCollapsed ? (historyItem.oldValue | prettifyHistoryValue) : historyItem.oldValue)">
+      </div>
     </div>
     <div class="history-item-misc">
       <div>

@@ -36,7 +36,8 @@ strong {
     height: 60px;
     width: 60px;
     z-index: 1;
-    color: gray;
+    color: #666666;
+    cursor: default;
 }
 
 .history-item-details {
