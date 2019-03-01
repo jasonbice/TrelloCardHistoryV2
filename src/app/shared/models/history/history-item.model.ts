@@ -1,6 +1,7 @@
 import { ITrelloHistoryDataObj } from '../trello/trello-history-data-obj.model';
 
 export enum UpdateType {
+    Converted = 'Converted',
     Created = 'Created',
     Description = 'Description',
     Points = 'Points',
@@ -22,20 +23,22 @@ export class HistoryItem {
 
     get oldValue(): string {
         switch (this.updateType) {
-            case 'Created': return null;
-            case 'Description': return this.sanitizedOldDescription;
-            case 'Points': return String(this.sanitizedOldPoints ? this.sanitizedOldPoints + ' points' : '');
-            case 'Title': return this.sanitizedOldTitle;
+            case UpdateType.Converted: return null;
+            case UpdateType.Created: return null;
+            case UpdateType.Description: return this.sanitizedOldDescription;
+            case UpdateType.Points: return String(this.sanitizedOldPoints ? this.sanitizedOldPoints + ' points' : '');
+            case UpdateType.Title: return this.sanitizedOldTitle;
             default: throw new Error(`${this.updateType} not implemented`);
         }
     }
 
     get newValue(): string {
         switch (this.updateType) {
-            case 'Created': return null;
-            case 'Description': return this.sanitizedNewDescription;
-            case 'Points': return String(this.sanitizedNewPoints ? this.sanitizedNewPoints + ' points' : '');
-            case 'Title': return this.sanitizedNewTitle;
+            case UpdateType.Converted: return null;
+            case UpdateType.Created: return null;
+            case UpdateType.Description: return this.sanitizedNewDescription;
+            case UpdateType.Points: return String(this.sanitizedNewPoints ? this.sanitizedNewPoints + ' points' : '');
+            case UpdateType.Title: return this.sanitizedNewTitle;
             default: throw new Error(`${this.updateType} not implemented`);
         }
     }
@@ -44,8 +47,10 @@ export class HistoryItem {
         if (!this.trelloHistoryDataObj) {
             return null;
         }
-        
-        if (this.trelloHistoryDataObj.type === 'createCard') {
+
+        if (this.trelloHistoryDataObj.type === 'convertToCardFromCheckItem') {
+            return UpdateType.Converted;
+        } else if (this.trelloHistoryDataObj.type === 'createCard') {
             return UpdateType.Created;
         } else if (this.trelloHistoryDataObj.type === 'updateCard') {
             if (this.trelloHistoryDataObj.data.card.desc != this.trelloHistoryDataObj.data.old.desc) {
@@ -61,8 +66,6 @@ export class HistoryItem {
     }
 
     constructor(public trelloHistoryDataObj: ITrelloHistoryDataObj) {
-        this.trelloHistoryDataObj.type = this.trelloHistoryDataObj.type === 'convertToCardFromCheckItem' ? 'createCard' : this.trelloHistoryDataObj.type;
-
         this.initialize();
     }
 

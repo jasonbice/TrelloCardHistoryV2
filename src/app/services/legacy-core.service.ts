@@ -105,6 +105,10 @@ export class LegacyCoreService {
     chrome.browserAction.setTitle({ title: TITLE });
   }
 
+  getTrelloCardUrl(shortLink: string) {
+    return BASE_OPEN_CARD_URL + shortLink;
+  }
+
   getCurrentUrl(): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       chrome.tabs.query({ "active": true, "lastFocusedWindow": true }, (tabs) => {

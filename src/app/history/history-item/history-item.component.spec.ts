@@ -170,6 +170,16 @@ describe('HistoryItemComponent', () => {
       expect(actual).toBe(expected);
     });
 
+    xit('should be VERB_CONVERTED when the card has been converted from a checklist item', () => {
+      // TODO: Need a mock with Converted
+      component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Converted);
+
+      const actual = component.updateVerb;
+      const expected = component.VERB_CONVERTED;
+
+      expect(actual).toBe(expected);
+    });
+
     it('should be VERB_CREATED when the card has been created', () => {
       component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(history => history.updateType === UpdateType.Created);
 
