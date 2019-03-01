@@ -7,24 +7,51 @@
   </div>
   <div class="history-container">
     <div class="input-group input-group-sm">
-      <input type="text" class="form-control" placeholder="Filter" [(ngModel)]="historyItemFilter.filterBy" (ngModelChange)="applyHistoryItemFilterAndSort()">
-      <div class="input-group-append" id="button-addon4">
+      <input type="text" class="form-control" placeholder="Filter" [(ngModel)]="historyItemFilter.filterBy"
+        (ngModelChange)="applyHistoryItemFilterAndSort()">
+      <div class="input-group-append">
         <span class="input-group-text">Include changes to</span>
         <button class="btn btn-outline-secondary" type="button"
           [class.active]="historyItemFilter.includeDescriptionChanges"
-          (click)="historyItemFilter.includeDescriptionChanges = !historyItemFilter.includeDescriptionChanges; applyHistoryItemFilterAndSort()">Description</button>
+          (click)="historyItemFilter.includeDescriptionChanges = !historyItemFilter.includeDescriptionChanges; applyHistoryItemFilterAndSort()">description</button>
         <button class="btn btn-outline-secondary" type="button" [class.active]="historyItemFilter.includeTitleChanges"
-          (click)="historyItemFilter.includeTitleChanges = !historyItemFilter.includeTitleChanges; applyHistoryItemFilterAndSort()">Title</button>
+          (click)="historyItemFilter.includeTitleChanges = !historyItemFilter.includeTitleChanges; applyHistoryItemFilterAndSort()">title</button>
         <button class="btn btn-outline-secondary" type="button" [class.active]="historyItemFilter.includePointsChanges"
-          (click)="historyItemFilter.includePointsChanges = !historyItemFilter.includePointsChanges; applyHistoryItemFilterAndSort()">Points</button>
+          (click)="historyItemFilter.includePointsChanges = !historyItemFilter.includePointsChanges; applyHistoryItemFilterAndSort()">points</button>
+      </div>
+      <div *ngIf="changeAuthors.length > 1" class="input-group-append">
+        <span class="input-group-text">made by</span>
+      </div>
+      <div *ngIf="changeAuthors.length > 1" class="input-group-append dropdown">
+        <button class="btn btn-outline-secondary dropdown-toggle active" type="button" data-toggle="dropdown">{{historyItemFilter.memberCreatorIds.length > 0 ? historyItemFilter.memberCreatorIds.length : changeAuthors.length}}/{{changeAuthors.length}} authors
+          <span class="caret"></span></button>
+        <ul class="dropdown-menu dropdown-menu-right dropdown-menu-authors">
+          <li (click)="clearChangeAuthorSelections();$event.stopPropagation();"
+            [ngClass]="{'selected': historyItemFilter.memberCreatorIds.length === 0}">
+            <div class="avatar-small"><span>{{changeAuthors.length}}</span></div>
+            <div>{{changeAuthors.length == 2 ? 'Both' : 'All'}} change authors</div>
+          </li>
+          <li class="dropdown-divider"></li>
+          <li *ngFor="let changeAuthor of changeAuthors"
+            (click)="toggleChangeAuthorSelection(changeAuthor.id);$event.stopPropagation();"
+            [ngClass]="{'selected': historyItemFilter.memberCreatorIds.indexOf(changeAuthor.id) > -1}">
+            <div class="avatar-small">
+              <img *ngIf="changeAuthor.avatarUrl" src="{{changeAuthor.avatarUrl}}/170.png">
+              <span *ngIf="!changeAuthor.avatarUrl">{{changeAuthor.initials}}</span>
+            </div>
+            <div>{{changeAuthor.fullName}}</div>
+          </li>
+        </ul>
       </div>
     </div>
     <div class="history-items">
       <history-item-list [historyItems]="filteredHistoryItems"></history-item-list>
     </div>
     <div class="last-viewed">
-      <span *ngIf="history.lastViewed" id="lastViewed">You last viewed this history on {{history.lastViewed | date:'fullDate'}} at {{history.lastViewed | date:'mediumTime'}}</span>
-      <span *ngIf="!history.lastViewed" id="firstViewing">This is the first time you've viewed this card's history.</span>
+      <span *ngIf="history.lastViewed" id="lastViewed">You last viewed this history on
+        {{history.lastViewed | date:'fullDate'}} at {{history.lastViewed | date:'mediumTime'}}</span>
+      <span *ngIf="!history.lastViewed" id="firstViewing">This is the first time you've viewed this card's
+        history.</span>
     </div>
   </div>
 </div>

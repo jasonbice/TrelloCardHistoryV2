@@ -14,7 +14,7 @@ describe('HistoryItem', () => {
     });
 
     describe('getSanitizedTitle', () => {
-        it('return null if null is passed in', () => {
+        it('should return null if null is passed in', () => {
             const testTitle: string = null
 
             const actual: string = HistoryItem.getSanitizedTitle(testTitle);
@@ -23,7 +23,7 @@ describe('HistoryItem', () => {
             expect(actual).toBe(expected);
         });
 
-        it('return an empty string if an empty string is passed in', () => {
+        it('should return an empty string if an empty string is passed in', () => {
             const testTitle: string = ''
 
             const actual: string = HistoryItem.getSanitizedTitle(testTitle);
@@ -73,7 +73,7 @@ describe('HistoryItem', () => {
     });
 
     describe('getSanitizedPoints', () => {
-        it('return null if null is passed in', () => {
+        it('should return null if null is passed in', () => {
             const testTitle: string = null;
 
             const actual: number = HistoryItem.getSanitizedPoints(testTitle);
@@ -81,7 +81,7 @@ describe('HistoryItem', () => {
             expect(actual).toBeNull();
         });
 
-        it('return null if an empty string is passed in', () => {
+        it('should return null if an empty string is passed in', () => {
             const testTitle: string = '';
 
             const actual: number = HistoryItem.getSanitizedPoints(testTitle);
@@ -89,7 +89,7 @@ describe('HistoryItem', () => {
             expect(actual).toBeNull();
         });
 
-        it('return null if a value containing only a non-parened integer is passed in', () => {
+        it('should return null if a value containing only a non-parened integer is passed in', () => {
             const testTitle: string = '8';
 
             const actual: number = HistoryItem.getSanitizedPoints(testTitle);

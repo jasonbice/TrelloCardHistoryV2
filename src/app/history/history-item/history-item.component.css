@@ -11,35 +11,6 @@ strong {
     border-bottom: solid 1px #f0f0f0;
 }
 
-.history-item-avatar {
-    text-align: center;
-    display: table-cell;
-    width: 60px;
-}
-
-.history-item-avatar img {
-    height: 60px;
-    width: 60px;
-    border-radius: 0.5em;
-}
-
-.history-item-avatar span {
-    text-align: center;
-    border-radius: 2em;
-    background-color: #ebebeb;
-    border: solid 1px lightgray;
-    display: block;
-    font-size: 30px;
-    line-height: 60px;
-    overflow: hidden;
-    top: 0;
-    height: 60px;
-    width: 60px;
-    z-index: 1;
-    color: #666666;
-    cursor: default;
-}
-
 .history-item-details {
     display: table-cell;
     vertical-align: top;

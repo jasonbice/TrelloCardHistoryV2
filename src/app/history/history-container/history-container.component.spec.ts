@@ -194,9 +194,77 @@ describe('HistoryContainerComponent', () => {
         spyOn(component.historyItemFilter, 'filter').and.callThrough();
         spyOn(HistoryItem, 'sort').and.callThrough();
 
-        console.log("test", HistoryMock.MOCK_HISTORY);
-
         component.loadHistory().then(() => {
+          expect(component.historyItemFilter.filter).toHaveBeenCalled();
+          expect(HistoryItem.sort).toHaveBeenCalled();
+        });
+      });
+    });
+
+    describe('clearChangeAuthorSelections', () => {
+      it('should clear the selections from the filter and then apply the filter', () => {
+        component.loadHistory().then(() => {
+          component.historyItemFilter.memberCreatorIds.push('nonexistentid');
+
+          spyOn(component.historyItemFilter, 'filter').and.callThrough();
+          spyOn(HistoryItem, 'sort').and.callThrough();
+
+          component.clearChangeAuthorSelections();
+
+          expect(component.historyItemFilter.memberCreatorIds.length).toBe(0);
+          expect(component.historyItemFilter.filter).toHaveBeenCalled();
+          expect(HistoryItem.sort).toHaveBeenCalled();
+        });
+      });
+    });
+
+    describe('toggleChangeAuthorSelection', () => {
+      it('should add an id to the filter when it doesn\'t exist and then apply the filter', () => {
+        component.loadHistory().then(() => {
+          spyOn(component.historyItemFilter, 'filter').and.callThrough();
+          spyOn(HistoryItem, 'sort').and.callThrough();
+
+          component.toggleChangeAuthorSelection('nonexistentid');
+
+          expect(component.historyItemFilter.memberCreatorIds.length).toBe(1);
+          expect(component.historyItemFilter.filter).toHaveBeenCalled();
+          expect(HistoryItem.sort).toHaveBeenCalled();
+        });
+      });
+
+      it('should remove an id from the filter when it exists and then apply the filter', () => {
+        component.loadHistory().then(() => {
+          const id: string = 'nonexistentid';
+
+          component.historyItemFilter.memberCreatorIds.push(id);
+          expect(component.historyItemFilter.memberCreatorIds.length).toBe(1);
+
+          spyOn(component.historyItemFilter, 'filter').and.callThrough();
+          spyOn(HistoryItem, 'sort').and.callThrough();
+
+          component.toggleChangeAuthorSelection(id);
+
+          expect(component.historyItemFilter.memberCreatorIds.length).toBe(0);
+          expect(component.historyItemFilter.filter).toHaveBeenCalled();
+          expect(HistoryItem.sort).toHaveBeenCalled();
+        });
+      });
+
+      it('should not remove an id from the filter when another id was removed and then apply the filter', () => {
+        component.loadHistory().then(() => {
+          const id1: string = 'id1';
+          const id2: string = 'id2';
+
+          component.historyItemFilter.memberCreatorIds.push(id1);
+          component.historyItemFilter.memberCreatorIds.push(id2);
+          expect(component.historyItemFilter.memberCreatorIds.length).toBe(2);
+
+          spyOn(component.historyItemFilter, 'filter').and.callThrough();
+          spyOn(HistoryItem, 'sort').and.callThrough();
+
+          component.toggleChangeAuthorSelection(id2);
+
+          expect(component.historyItemFilter.memberCreatorIds.length).toBe(1);
           expect(component.historyItemFilter.filter).toHaveBeenCalled();
           expect(HistoryItem.sort).toHaveBeenCalled();
         });

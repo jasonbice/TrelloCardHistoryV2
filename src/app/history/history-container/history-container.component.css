@@ -29,3 +29,32 @@
     font-style: italic;
     font-size: 11px;
 }
+
+.dropdown-menu-authors {
+    width: 275px;
+    font-size: 14px;
+}
+
+.dropdown-menu-authors li:hover:not(.dropdown-divider) {
+    background-color: #ebebeb;
+    color: #000000;
+    cursor: pointer;
+}
+
+.dropdown-menu-authors li:not(.dropdown-divider) {
+    padding: 5px 0 5px 10px;
+    opacity: 0.35;
+}
+
+.dropdown-menu-authors li.selected {
+    opacity: 1.0;
+}
+
+.dropdown-menu-authors li div {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.dropdown-menu-authors li div:first-of-type {
+    margin-right: 10px;
+}

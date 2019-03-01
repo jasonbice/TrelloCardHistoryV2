@@ -5,6 +5,8 @@ import { LegacyCoreService } from 'src/app/services/legacy-core.service';
 import { ActivatedRoute } from '@angular/router';
 import { HistoryItemFilter } from 'src/app/shared/models/history/history-item-filter.model';
 import { HistoryItem, SortBy } from 'src/app/shared/models/history/history-item.model';
+import { ITrelloMemberCreator } from 'src/app/shared/models/trello/trello-member-creator.model';
+import { getDistinctObjectArray } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-history-container',
@@ -18,6 +20,7 @@ export class HistoryContainerComponent implements OnInit {
   historyItemFilter: HistoryItemFilter = new HistoryItemFilter();
   sortBy: SortBy;
   sortAscending: boolean;
+  changeAuthors: ITrelloMemberCreator[];
 
   constructor(private coreService: LegacyCoreService, private trelloDataService: TrelloDataService, private changeDetector: ChangeDetectorRef, private activatedRoute: ActivatedRoute) {
     this.sortBy = SortBy.Date;
@@ -43,6 +46,10 @@ export class HistoryContainerComponent implements OnInit {
       this.trelloDataService.getHistory(this.shortLink).subscribe(history => {
         this.history = history;
 
+        this.changeAuthors = getDistinctObjectArray(this.history.historyItems.map(h => {
+          return h.trelloHistoryDataObj.memberCreator;
+        }), 'id');
+
         this.applyHistoryItemFilterAndSort();
 
         this.trelloDataService.applyLastViewedToHistory(this.history, true).then(() => {
@@ -59,5 +66,23 @@ export class HistoryContainerComponent implements OnInit {
     HistoryItem.sort(this.filteredHistoryItems, this.sortBy, this.sortAscending);
 
     this.changeDetector.detectChanges();
+  }
+
+  clearChangeAuthorSelections(): void {
+    this.historyItemFilter.memberCreatorIds.splice(0);
+
+    this.applyHistoryItemFilterAndSort();
+  }
+
+  toggleChangeAuthorSelection(id: string): void {
+    const index: number = this.historyItemFilter.memberCreatorIds.indexOf(id);
+
+    if (index > -1) {
+      this.historyItemFilter.memberCreatorIds.splice(index, 1);
+    } else {
+      this.historyItemFilter.memberCreatorIds.push(id);
+    }
+
+    this.applyHistoryItemFilterAndSort();
   }
 }
