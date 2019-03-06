@@ -66,11 +66,6 @@ describe('HistoryContainerComponent', () => {
     expect(component.sortAscending).toBe(false);
   });
 
-  afterAll(() => {
-    chrome.flush();
-    delete window.chrome;
-  });
-
   describe('ngOnInit', () => {
     let coreService: LegacyCoreService;
     let trelloDataService: TrelloDataService;
@@ -87,7 +82,7 @@ describe('HistoryContainerComponent', () => {
       spyOn(trelloDataService, 'getHistory').and.returnValue(of(HistoryMock.MOCK_HISTORY));
     });
 
-    it('should set the title', async(() => {
+    it('should set the title', () => {
       component.ngOnInit();
 
       fixture.whenStable().then(() => {
@@ -98,9 +93,9 @@ describe('HistoryContainerComponent', () => {
 
         expect(actual).toBe(expected);
       });
-    }));
+    });
 
-    it('should show the last viewed date if the history has been previously viewed', async(() => {
+    it('should show the last viewed date if the history has been previously viewed', () => {
       component.ngOnInit();
 
       fixture.whenStable().then(() => {
@@ -114,9 +109,9 @@ describe('HistoryContainerComponent', () => {
         expect(lastViewedElement).toBeTruthy();
         expect(firstViewingElement).toBeNull();
       });
-    }));
+    });
 
-    it('should show the last viewed data if the history has been previously viewed', async(() => {
+    it('should show the last viewed data if the history has been previously viewed', () => {
       component.ngOnInit();
 
       fixture.whenStable().then(() => {
@@ -130,9 +125,9 @@ describe('HistoryContainerComponent', () => {
         expect(lastViewedElement).toBeNull();
         expect(firstViewingElement).toBeTruthy();
       });
-    }));
+    });
 
-    it('should load the history when running in extension mode', async(() => {
+    it('should load the history when running in extension mode', () => {
       coreService.isRunningInExtensionMode = true;
       spyOn(component, 'loadHistory').and.callThrough();
 
@@ -141,9 +136,9 @@ describe('HistoryContainerComponent', () => {
       fixture.whenStable().then(() => {
         expect(component.loadHistory).toHaveBeenCalled();
       });
-    }));
+    });
 
-    it('should load the history when running in browser mode', async(() => {
+    it('should load the history when running in browser mode', () => {
       coreService.isRunningInExtensionMode = false;
       spyOn(component, 'loadHistory').and.callThrough();
 
@@ -152,41 +147,41 @@ describe('HistoryContainerComponent', () => {
       fixture.whenStable().then(() => {
         expect(component.loadHistory).toHaveBeenCalled();
       });
-    }));
+    });
 
     describe('loadHistory', () => {
-      it('should refresh the extension icon and badge', async(() => {
+      it('should refresh the extension icon and badge', () => {
         coreService.isRunningInExtensionMode = true;
         spyOn(coreService, 'updateBadgeForCurrentTabByHistory').and.callThrough();
 
         component.loadHistory().then(() => {
           expect(coreService.updateBadgeForCurrentTabByHistory).toHaveBeenCalled();
         });
-      }));
+      });
 
-      it('should set the component\'s shortLink', async(() => {
+      it('should set the component\'s shortLink', () => {
         coreService.isRunningInExtensionMode = true;
 
         component.loadHistory().then(() => {
           expect(component.shortLink).toBe(HistoryMock.MOCK_SHORT_LINK);
         });
-      }));
+      });
 
-      it('should set the component\'s history', async(() => {
+      it('should set the component\'s history', () => {
         coreService.isRunningInExtensionMode = true;
 
         component.loadHistory().then(() => {
           expect(component.history).toBe(HistoryMock.MOCK_HISTORY);
         });
-      }));
+      });
 
-      it('should set the component\'s filteredHistoryItems', async(() => {
+      it('should set the component\'s filteredHistoryItems', () => {
         coreService.isRunningInExtensionMode = true;
 
         component.loadHistory().then(() => {
           expect(component.filteredHistoryItems).toBeTruthy();
         });
-      }));
+      });
     });
 
     describe('applyHistoryItemFilterAndSort', () => {
