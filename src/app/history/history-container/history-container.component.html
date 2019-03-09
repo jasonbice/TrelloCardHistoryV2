@@ -23,7 +23,9 @@
         <span class="input-group-text">made by</span>
       </div>
       <div *ngIf="changeAuthors.length > 1" class="input-group-append dropdown">
-        <button class="btn btn-outline-secondary dropdown-toggle active" type="button" data-toggle="dropdown">{{historyItemFilter.memberCreatorIds.length > 0 ? historyItemFilter.memberCreatorIds.length : changeAuthors.length}}/{{changeAuthors.length}} authors
+        <button class="btn btn-outline-secondary dropdown-toggle active" type="button"
+          data-toggle="dropdown">{{historyItemFilter.memberCreatorIds.length > 0 ? historyItemFilter.memberCreatorIds.length : changeAuthors.length}}/{{changeAuthors.length}}
+          authors
           <span class="caret"></span></button>
         <ul class="dropdown-menu dropdown-menu-right dropdown-menu-authors">
           <li (click)="clearChangeAuthorSelections();$event.stopPropagation();"
@@ -45,7 +47,9 @@
       </div>
     </div>
     <div class="history-items">
-      <history-item-list [historyItems]="filteredHistoryItems"></history-item-list>
+      <history-item [historyItem]="historyItem" [currentHistoryItemFilter]="historyItemFilter"
+        *ngFor="let historyItem of filteredHistoryItems"
+        (filterByMemberCreatorIdToggled)="onFilterByMemberCreatorIdToggled($event)"></history-item>
     </div>
     <div class="last-viewed">
       <span *ngIf="history.lastViewed" id="lastViewed">You last viewed this history on

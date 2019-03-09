@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HistoryContainerComponent } from './history-container.component';
-import { HistoryItemListComponent } from '../history-item-list/history-item-list.component';
 import { HistoryItemComponent } from '../history-item/history-item.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from 'src/app/app-routing.module';
@@ -31,7 +30,6 @@ describe('HistoryContainerComponent', () => {
       ],
       declarations: [
         HistoryItemComponent,
-        HistoryItemListComponent,
         HistoryContainerComponent,
         PrettifyHistoryValuePipe
       ],

@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HistoryContainerComponent } from './history/history-container/history-container.component';
 import { RouterModule } from '@angular/router';
-import { HistoryItemListComponent } from './history/history-item-list/history-item-list.component';
 import { HistoryItemComponent } from './history/history-item/history-item.component';
 import { BackgroundComponent } from './background/background.component';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +14,6 @@ import { PrettifyHistoryValuePipe } from './shared/pipes/prettify-history-value.
   declarations: [
     AppComponent,
     HistoryContainerComponent,
-    HistoryItemListComponent,
     HistoryItemComponent,
     PrettifyHistoryValuePipe,
     BackgroundComponent

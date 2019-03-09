@@ -1,7 +1,8 @@
-import { Component, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { HistoryItem, UpdateType } from 'src/app/shared/models/history/history-item.model';
 import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-value.pipe';
 import { LegacyCoreService } from 'src/app/services/legacy-core.service';
+import { HistoryItemFilter } from 'src/app/shared/models/history/history-item-filter.model';
 
 @Component({
   selector: 'history-item',
@@ -17,7 +18,25 @@ export class HistoryItemComponent {
   readonly VERB_CREATED: string = null;
   readonly VERB_REMOVED: string = 'removed';
 
+  @Output() filterByMemberCreatorIdToggled = new EventEmitter<string>();
   @Input() historyItem: HistoryItem;
+  @Input() currentHistoryItemFilter: HistoryItemFilter;
+
+  get memberIdFilterTitle(): string {
+    if (this.isFilteredByThisMemberId) {
+      return `Stop filtering by ${this.historyItem.trelloHistoryDataObj.memberCreator.fullName}'s changes`;
+    } else {
+      return `Filter by ${this.historyItem.trelloHistoryDataObj.memberCreator.fullName}'s changes`;
+    }
+  }
+
+  get isFilteredByThisMemberId(): boolean {
+    if (!this.currentHistoryItemFilter) {
+      return false;
+    }
+
+    return this.currentHistoryItemFilter.memberCreatorIds.includes(this.historyItem.trelloHistoryDataObj.idMemberCreator);
+  }
 
   newValueCollapsed: boolean = true;
   oldValueCollapsed: boolean = true;
@@ -75,6 +94,10 @@ export class HistoryItemComponent {
     this.oldValueCollapsed = !this.oldValueCollapsed;
 
     this.changeDetector.detectChanges();
+  }
+
+  onFilterByMemberCreatorIdToggled(): void {
+    this.filterByMemberCreatorIdToggled.emit(this.historyItem.trelloHistoryDataObj.idMemberCreator);
   }
 
 }

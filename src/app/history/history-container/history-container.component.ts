@@ -85,4 +85,10 @@ export class HistoryContainerComponent implements OnInit {
 
     this.applyHistoryItemFilterAndSort();
   }
+
+  onFilterByMemberCreatorIdToggled(memberCreatorId: string) {
+    this.historyItemFilter.toggleMemberCreatorId(memberCreatorId);   
+    
+    this.applyHistoryItemFilterAndSort();
+  }
 }

@@ -2,6 +2,10 @@ strong {
     font-weight: 500;
 }
 
+.avatar {
+    cursor: pointer;
+}
+
 .history-item {
     display: table;
     width: 100%;
