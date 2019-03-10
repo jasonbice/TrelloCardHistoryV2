@@ -33,4 +33,12 @@ export class History {
 
         return this.historyItems.filter((h) => h.trelloHistoryDataObj.date === maxDate)[0];
     }
+
+    containsChangesOfType(updateType: UpdateType): boolean {
+        if (!this.historyItems || this.historyItems.length === 0) {
+            return false;
+          }
+      
+          return this.historyItems.findIndex(h => h.updateType === updateType) > -1;
+    }
 }

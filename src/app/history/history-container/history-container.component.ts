@@ -4,7 +4,7 @@ import { History } from 'src/app/shared/models/history/history.model';
 import { LegacyCoreService } from 'src/app/services/legacy-core.service';
 import { ActivatedRoute } from '@angular/router';
 import { HistoryItemFilter } from 'src/app/shared/models/history/history-item-filter.model';
-import { HistoryItem, SortBy } from 'src/app/shared/models/history/history-item.model';
+import { HistoryItem, SortBy, UpdateType } from 'src/app/shared/models/history/history-item.model';
 import { ITrelloMemberCreator } from 'src/app/shared/models/trello/trello-member-creator.model';
 import { getDistinctObjectArray } from 'src/app/shared/utils';
 
@@ -21,6 +21,18 @@ export class HistoryContainerComponent implements OnInit {
   sortBy: SortBy;
   sortAscending: boolean;
   changeAuthors: ITrelloMemberCreator[];
+
+  get containsDescriptionChanges(): boolean {
+    return this.history.containsChangesOfType(UpdateType.Description);
+  }
+
+  get containsTitleChanges(): boolean {
+    return this.history.containsChangesOfType(UpdateType.Title);
+  }
+  
+  get containsPointsChanges(): boolean {
+    return this.history.containsChangesOfType(UpdateType.Points);
+  }
 
   constructor(private coreService: LegacyCoreService, private trelloDataService: TrelloDataService, private changeDetector: ChangeDetectorRef, private activatedRoute: ActivatedRoute) {
     this.sortBy = SortBy.Date;

@@ -6,17 +6,17 @@
     </h6>
   </div>
   <div class="history-container">
-    <div class="input-group input-group-sm">
+    <div *ngIf="containsDescriptionChanges || containsPointsChanges || containsTitleChanges" class="input-group input-group-sm">
       <input type="text" class="form-control" placeholder="Filter" [(ngModel)]="historyItemFilter.filterBy"
         (ngModelChange)="applyHistoryItemFilterAndSort()">
       <div class="input-group-append">
         <span class="input-group-text">Include changes to</span>
-        <button class="btn btn-outline-secondary" type="button"
+        <button *ngIf="containsDescriptionChanges" class="btn btn-outline-secondary" type="button"
           [class.active]="historyItemFilter.includeDescriptionChanges"
           (click)="historyItemFilter.includeDescriptionChanges = !historyItemFilter.includeDescriptionChanges; applyHistoryItemFilterAndSort()">description</button>
-        <button class="btn btn-outline-secondary" type="button" [class.active]="historyItemFilter.includeTitleChanges"
+        <button *ngIf="containsTitleChanges" class="btn btn-outline-secondary" type="button" [class.active]="historyItemFilter.includeTitleChanges"
           (click)="historyItemFilter.includeTitleChanges = !historyItemFilter.includeTitleChanges; applyHistoryItemFilterAndSort()">title</button>
-        <button class="btn btn-outline-secondary" type="button" [class.active]="historyItemFilter.includePointsChanges"
+        <button *ngIf="containsPointsChanges" class="btn btn-outline-secondary" type="button" [class.active]="historyItemFilter.includePointsChanges"
           (click)="historyItemFilter.includePointsChanges = !historyItemFilter.includePointsChanges; applyHistoryItemFilterAndSort()">points</button>
       </div>
       <div *ngIf="changeAuthors.length > 1" class="input-group-append">
