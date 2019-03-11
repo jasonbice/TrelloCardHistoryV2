@@ -86,17 +86,17 @@ export class HistoryContainerComponent implements OnInit {
     this.applyHistoryItemFilterAndSort();
   }
 
-  toggleChangeAuthorSelection(id: string): void {
-    const index: number = this.historyItemFilter.memberCreatorIds.indexOf(id);
+  // toggleChangeAuthorSelection(id: string): void {
+  //   const index: number = this.historyItemFilter.memberCreatorIds.indexOf(id);
 
-    if (index > -1) {
-      this.historyItemFilter.memberCreatorIds.splice(index, 1);
-    } else {
-      this.historyItemFilter.memberCreatorIds.push(id);
-    }
+  //   if (index > -1) {
+  //     this.historyItemFilter.memberCreatorIds.splice(index, 1);
+  //   } else {
+  //     this.historyItemFilter.memberCreatorIds.push(id);
+  //   }
 
-    this.applyHistoryItemFilterAndSort();
-  }
+  //   this.applyHistoryItemFilterAndSort();
+  // }
 
   onFilterByMemberCreatorIdToggled(memberCreatorId: string) {
     this.historyItemFilter.toggleMemberCreatorId(memberCreatorId);   

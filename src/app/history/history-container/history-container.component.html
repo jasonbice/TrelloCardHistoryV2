@@ -35,7 +35,7 @@
           </li>
           <li class="dropdown-divider"></li>
           <li *ngFor="let changeAuthor of changeAuthors"
-            (click)="toggleChangeAuthorSelection(changeAuthor.id);$event.stopPropagation();"
+            (click)="onFilterByMemberCreatorIdToggled(changeAuthor.id);$event.stopPropagation();"
             [ngClass]="{'selected': historyItemFilter.memberCreatorIds.indexOf(changeAuthor.id) > -1}">
             <div class="avatar-small">
               <img *ngIf="changeAuthor.avatarUrl" src="{{changeAuthor.avatarUrl}}/170.png">

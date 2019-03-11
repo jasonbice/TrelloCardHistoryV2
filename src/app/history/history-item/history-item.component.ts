@@ -3,6 +3,7 @@ import { HistoryItem, UpdateType } from 'src/app/shared/models/history/history-i
 import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-value.pipe';
 import { LegacyCoreService } from 'src/app/services/legacy-core.service';
 import { HistoryItemFilter } from 'src/app/shared/models/history/history-item-filter.model';
+import { HistoryMock } from 'src/app/shared/models/history/history.model.mock';
 
 @Component({
   selector: 'history-item',

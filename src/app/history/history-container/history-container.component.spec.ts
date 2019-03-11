@@ -9,7 +9,7 @@ import { TrelloDataService } from 'src/app/services/trello-data.service';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { LegacyCoreService } from 'src/app/services/legacy-core.service';
-import { SortBy, HistoryItem } from 'src/app/shared/models/history/history-item.model';
+import { SortBy, HistoryItem, UpdateType } from 'src/app/shared/models/history/history-item.model';
 import { HistoryMock } from 'src/app/shared/models/history/history.model.mock';
 import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-value.pipe';
 
@@ -77,52 +77,7 @@ describe('HistoryContainerComponent', () => {
       });
 
       spyOn(coreService, 'getTrelloCardIdFromCurrentUrl').and.returnValue(qShortLink);
-      spyOn(trelloDataService, 'getHistory').and.returnValue(of(HistoryMock.MOCK_HISTORY));
-    });
-
-    it('should set the title', () => {
-      component.ngOnInit();
-
-      fixture.whenStable().then(() => {
-        const titleElement: HTMLElement = fixture.nativeElement.querySelector('h6');
-
-        const actual = titleElement.innerHTML.trim();
-        const expected = HistoryMock.MOCK_HISTORY.title;
-
-        expect(actual).toBe(expected);
-      });
-    });
-
-    it('should show the last viewed date if the history has been previously viewed', () => {
-      component.ngOnInit();
-
-      fixture.whenStable().then(() => {
-        component.history.lastViewed = new Date();
-
-        fixture.detectChanges();
-
-        const lastViewedElement: HTMLElement = fixture.nativeElement.querySelector('#lastViewed');
-        const firstViewingElement: HTMLElement = fixture.nativeElement.querySelector('#firstViewing');
-
-        expect(lastViewedElement).toBeTruthy();
-        expect(firstViewingElement).toBeNull();
-      });
-    });
-
-    it('should show the last viewed data if the history has been previously viewed', () => {
-      component.ngOnInit();
-
-      fixture.whenStable().then(() => {
-        component.history.lastViewed = null;
-
-        fixture.detectChanges();
-
-        const lastViewedElement: HTMLElement = fixture.nativeElement.querySelector('#lastViewed');
-        const firstViewingElement: HTMLElement = fixture.nativeElement.querySelector('#firstViewing');
-
-        expect(lastViewedElement).toBeNull();
-        expect(firstViewingElement).toBeTruthy();
-      });
+      spyOn(trelloDataService, 'getHistory').and.returnValue(of(new HistoryMock()));
     });
 
     it('should load the history when running in extension mode', () => {
@@ -169,7 +124,7 @@ describe('HistoryContainerComponent', () => {
         coreService.isRunningInExtensionMode = true;
 
         component.loadHistory().then(() => {
-          expect(component.history).toBe(HistoryMock.MOCK_HISTORY);
+          expect(component.history).toBe(new HistoryMock());
         });
       });
 
@@ -217,7 +172,7 @@ describe('HistoryContainerComponent', () => {
           spyOn(component.historyItemFilter, 'filter').and.callThrough();
           spyOn(HistoryItem, 'sort').and.callThrough();
 
-          component.toggleChangeAuthorSelection('nonexistentid');
+          component.onFilterByMemberCreatorIdToggled('nonexistentid');
 
           expect(component.historyItemFilter.memberCreatorIds.length).toBe(1);
           expect(component.historyItemFilter.filter).toHaveBeenCalled();
@@ -235,7 +190,7 @@ describe('HistoryContainerComponent', () => {
           spyOn(component.historyItemFilter, 'filter').and.callThrough();
           spyOn(HistoryItem, 'sort').and.callThrough();
 
-          component.toggleChangeAuthorSelection(id);
+          component.onFilterByMemberCreatorIdToggled(id);
 
           expect(component.historyItemFilter.memberCreatorIds.length).toBe(0);
           expect(component.historyItemFilter.filter).toHaveBeenCalled();
@@ -255,13 +210,177 @@ describe('HistoryContainerComponent', () => {
           spyOn(component.historyItemFilter, 'filter').and.callThrough();
           spyOn(HistoryItem, 'sort').and.callThrough();
 
-          component.toggleChangeAuthorSelection(id2);
+          component.onFilterByMemberCreatorIdToggled(id2);
 
           expect(component.historyItemFilter.memberCreatorIds.length).toBe(1);
           expect(component.historyItemFilter.filter).toHaveBeenCalled();
           expect(HistoryItem.sort).toHaveBeenCalled();
         });
       });
+    });
+  });
+
+  describe('containsDescriptionChanges', () => {
+    let historyMock: HistoryMock;
+    let coreService: LegacyCoreService;
+    let trelloDataService: TrelloDataService;
+    let spyGetHistory: jasmine.Spy;
+
+    beforeEach(() => {
+      historyMock = new HistoryMock();
+      coreService = TestBed.get(LegacyCoreService);
+      trelloDataService = TestBed.get(TrelloDataService);
+
+      component.history = historyMock;
+
+      let qShortLink: any = new Promise((resolve, reject) => {
+        resolve(HistoryMock.MOCK_SHORT_LINK);
+      });
+
+      spyOn(coreService, 'getTrelloCardIdFromCurrentUrl').and.returnValue(qShortLink);
+    });
+
+    it('should return true when the history contains description changes', () => {
+      spyGetHistory = spyOn(trelloDataService, 'getHistory').and.returnValue(of(historyMock));
+
+      fixture.whenStable().then(() => {
+        expect(component.containsDescriptionChanges).toBeTruthy();
+      });
+    });
+
+    it('should return false when the history does not contain description changes', () => {
+      const noDescriptionHistoryItems = historyMock.historyItems.filter(hi => hi.updateType !== UpdateType.Description);
+
+      spyGetHistory = spyOn(historyMock, 'historyItems').and.returnValue(noDescriptionHistoryItems);
+
+      fixture.whenStable().then(() => {
+        expect(component.containsDescriptionChanges).toBeFalsy();
+      });
+    });
+
+    afterEach(() => {
+      if (spyGetHistory) {
+        spyGetHistory.and.callThrough();
+      }
+    });
+  });
+
+  describe('containsPointsChanges', () => {
+    let historyMock: HistoryMock;
+    let coreService: LegacyCoreService;
+    let trelloDataService: TrelloDataService;
+    let spyGetHistory: jasmine.Spy;
+
+    beforeEach(() => {
+      historyMock = new HistoryMock();
+      coreService = TestBed.get(LegacyCoreService);
+      trelloDataService = TestBed.get(TrelloDataService);
+
+      component.history = historyMock;
+
+      let qShortLink: any = new Promise((resolve, reject) => {
+        resolve(HistoryMock.MOCK_SHORT_LINK);
+      });
+
+      spyOn(coreService, 'getTrelloCardIdFromCurrentUrl').and.returnValue(qShortLink);
+    });
+
+    it('should return true when the history contains points changes', () => {
+      spyGetHistory = spyOn(trelloDataService, 'getHistory').and.returnValue(of(historyMock));
+
+      fixture.whenStable().then(() => {
+        expect(component.containsPointsChanges).toBeTruthy();
+      });
+    });
+
+    it('should return false when the history does not contain points changes', () => {
+      const noPointsHistoryItems = historyMock.historyItems.filter(hi => hi.updateType !== UpdateType.Points);
+
+      spyGetHistory = spyOn(historyMock, 'historyItems').and.returnValue(noPointsHistoryItems);
+
+      fixture.whenStable().then(() => {
+        expect(component.containsPointsChanges).toBeFalsy();
+      });
+    });
+
+    afterEach(() => {
+      if (spyGetHistory) {
+        spyGetHistory.and.callThrough();
+      }
+    });
+  });
+
+  describe('containsTitleChanges', () => {
+    let historyMock: HistoryMock;
+    let coreService: LegacyCoreService;
+    let trelloDataService: TrelloDataService;
+    let spyGetHistory: jasmine.Spy;
+
+    beforeEach(() => {
+      historyMock = new HistoryMock();
+      coreService = TestBed.get(LegacyCoreService);
+      trelloDataService = TestBed.get(TrelloDataService);
+
+      component.history = historyMock;
+
+      let qShortLink: any = new Promise((resolve, reject) => {
+        resolve(HistoryMock.MOCK_SHORT_LINK);
+      });
+
+      spyOn(coreService, 'getTrelloCardIdFromCurrentUrl').and.returnValue(qShortLink);
+    });
+
+    it('should return true when the history contains title changes', () => {
+      spyGetHistory = spyOn(trelloDataService, 'getHistory').and.returnValue(of(historyMock));
+
+      fixture.whenStable().then(() => {
+        expect(component.containsTitleChanges).toBeTruthy();
+      });
+    });
+
+    it('should return false when the history does not contain title changes', () => {
+      const noTitleHistoryItems = historyMock.historyItems.filter(hi => hi.updateType !== UpdateType.Title);
+
+      spyGetHistory = spyOn(historyMock, 'historyItems').and.returnValue(noTitleHistoryItems);
+
+      fixture.whenStable().then(() => {
+        expect(component.containsTitleChanges).toBeFalsy();
+      });
+    });
+
+    afterEach(() => {
+      if (spyGetHistory) {
+        spyGetHistory.and.callThrough();
+      }
+    });
+  });
+
+  xdescribe('applyHistoryItemFilterAndSort', () => {
+
+  });
+
+  describe('onFilterByMemberCreatorIdToggled', () => {
+    it('should not have any member IDs in the filter by default', () => {
+      expect(component.historyItemFilter.memberCreatorIds.length).toBe(0);
+    });
+
+    it('should add the supplied member ID to the filter when toggled and apply the sort/filter', () => {
+      const filterByMemberId: string = 'testId';
+
+      spyOn(component, 'applyHistoryItemFilterAndSort');
+
+      component.onFilterByMemberCreatorIdToggled(filterByMemberId);
+
+      const actualLength: number = component.historyItemFilter.memberCreatorIds.length;
+      const expectedLength: number = 1;
+
+      expect(actualLength).toBe(expectedLength);
+
+      const actualMemberId: string = component.historyItemFilter.memberCreatorIds[0];
+      const expectedMemberId: string = filterByMemberId;
+
+      expect(actualMemberId).toBe(expectedMemberId);
+      expect(component.applyHistoryItemFilterAndSort).toHaveBeenCalledTimes(1);
     });
   });
 });

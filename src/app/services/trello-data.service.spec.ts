@@ -2,7 +2,6 @@ import { async, TestBed } from '@angular/core/testing';
 import { TrelloDataService } from './trello-data.service';
 import { HttpClientModule } from '@angular/common/http';
 import { HistoryMock } from '../shared/models/history/history.model.mock';
-import { browser } from 'protractor';
 
 describe('TrelloDataService', () => {
   let service: TrelloDataService;
@@ -31,11 +30,13 @@ describe('TrelloDataService', () => {
   });
 
   describe('getHistory', () => {
+    let historyMock: HistoryMock = new HistoryMock();
+
     xit('should get the history via the Trello API', () => {
       service.getHistory(HistoryMock.MOCK_SHORT_LINK).subscribe(history => {
         expect(history).toBeTruthy();        
         expect(history.historyItems).toBeTruthy();
-        expect(history.historyItems.length).toBeGreaterThanOrEqual(HistoryMock.MOCK_HISTORY.historyItems.length);
+        expect(history.historyItems.length).toBeGreaterThanOrEqual(historyMock.historyItems.length);
       });
     });
   });
