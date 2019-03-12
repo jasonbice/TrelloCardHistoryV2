@@ -25,7 +25,7 @@ export class HistoryItemComponent {
   @Input() currentHistoryItemFilter: HistoryItemFilter;
 
   get isOnlyChangeAuthor(): boolean {
-    return this.allChangeAuthors.length === 1;
+    return this.allChangeAuthors && this.allChangeAuthors.length === 1;
   }
 
   get memberIdFilterTitle(): string {
