@@ -1,5 +1,6 @@
 <div class="history-item">
-  <div class="avatar" [title]="memberIdFilterTitle" (click)="onFilterByMemberCreatorIdToggled()">
+  <div class="avatar" [title]="memberIdFilterTitle" (click)="onFilterByMemberCreatorIdToggled()"
+    [ngClass]="{'cursor-pointer': !isOnlyChangeAuthor, 'cursor-default': isOnlyChangeAuthor}">
     <div>
       <img *ngIf="historyItem.trelloHistoryDataObj.memberCreator.avatarUrl" id="memberCreatorAvatar"
         src="{{historyItem.trelloHistoryDataObj.memberCreator.avatarUrl}}/170.png">

@@ -20,7 +20,7 @@ export class HistoryContainerComponent implements OnInit {
   historyItemFilter: HistoryItemFilter = new HistoryItemFilter();
   sortBy: SortBy;
   sortAscending: boolean;
-  changeAuthors: ITrelloMemberCreator[];
+  allChangeAuthors: ITrelloMemberCreator[];
 
   get containsDescriptionChanges(): boolean {
     return this.history.containsChangesOfType(UpdateType.Description);
@@ -58,7 +58,7 @@ export class HistoryContainerComponent implements OnInit {
       this.trelloDataService.getHistory(this.shortLink).subscribe(history => {
         this.history = history;
 
-        this.changeAuthors = getDistinctObjectArray(this.history.historyItems.map(h => {
+        this.allChangeAuthors = getDistinctObjectArray(this.history.historyItems.map(h => {
           return h.trelloHistoryDataObj.memberCreator;
         }), 'id');
 

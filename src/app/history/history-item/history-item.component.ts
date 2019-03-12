@@ -3,7 +3,7 @@ import { HistoryItem, UpdateType } from 'src/app/shared/models/history/history-i
 import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-value.pipe';
 import { LegacyCoreService } from 'src/app/services/legacy-core.service';
 import { HistoryItemFilter } from 'src/app/shared/models/history/history-item-filter.model';
-import { HistoryMock } from 'src/app/shared/models/history/history.model.mock';
+import { ITrelloMemberCreator } from 'src/app/shared/models/trello/trello-member-creator.model';
 
 @Component({
   selector: 'history-item',
@@ -20,11 +20,18 @@ export class HistoryItemComponent {
   readonly VERB_REMOVED: string = 'removed';
 
   @Output() filterByMemberCreatorIdToggled = new EventEmitter<string>();
+  @Input() allChangeAuthors: ITrelloMemberCreator[];
   @Input() historyItem: HistoryItem;
   @Input() currentHistoryItemFilter: HistoryItemFilter;
 
+  get isOnlyChangeAuthor(): boolean {
+    return this.allChangeAuthors.length === 1;
+  }
+
   get memberIdFilterTitle(): string {
-    if (this.isFilteredByThisMemberId) {
+    if (this.isOnlyChangeAuthor) {
+      return this.historyItem.trelloHistoryDataObj.memberCreator.fullName;
+    } else if (this.isFilteredByThisMemberId) {
       return `Stop filtering by ${this.historyItem.trelloHistoryDataObj.memberCreator.fullName}'s changes`;
     } else {
       return `Filter by ${this.historyItem.trelloHistoryDataObj.memberCreator.fullName}'s changes`;
@@ -98,7 +105,9 @@ export class HistoryItemComponent {
   }
 
   onFilterByMemberCreatorIdToggled(): void {
-    this.filterByMemberCreatorIdToggled.emit(this.historyItem.trelloHistoryDataObj.idMemberCreator);
+    if (!this.isOnlyChangeAuthor) {
+      this.filterByMemberCreatorIdToggled.emit(this.historyItem.trelloHistoryDataObj.idMemberCreator);
+    }
   }
 
 }

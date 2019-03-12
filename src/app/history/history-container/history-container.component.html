@@ -19,22 +19,22 @@
         <button *ngIf="containsPointsChanges" class="btn btn-outline-secondary" type="button" [class.active]="historyItemFilter.includePointsChanges"
           (click)="historyItemFilter.includePointsChanges = !historyItemFilter.includePointsChanges; applyHistoryItemFilterAndSort()">points</button>
       </div>
-      <div *ngIf="changeAuthors.length > 1" class="input-group-append">
+      <div *ngIf="allChangeAuthors.length > 1" class="input-group-append">
         <span class="input-group-text">made by</span>
       </div>
-      <div *ngIf="changeAuthors.length > 1" class="input-group-append dropdown">
+      <div *ngIf="allChangeAuthors.length > 1" class="input-group-append dropdown">
         <button class="btn btn-outline-secondary dropdown-toggle active" type="button"
-          data-toggle="dropdown">{{historyItemFilter.memberCreatorIds.length > 0 ? historyItemFilter.memberCreatorIds.length : changeAuthors.length}}/{{changeAuthors.length}}
+          data-toggle="dropdown">{{historyItemFilter.memberCreatorIds.length > 0 ? historyItemFilter.memberCreatorIds.length : allChangeAuthors.length}}/{{allChangeAuthors.length}}
           authors
           <span class="caret"></span></button>
         <ul class="dropdown-menu dropdown-menu-right dropdown-menu-authors">
           <li (click)="clearChangeAuthorSelections();$event.stopPropagation();"
             [ngClass]="{'selected': historyItemFilter.memberCreatorIds.length === 0}">
-            <div class="avatar-small"><span>{{changeAuthors.length}}</span></div>
-            <div>{{changeAuthors.length == 2 ? 'Both' : 'All'}} change authors</div>
+            <div class="avatar-small"><span>{{allChangeAuthors.length}}</span></div>
+            <div>{{allChangeAuthors.length == 2 ? 'Both' : 'All'}} change authors</div>
           </li>
           <li class="dropdown-divider"></li>
-          <li *ngFor="let changeAuthor of changeAuthors"
+          <li *ngFor="let changeAuthor of allChangeAuthors"
             (click)="onFilterByMemberCreatorIdToggled(changeAuthor.id);$event.stopPropagation();"
             [ngClass]="{'selected': historyItemFilter.memberCreatorIds.indexOf(changeAuthor.id) > -1}">
             <div class="avatar-small">
@@ -47,7 +47,7 @@
       </div>
     </div>
     <div class="history-items">
-      <history-item [historyItem]="historyItem" [currentHistoryItemFilter]="historyItemFilter"
+      <history-item [allChangeAuthors]="allChangeAuthors" [historyItem]="historyItem" [currentHistoryItemFilter]="historyItemFilter"
         *ngFor="let historyItem of filteredHistoryItems"
         (filterByMemberCreatorIdToggled)="onFilterByMemberCreatorIdToggled($event)"></history-item>
     </div>

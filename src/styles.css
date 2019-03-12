@@ -5,6 +5,14 @@ body {
     color: #333;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.cursor-default {
+    cursor: default;
+}
+
 div.avatar {
     text-align: center;
     display: table-cell;
@@ -42,7 +50,6 @@ div.avatar span {
     width: 60px;
     z-index: 1;
     color: #666666;
-    cursor: default;
 }
 
 div.avatar-small span {
