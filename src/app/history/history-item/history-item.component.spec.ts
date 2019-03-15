@@ -4,6 +4,7 @@ import { UpdateType } from 'src/app/shared/models/history/history-item.model';
 import { HistoryMock } from 'src/app/shared/models/history/history.model.mock';
 import { IsNullOrWhiteSpace } from 'src/app/shared/utils';
 import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-value.pipe';
+import { ITrelloMemberCreator } from 'src/app/shared/models/trello/trello-member-creator.model';
 
 describe('HistoryItemComponent', () => {
   let component: HistoryItemComponent;
@@ -141,8 +142,31 @@ describe('HistoryItemComponent', () => {
     });
   });
 
-  // e2e
-  xdescribe('updateVerb', () => {
+  describe('isOnlyChangeAuthor', () => {
+    it(`should return true when the history item's author is the only change author within the history`, () => {
+      component.allChangeAuthors = [component.historyItem.trelloHistoryDataObj.memberCreator];
+
+      expect(component.isOnlyChangeAuthor).toBeTruthy();
+    });
+
+    it(`should return false when the history item's author is not the only change author within the history`, () => {
+      const mockChangeAuthor: ITrelloMemberCreator = {
+        avatarHash: 'avatarHash',
+        avatarUrl: 'avatarUrl',
+        id: 'testId',
+        initials: 'TI',
+        fullName: 'Test Id',
+        username: 'testId'
+      };
+
+      component.allChangeAuthors = [component.historyItem.trelloHistoryDataObj.memberCreator, mockChangeAuthor];
+
+      expect(component.isOnlyChangeAuthor).toBeFalsy();
+    });
+
+  });
+
+  describe('updateVerb', () => {
     it('should be VERB_ADDED when a Description is added for the first time', () => {
       component.historyItem = historyMock.historyItems.find(history => history.updateType === UpdateType.Description && IsNullOrWhiteSpace(history.sanitizedOldDescription));
 
@@ -216,4 +240,5 @@ describe('HistoryItemComponent', () => {
       expect(actual).toBe(expected);
     });
   });
+
 });
