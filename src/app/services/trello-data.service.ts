@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { History } from '../shared/models/history/history.model';
 import { LegacyCoreService } from './legacy-core.service';
 import deepcopy from 'deepcopy';
+import { ITrelloValue } from '../shared/models/trello/trello-value';
 
 /**
  * The maximium number of card data items the extension is permitted to keep in browser storage
@@ -19,17 +20,29 @@ export class TrelloDataService {
 
   constructor(private http: HttpClient, private coreService: LegacyCoreService) { }
 
-  getRequestUri(shortLink: string): string {
-    return `https://trello.com/1/cards/${shortLink}/actions?filter=createCard,copyCard,convertToCardFromCheckItem,updateCard&limit=1000`
+  getHistoryRequestUri(shortLink: string): string {
+    return `https://trello.com/1/cards/${shortLink}/actions?filter=createCard,copyCard,convertToCardFromCheckItem,updateCard&limit=1000`;
+  }
+
+  getNameRequestUri(shortLink: string): string {
+    return `https://trello.com/1/cards/${shortLink}/name`;
+  }
+
+  getName(shortLink: string): Observable<string> {
+    const cardNameUri: string = this.getNameRequestUri(shortLink);
+
+    return this.http.get<any>(cardNameUri).pipe(
+      map<ITrelloValue, string>(a => a._value)
+    );
   }
 
   getHistory(shortLink: string): Observable<History> {
-    const cardDataUri = this.getRequestUri(shortLink);
+    const cardDataUri: string = this.getHistoryRequestUri(shortLink);
 
     console.log(`Fetching card data for ${shortLink}`, cardDataUri);
 
     return this.http.get<ITrelloHistoryDataObj[]>(cardDataUri).pipe(
-      map<ITrelloHistoryDataObj[], History>(trelloHistoryDataObjects => new History(shortLink, trelloHistoryDataObjects.filter(t =>
+      map<ITrelloHistoryDataObj[], History>(trelloHistoryDataObjects => new History(this, shortLink, trelloHistoryDataObjects.filter(t =>
         t.data.card.shortLink == shortLink && ( // Need to filter on shortLink so convertToCardFromCheckItem entries from the *new* card are not included
           (t.type !== 'updateCard' || (!t.data.old.idList && (t.data.old.name || t.data.card.desc || t.data.old.desc))))
       )))
@@ -144,5 +157,47 @@ export class TrelloDataService {
   */
   clearLocalStorage(): void {
     this.coreService.storage.clear();
+  }
+
+  static getPointsRegExp(): RegExp {
+    return new RegExp(/^\((\d+)\)/g);
+  }
+
+  static getSanitizedTitle(rawTitle: string): string {
+    if (rawTitle == null) {
+      return null;
+    }
+
+    const trimmedTitle = rawTitle.trim();
+    const pointsRegEx: RegExpExecArray = TrelloDataService.getPointsRegExp().exec(trimmedTitle);
+
+    if (pointsRegEx && pointsRegEx[0]) {
+      return trimmedTitle.substring(pointsRegEx[0].length).trim();
+    }
+
+    return rawTitle;
+  }
+
+  static getSanitizedPoints(rawTitle: string): number {
+    if (rawTitle == null) {
+      return null;
+    }
+
+    const trimmedTitle = rawTitle.trim();
+    const pointsRegEx: RegExpExecArray = TrelloDataService.getPointsRegExp().exec(trimmedTitle);
+
+    if (pointsRegEx && pointsRegEx[1]) {
+      return +pointsRegEx[1];
+    }
+
+    return null;
+  }
+
+  static getSanitizedDescription(description: string): string {
+    if (description) {
+      return description.replace(/\n/g, '<br />').replace(/[\r]/g, '<br />');
+    }
+
+    return description;
   }
 }

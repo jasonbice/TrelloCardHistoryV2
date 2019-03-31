@@ -1,5 +1,6 @@
 import { HistoryItem, UpdateType } from './history-item.model';
 import { ITrelloHistoryDataObj } from '../trello/trello-history-data-obj.model';
+import { TrelloDataService } from 'src/app/services/trello-data.service';
 
 export class History {
     id: string;
@@ -7,7 +8,7 @@ export class History {
     historyItems: HistoryItem[] = new Array<HistoryItem>();
     newUpdates: number;
     title: string;
-    
+
     get totalUpdateCount(): number {
         return this.historyItems.filter(h => h.updateType !== UpdateType.Created).length;
     }
@@ -16,7 +17,7 @@ export class History {
         return this.historyItems.filter(h => h.trelloHistoryDataObj.date > this.lastViewed).length;
     }
 
-    constructor(shortLink: string, trelloHistoryItemObjects: ITrelloHistoryDataObj[]) {
+    constructor(trelloDataService: TrelloDataService, shortLink: string, trelloHistoryItemObjects: ITrelloHistoryDataObj[]) {
         this.id = shortLink;
 
         for (let trelloHistoryItemObj of trelloHistoryItemObjects) {
@@ -25,8 +26,14 @@ export class History {
             this.historyItems.push(historyItem);
         }
 
+        this.setTitle(trelloDataService);
+    }
+
+    setTitle(trelloDataService: TrelloDataService): void {
         if (this.historyItems.length > 0) {
             this.title = this.getMostRecentHistoryItem().sanitizedNewTitle;
+        } else {
+            trelloDataService.getName(this.id).subscribe(name => this.title = TrelloDataService.getSanitizedTitle(name));
         }
     }
 
@@ -39,8 +46,8 @@ export class History {
     containsChangesOfType(updateType: UpdateType): boolean {
         if (!this.historyItems || this.historyItems.length === 0) {
             return false;
-          }
-      
-          return this.historyItems.findIndex(h => h.updateType === updateType) > -1;
+        }
+
+        return this.historyItems.findIndex(h => h.updateType === updateType) > -1;
     }
 }

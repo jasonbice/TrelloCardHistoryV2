@@ -1,4 +1,5 @@
 import { ITrelloHistoryDataObj } from '../trello/trello-history-data-obj.model';
+import { TrelloDataService } from 'src/app/services/trello-data.service';
 
 export enum UpdateType {
     Converted = 'Converted',
@@ -73,59 +74,17 @@ export class HistoryItem {
     }
 
     initialize(): void {
-        this.sanitizedNewPoints = HistoryItem.getSanitizedPoints(this.trelloHistoryDataObj.data.card.name);
-        this.sanitizedNewTitle = HistoryItem.getSanitizedTitle(this.trelloHistoryDataObj.data.card.name);
-        this.sanitizedNewDescription = HistoryItem.getSanitizedDescription(this.trelloHistoryDataObj.data.card.desc);
+        this.sanitizedNewPoints = TrelloDataService.getSanitizedPoints(this.trelloHistoryDataObj.data.card.name);
+        this.sanitizedNewTitle = TrelloDataService.getSanitizedTitle(this.trelloHistoryDataObj.data.card.name);
+        this.sanitizedNewDescription = TrelloDataService.getSanitizedDescription(this.trelloHistoryDataObj.data.card.desc);
 
         if (this.trelloHistoryDataObj.data.old) {
-            this.sanitizedOldPoints = HistoryItem.getSanitizedPoints(this.trelloHistoryDataObj.data.old.name);
-            this.sanitizedOldTitle = HistoryItem.getSanitizedTitle(this.trelloHistoryDataObj.data.old.name);
-            this.sanitizedOldDescription = HistoryItem.getSanitizedDescription(this.trelloHistoryDataObj.data.old.desc);
+            this.sanitizedOldPoints = TrelloDataService.getSanitizedPoints(this.trelloHistoryDataObj.data.old.name);
+            this.sanitizedOldTitle = TrelloDataService.getSanitizedTitle(this.trelloHistoryDataObj.data.old.name);
+            this.sanitizedOldDescription = TrelloDataService.getSanitizedDescription(this.trelloHistoryDataObj.data.old.desc);
         }
 
         this.trelloHistoryDataObj.date = new Date(this.trelloHistoryDataObj.date);
-    }
-
-    static getPointsRegExp(): RegExp {
-        return new RegExp(/^\((\d+)\)/g);
-    }
-
-    static getSanitizedTitle(rawTitle: string): string {
-        if (rawTitle == null) {
-            return null;
-        }
-
-        const trimmedTitle = rawTitle.trim();
-        const pointsRegEx: RegExpExecArray = HistoryItem.getPointsRegExp().exec(trimmedTitle);
-
-        if (pointsRegEx && pointsRegEx[0]) {
-            return trimmedTitle.substring(pointsRegEx[0].length).trim();
-        }
-
-        return rawTitle;
-    }
-
-    static getSanitizedPoints(rawTitle: string): number {
-        if (rawTitle == null) {
-            return null;
-        }
-
-        const trimmedTitle = rawTitle.trim();
-        const pointsRegEx: RegExpExecArray = HistoryItem.getPointsRegExp().exec(trimmedTitle);
-
-        if (pointsRegEx && pointsRegEx[1]) {
-            return +pointsRegEx[1];
-        }
-
-        return null;
-    }
-
-    static getSanitizedDescription(description: string): string {
-        if (description) {
-            return description.replace(/\n/g, '<br />').replace(/[\r]/g, '<br />');
-        }
-
-        return description;
     }
 
     static sort(historyItems: HistoryItem[], sortBy: SortBy, ascending: boolean): void {

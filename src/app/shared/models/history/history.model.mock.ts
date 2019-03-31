@@ -8,6 +8,6 @@ export class HistoryMock extends History {
     static readonly MOCK_SHORT_LINK: string = 'UEJpVbdt';
 
     constructor() {
-        super(HistoryMock.MOCK_SHORT_LINK, HistoryMock.MOCK_TRELLO_HISTORY_DATA_OBJS);
+        super(null, HistoryMock.MOCK_SHORT_LINK, HistoryMock.MOCK_TRELLO_HISTORY_DATA_OBJS);
     }
 }
