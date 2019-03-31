@@ -26,6 +26,8 @@ export class TrelloDataService {
   getHistory(shortLink: string): Observable<History> {
     const cardDataUri = this.getRequestUri(shortLink);
 
+    console.log(`Fetching card data for ${shortLink}`, cardDataUri);
+
     return this.http.get<ITrelloHistoryDataObj[]>(cardDataUri).pipe(
       map<ITrelloHistoryDataObj[], History>(trelloHistoryDataObjects => new History(shortLink, trelloHistoryDataObjects.filter(t =>
         t.data.card.shortLink == shortLink && ( // Need to filter on shortLink so convertToCardFromCheckItem entries from the *new* card are not included
