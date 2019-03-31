@@ -16,6 +16,7 @@ export class HistoryItemComponent {
   readonly VERB_ADDED: string = 'added';
   readonly VERB_CHANGED: string = 'changed';
   readonly VERB_CONVERTED: string = null;
+  readonly VERB_COPIED: string = null;
   readonly VERB_CREATED: string = null;
   readonly VERB_REMOVED: string = 'removed';
 
@@ -53,6 +54,8 @@ export class HistoryItemComponent {
     switch (this.historyItem.updateType) {
       case UpdateType.Converted:
         return this.VERB_CONVERTED;
+      case UpdateType.Copied:
+        return this.VERB_COPIED;
       case UpdateType.Created:
         return this.VERB_CREATED;
       case UpdateType.Description:

@@ -2,6 +2,7 @@ import { ITrelloHistoryDataObj } from '../trello/trello-history-data-obj.model';
 
 export enum UpdateType {
     Converted = 'Converted',
+    Copied = 'Copied',
     Created = 'Created',
     Description = 'Description',
     Points = 'Points',
@@ -50,6 +51,8 @@ export class HistoryItem {
 
         if (this.trelloHistoryDataObj.type === 'convertToCardFromCheckItem') {
             return UpdateType.Converted;
+        } else if (this.trelloHistoryDataObj.type === 'copyCard') {
+            return UpdateType.Copied;
         } else if (this.trelloHistoryDataObj.type === 'createCard') {
             return UpdateType.Created;
         } else if (this.trelloHistoryDataObj.type === 'updateCard') {

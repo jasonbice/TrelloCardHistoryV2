@@ -20,7 +20,7 @@ export class TrelloDataService {
   constructor(private http: HttpClient, private coreService: LegacyCoreService) { }
 
   getRequestUri(shortLink: string): string {
-    return `https://trello.com/1/cards/${shortLink}/actions?filter=createCard,convertToCardFromCheckItem,updateCard&limit=1000`
+    return `https://trello.com/1/cards/${shortLink}/actions?filter=createCard,copyCard,convertToCardFromCheckItem,updateCard&limit=1000`
   }
 
   getHistory(shortLink: string): Observable<History> {
@@ -31,9 +31,7 @@ export class TrelloDataService {
     return this.http.get<ITrelloHistoryDataObj[]>(cardDataUri).pipe(
       map<ITrelloHistoryDataObj[], History>(trelloHistoryDataObjects => new History(shortLink, trelloHistoryDataObjects.filter(t =>
         t.data.card.shortLink == shortLink && ( // Need to filter on shortLink so convertToCardFromCheckItem entries from the *new* card are not included
-          t.type === 'createCard' ||
-          t.type === 'convertToCardFromCheckItem' ||
-          (t.type === 'updateCard' && !t.data.old.idList && (t.data.old.name || t.data.card.desc || t.data.old.desc)))
+          (t.type !== 'updateCard' || (!t.data.old.idList && (t.data.old.name || t.data.card.desc || t.data.old.desc))))
       )))
     );
   }

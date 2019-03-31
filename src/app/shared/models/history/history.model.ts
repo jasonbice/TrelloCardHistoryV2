@@ -25,7 +25,9 @@ export class History {
             this.historyItems.push(historyItem);
         }
 
-        this.title = this.getMostRecentHistoryItem().sanitizedNewTitle;
+        if (this.historyItems.length > 0) {
+            this.title = this.getMostRecentHistoryItem().sanitizedNewTitle;
+        }
     }
 
     getMostRecentHistoryItem(): HistoryItem {

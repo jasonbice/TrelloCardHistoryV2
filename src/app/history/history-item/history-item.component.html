@@ -16,7 +16,7 @@
         <div *ngIf="historyItem.isNew" class="badge badge-warning"
           title="This change occurred after your last viewing of this card's history">New</div>
       </div>
-      <div *ngIf="historyItem.updateType !== 'Converted'" class="history-item-changes-new"
+      <div *ngIf="historyItem.updateType !== 'Converted' && historyItem.updateType !== 'Copied'" class="history-item-changes-new"
         (click)="toggleNewValueCollapse()"
         [ngClass]="{'toggle-collapse' : historyItem.newValue?.length > MAX_VALUE_DISPLAY_LENGTH}"
         [innerHTML]="historyItem.updateType === 'Created' ? '' : (newValueCollapsed ? (historyItem.newValue | prettifyHistoryValue) : historyItem.newValue)">
@@ -26,7 +26,11 @@
         <a [href]="sourceTrelloCardLink" target="_blank">{{historyItem.trelloHistoryDataObj.data.cardSource.name}}</a> /
         {{historyItem.trelloHistoryDataObj.data.checklist.name}}
       </div>
-      <div *ngIf="historyItem.updateType !== 'Converted'" class="history-item-changes-old"
+      <div *ngIf="historyItem.updateType === 'Copied'" class="history-item-changes-new">
+        <strong>Source:</strong>&nbsp;
+        <a [href]="sourceTrelloCardLink" target="_blank">{{historyItem.trelloHistoryDataObj.data.cardSource.name}}</a>
+      </div>
+      <div *ngIf="historyItem.updateType !== 'Converted' && historyItem.updateType !== 'Copied'" class="history-item-changes-old"
         (click)="toggleOldValueCollapse()"
         [ngClass]="{'toggle-collapse' : historyItem.oldValue?.length > MAX_VALUE_DISPLAY_LENGTH, 'history-item-changes-old-expanded': !oldValueCollapsed}"
         [innerHTML]="historyItem.updateType === 'Created' ? '' : (oldValueCollapsed ? (historyItem.oldValue | prettifyHistoryValue) : historyItem.oldValue)">
