@@ -31,6 +31,8 @@ export class TrelloDataService {
   getName(shortLink: string): Observable<string> {
     const cardNameUri: string = this.getNameRequestUri(shortLink);
 
+    console.log(`Fetching card name for ${shortLink}`, cardNameUri);
+
     return this.http.get<any>(cardNameUri).pipe(
       map<ITrelloValue, string>(a => a._value)
     );
