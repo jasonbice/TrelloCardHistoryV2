@@ -48,7 +48,7 @@
     </div>
     <div class="history-items">
       <div *ngIf="history.historyItems.length === 0">
-        There is no history to display for this card.  It may have been created prior to being transferred to this board.
+        There is no history to display for this card, and was likely created on a different board.
       </div>
       <history-item [allChangeAuthors]="allChangeAuthors" [historyItem]="historyItem" [currentHistoryItemFilter]="historyItemFilter"
         *ngFor="let historyItem of filteredHistoryItems"
