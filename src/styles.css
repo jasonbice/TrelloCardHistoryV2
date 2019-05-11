@@ -1,8 +1,7 @@
 body {
     position: relative;
     font-family: 'Roboto', sans-serif;
-    width: 650px;
-    color: #333;
+    width: 650px;    
 }
 
 .cursor-pointer {
@@ -68,3 +67,27 @@ div.avatar-small span {
     cursor: default;
     font-weight: 500;
 }
+
+.input-group-xs>.form-control,
+.input-group-xs>.input-group-addon,
+.input-group-xs>.input-group-btn>.btn {
+    height: 22px;
+    padding: 1px 5px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* https://stackoverflow.com/questions/33911049/btn-xs-no-longer-a-valid-option-in-bootstrap-4 */
+.btn-group-xs > .btn, .btn-xs {
+    padding: .25rem .4rem;
+    font-size: .875rem;
+    line-height: .5;
+    border-radius: .2rem;
+  }
+
+  .btn-group-xxs > .btn, .btn-xs {
+    padding: .2rem .2rem;
+    font-size: .675rem;
+    line-height: .4;
+    border-radius: .2rem;
+  }

@@ -2,9 +2,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HistoryItemComponent } from './history-item.component';
 import { UpdateType } from 'src/app/shared/models/history/history-item.model';
 import { HistoryMock } from 'src/app/shared/models/history/history.model.mock';
-import { IsNullOrWhiteSpace } from 'src/app/shared/utils';
 import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-value.pipe';
 import { ITrelloMemberCreator } from 'src/app/shared/models/trello/trello-member-creator.model';
+import { Utils } from 'src/app/shared/utils';
+import { HistoryItemMenuComponent } from '../history-item-menu/history-item-menu.component';
 
 describe('HistoryItemComponent', () => {
   let component: HistoryItemComponent;
@@ -13,7 +14,7 @@ describe('HistoryItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [HistoryItemComponent, PrettifyHistoryValuePipe]
+      declarations: [HistoryItemComponent, HistoryItemMenuComponent, PrettifyHistoryValuePipe]
     })
       .compileComponents();
   }));
@@ -81,7 +82,7 @@ describe('HistoryItemComponent', () => {
   });
 
   // e2e
-  xdescribe('toggleNewValueCollapse', () => {
+  xdescribe('onNewExpandToggled', () => {
     it('should be collapsed by default', () => {
       component.historyItem = historyMock.historyItems.find(history => history.updateType === UpdateType.Description && history.sanitizedNewDescription && history.sanitizedNewDescription.length > PrettifyHistoryValuePipe.DEFAULT_MAX_LENGTH);
 
@@ -112,7 +113,7 @@ describe('HistoryItemComponent', () => {
   });
 
   // e2e
-  xdescribe('toggleOldValueCollapse', () => {
+  xdescribe('onOldExpandToggled', () => {
     it('should be collapsed by default', () => {
       component.historyItem = historyMock.historyItems.find(history => history.updateType === UpdateType.Description && history.sanitizedOldDescription && history.sanitizedOldDescription.length > PrettifyHistoryValuePipe.DEFAULT_MAX_LENGTH);
 
@@ -168,7 +169,7 @@ describe('HistoryItemComponent', () => {
 
   describe('updateVerb', () => {
     it('should be VERB_ADDED when a Description is added for the first time', () => {
-      component.historyItem = historyMock.historyItems.find(history => history.updateType === UpdateType.Description && IsNullOrWhiteSpace(history.sanitizedOldDescription));
+      component.historyItem = historyMock.historyItems.find(history => history.updateType === UpdateType.Description && Utils.isNullOrWhiteSpace(history.sanitizedOldDescription));
 
       const actual = component.updateVerb;
       const expected = component.VERB_ADDED;
@@ -186,7 +187,7 @@ describe('HistoryItemComponent', () => {
     });
 
     it('should be VERB_CHANGED when the Description is changed from an existing non-null value to a new non-null value', () => {
-      component.historyItem = historyMock.historyItems.find(history => history.updateType === UpdateType.Description && !IsNullOrWhiteSpace(history.sanitizedOldDescription) && !IsNullOrWhiteSpace(history.sanitizedNewDescription));
+      component.historyItem = historyMock.historyItems.find(history => history.updateType === UpdateType.Description && !Utils.isNullOrWhiteSpace(history.sanitizedOldDescription) && !Utils.isNullOrWhiteSpace(history.sanitizedNewDescription));
 
       const actual = component.updateVerb;
       const expected = component.VERB_CHANGED;
@@ -195,7 +196,7 @@ describe('HistoryItemComponent', () => {
     });
 
     it('should be VERB_CHANGED when the Title is changed from an existing non-null value to a new value', () => {
-      component.historyItem = historyMock.historyItems.find(history => history.updateType === UpdateType.Title && !IsNullOrWhiteSpace(history.sanitizedNewTitle) && !IsNullOrWhiteSpace(history.sanitizedOldTitle));
+      component.historyItem = historyMock.historyItems.find(history => history.updateType === UpdateType.Title && !Utils.isNullOrWhiteSpace(history.sanitizedNewTitle) && !Utils.isNullOrWhiteSpace(history.sanitizedOldTitle));
 
       const actual = component.updateVerb;
       const expected = component.VERB_CHANGED;
@@ -223,7 +224,7 @@ describe('HistoryItemComponent', () => {
     });
 
     it('should be VERB_REMOVED when the Description is changed from a non-null value to a null value', () => {
-      component.historyItem = historyMock.historyItems.find(history => history.updateType === UpdateType.Description && !IsNullOrWhiteSpace(history.sanitizedOldDescription) && IsNullOrWhiteSpace(history.sanitizedNewDescription));
+      component.historyItem = historyMock.historyItems.find(history => history.updateType === UpdateType.Description && !Utils.isNullOrWhiteSpace(history.sanitizedOldDescription) && Utils.isNullOrWhiteSpace(history.sanitizedNewDescription));
 
       const actual = component.updateVerb;
       const expected = component.VERB_REMOVED;

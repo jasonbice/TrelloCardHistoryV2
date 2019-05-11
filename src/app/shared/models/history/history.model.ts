@@ -1,6 +1,7 @@
 import { HistoryItem, UpdateType } from './history-item.model';
 import { ITrelloHistoryDataObj } from '../trello/trello-history-data-obj.model';
 import { TrelloDataService } from 'src/app/services/trello-data.service';
+import { Utils } from '../../utils';
 
 export class History {
     id: string;
@@ -33,7 +34,7 @@ export class History {
         if (this.historyItems.length > 0) {
             this.title = this.getMostRecentHistoryItem().sanitizedNewTitle;
         } else {
-            trelloDataService.getName(this.id).subscribe(name => this.title = TrelloDataService.getSanitizedTitle(name));
+            trelloDataService.getName(this.id).subscribe(name => this.title = Utils.getSanitizedTitle(name));
         }
     }
 

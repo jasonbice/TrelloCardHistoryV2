@@ -12,6 +12,7 @@ import { LegacyCoreService } from 'src/app/services/legacy-core.service';
 import { SortBy, HistoryItem, UpdateType } from 'src/app/shared/models/history/history-item.model';
 import { HistoryMock } from 'src/app/shared/models/history/history.model.mock';
 import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-value.pipe';
+import { HistoryItemMenuComponent } from '../history-item-menu/history-item-menu.component';
 
 describe('HistoryContainerComponent', () => {
   let component: HistoryContainerComponent;
@@ -30,6 +31,7 @@ describe('HistoryContainerComponent', () => {
       ],
       declarations: [
         HistoryItemComponent,
+        HistoryItemMenuComponent,
         HistoryContainerComponent,
         PrettifyHistoryValuePipe
       ],

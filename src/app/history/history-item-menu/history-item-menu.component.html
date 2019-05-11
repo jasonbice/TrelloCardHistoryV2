@@ -1,0 +1,7 @@
+<div *ngIf="displayMenu">
+  <div class="btn-group btn-group-xxs" role="group">
+  <button (click)="copyValueToClipboard()" class="btn" title="Copy to clipboard" *ngIf="displayCopyButton"><i class="fa fa-clipboard"></i></button>
+  <button (click)="toggleExpand()" class="btn" [title]="isCollapsed ? 'Expand' : 'Collapse'" *ngIf="displayToggleExpandButton"><i [class]="isCollapsed ? 'fa fa-expand' : 'fa fa-compress'"></i></button>
+  <!-- <button *ngIf="!isCollapsed" class="btn" title="Make this the {{historyItem.updateType}}"><i class="fa fa-bolt"></i></button> -->
+</div>
+</div>

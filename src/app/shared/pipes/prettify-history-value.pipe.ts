@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { IsNullOrWhiteSpace } from '../utils';
+import { Utils } from '../utils';
 
 @Pipe({
   name: 'prettifyHistoryValue'
 })
 export class PrettifyHistoryValuePipe implements PipeTransform {
 
-  static readonly DEFAULT_MAX_LENGTH: number = 65;
+  static readonly DEFAULT_MAX_LENGTH: number = 60;
   static readonly DEFAULT_REPLACE_EMPTY_WITH: string = '(None)';
   static readonly DEFAULT_TRUNCATE_APPEND: string = '...';
 
@@ -25,6 +25,6 @@ export class PrettifyHistoryValuePipe implements PipeTransform {
   }
 
   replaceNullOrWhiteSpace(value: string, replaceWithIfNullOrEmpty: string): string {
-    return IsNullOrWhiteSpace(value) ? replaceWithIfNullOrEmpty : value;
+    return Utils.isNullOrWhiteSpace(value) ? replaceWithIfNullOrEmpty : value;
   }
 }

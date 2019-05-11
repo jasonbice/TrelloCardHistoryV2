@@ -24,17 +24,19 @@ strong {
 }
 
 .history-item-changes-new {
-    color: #000000;
+    margin-bottom: 5px;
+    padding: 0 5px;
+    border-left: solid 5px #bef5cb;
 }
 
 .history-item-changes-old {
-    color: #999999;
+    margin-top: 5px;
+    padding: 0 5px;
+    border-left: solid 5px #fdaeb7;
 }
 
 .history-item-changes-old-expanded {
-    text-decoration: none;;
-    color: #444444;
-    background-color: #ebebeb;
+    text-decoration: none;
 }
 
 .history-item-changes-title {
@@ -73,6 +75,13 @@ strong {
 
 .toggle-collapse:hover {
     cursor: pointer;
-    color: black;
-    background-color: #f6ef9d;
+}
+
+i.fa-clipboard {
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.collapsed {
+    font-style: italic;
 }

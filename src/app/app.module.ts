@@ -9,6 +9,7 @@ import { HistoryItemComponent } from './history/history-item/history-item.compon
 import { BackgroundComponent } from './background/background.component';
 import { FormsModule } from '@angular/forms';
 import { PrettifyHistoryValuePipe } from './shared/pipes/prettify-history-value.pipe';
+import { HistoryItemMenuComponent } from './history/history-item-menu/history-item-menu.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { PrettifyHistoryValuePipe } from './shared/pipes/prettify-history-value.
     HistoryContainerComponent,
     HistoryItemComponent,
     PrettifyHistoryValuePipe,
-    BackgroundComponent
+    BackgroundComponent,
+    HistoryItemMenuComponent
   ],
   imports: [
     BrowserModule,

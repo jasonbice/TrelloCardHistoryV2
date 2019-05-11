@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HistoryItemFilter } from 'src/app/shared/models/history/history-item-filter.model';
 import { HistoryItem, SortBy, UpdateType } from 'src/app/shared/models/history/history-item.model';
 import { ITrelloMemberCreator } from 'src/app/shared/models/trello/trello-member-creator.model';
-import { getDistinctObjectArray } from 'src/app/shared/utils';
+import { Utils } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-history-container',
@@ -58,7 +58,7 @@ export class HistoryContainerComponent implements OnInit {
       this.trelloDataService.getHistory(this.shortLink).subscribe(history => {
         this.history = history;
 
-        this.allChangeAuthors = getDistinctObjectArray(this.history.historyItems.map(h => {
+        this.allChangeAuthors = Utils.getDistinctObjectArray(this.history.historyItems.map(h => {
           return h.trelloHistoryDataObj.memberCreator;
         }), 'id');
 

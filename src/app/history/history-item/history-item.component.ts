@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import { Component, Input, ChangeDetectorRef, Output, EventEmitter, OnInit } from '@angular/core';
 import { HistoryItem, UpdateType } from 'src/app/shared/models/history/history-item.model';
 import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-value.pipe';
 import { LegacyCoreService } from 'src/app/services/legacy-core.service';
@@ -10,7 +10,8 @@ import { ITrelloMemberCreator } from 'src/app/shared/models/trello/trello-member
   templateUrl: './history-item.component.html',
   styleUrls: ['./history-item.component.css']
 })
-export class HistoryItemComponent {
+export class HistoryItemComponent implements OnInit {
+
   readonly MAX_VALUE_DISPLAY_LENGTH: number = PrettifyHistoryValuePipe.DEFAULT_MAX_LENGTH
   readonly TRUNCATE_APPEND = '...';
   readonly VERB_ADDED: string = 'added';
@@ -47,8 +48,12 @@ export class HistoryItemComponent {
     return this.currentHistoryItemFilter.memberCreatorIds.includes(this.historyItem.trelloHistoryDataObj.idMemberCreator);
   }
 
-  newValueCollapsed: boolean = true;
-  oldValueCollapsed: boolean = true;
+  get enableClipboardCopy(): boolean {
+    return this.historyItem.updateType === UpdateType.Description || this.historyItem.updateType === UpdateType.Title;
+  }
+
+  newValueCollapsed: boolean = false;
+  oldValueCollapsed: boolean = false;
 
   get updateVerb(): string {
     switch (this.historyItem.updateType) {
@@ -93,18 +98,27 @@ export class HistoryItemComponent {
     return null;
   }
 
-  constructor(private coreService: LegacyCoreService, private changeDetector: ChangeDetectorRef) { }
+  constructor(private coreService: LegacyCoreService, private changeDetector: ChangeDetectorRef) {}
 
-  toggleNewValueCollapse(): void {
-    this.newValueCollapsed = !this.newValueCollapsed;
-
-    this.changeDetector.detectChanges();
+  ngOnInit(): void {
+    this.onNewExpandToggled(null);
+    this.onOldExpandToggled(null);
   }
 
-  toggleOldValueCollapse(): void {
-    this.oldValueCollapsed = !this.oldValueCollapsed;
+  onNewExpandToggled(event): void {
+    if (this.historyItem.newValue && this.historyItem.newValue !== null && this.historyItem.newValue.length > this.MAX_VALUE_DISPLAY_LENGTH) {
+      this.newValueCollapsed = !this.newValueCollapsed;
 
-    this.changeDetector.detectChanges();
+      this.changeDetector.detectChanges();
+    }
+  }
+
+  onOldExpandToggled(event): void {
+    if (this.historyItem.oldValue && this.historyItem.oldValue !== null && this.historyItem.oldValue.length > this.MAX_VALUE_DISPLAY_LENGTH) {
+      this.oldValueCollapsed = !this.oldValueCollapsed;
+
+      this.changeDetector.detectChanges();
+    }
   }
 
   onFilterByMemberCreatorIdToggled(): void {

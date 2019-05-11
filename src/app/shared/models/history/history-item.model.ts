@@ -1,5 +1,5 @@
 import { ITrelloHistoryDataObj } from '../trello/trello-history-data-obj.model';
-import { TrelloDataService } from 'src/app/services/trello-data.service';
+import { Utils } from '../../utils';
 
 export enum UpdateType {
     Converted = 'Converted',
@@ -45,6 +45,28 @@ export class HistoryItem {
         }
     }
 
+    get oldValueRaw(): string {
+        switch (this.updateType) {
+            case UpdateType.Converted: return null;
+            case UpdateType.Created: return null;
+            case UpdateType.Description: return this.trelloHistoryDataObj.data.old.desc;
+            case UpdateType.Points: return this.oldValue;
+            case UpdateType.Title: return this.oldValue;
+            default: throw new Error(`${this.updateType} not implemented`);
+        }
+    }
+
+    get newValueRaw(): string {
+        switch (this.updateType) {
+            case UpdateType.Converted: return null;
+            case UpdateType.Created: return null;
+            case UpdateType.Description: return this.trelloHistoryDataObj.data.card.desc;
+            case UpdateType.Points: return this.newValue;
+            case UpdateType.Title: return this.newValue;
+            default: throw new Error(`${this.updateType} not implemented`);
+        }
+    }
+
     get updateType(): UpdateType {
         if (!this.trelloHistoryDataObj) {
             return null;
@@ -74,14 +96,14 @@ export class HistoryItem {
     }
 
     initialize(): void {
-        this.sanitizedNewPoints = TrelloDataService.getSanitizedPoints(this.trelloHistoryDataObj.data.card.name);
-        this.sanitizedNewTitle = TrelloDataService.getSanitizedTitle(this.trelloHistoryDataObj.data.card.name);
-        this.sanitizedNewDescription = TrelloDataService.getSanitizedDescription(this.trelloHistoryDataObj.data.card.desc);
+        this.sanitizedNewPoints = Utils.getSanitizedPoints(this.trelloHistoryDataObj.data.card.name);
+        this.sanitizedNewTitle = Utils.getSanitizedTitle(this.trelloHistoryDataObj.data.card.name);
+        this.sanitizedNewDescription = Utils.getSanitizedDescription(this.trelloHistoryDataObj.data.card.desc);
 
         if (this.trelloHistoryDataObj.data.old) {
-            this.sanitizedOldPoints = TrelloDataService.getSanitizedPoints(this.trelloHistoryDataObj.data.old.name);
-            this.sanitizedOldTitle = TrelloDataService.getSanitizedTitle(this.trelloHistoryDataObj.data.old.name);
-            this.sanitizedOldDescription = TrelloDataService.getSanitizedDescription(this.trelloHistoryDataObj.data.old.desc);
+            this.sanitizedOldPoints = Utils.getSanitizedPoints(this.trelloHistoryDataObj.data.old.name);
+            this.sanitizedOldTitle = Utils.getSanitizedTitle(this.trelloHistoryDataObj.data.old.name);
+            this.sanitizedOldDescription = Utils.getSanitizedDescription(this.trelloHistoryDataObj.data.old.desc);
         }
 
         this.trelloHistoryDataObj.date = new Date(this.trelloHistoryDataObj.date);
