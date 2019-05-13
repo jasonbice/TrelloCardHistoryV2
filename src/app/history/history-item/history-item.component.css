@@ -23,16 +23,34 @@ strong {
     font-size: 11px;
 }
 
-.history-item-changes-new {
-    margin-bottom: 5px;
+.history-item-changes-new,
+.history-item-changes-old {
     padding: 0 5px;
+    clear: both;
+    float: left;
     border-left: solid 5px #bef5cb;
 }
 
 .history-item-changes-old {
-    margin-top: 5px;
-    padding: 0 5px;
     border-left: solid 5px #fdaeb7;
+}
+
+.history-item-menu-new,
+.history-item-menu-old {
+    display: none;
+}
+
+.history-item-changes-new:hover > .history-item-menu-new,
+.history-item-changes-old:hover > .history-item-menu-old {
+    display: block;
+}
+
+.history-item-changes-new:hover {
+    background-color: #e6ffed;
+}
+
+.history-item-changes-old:hover {
+    background-color: #ffeef0;
 }
 
 .history-item-changes-old-expanded {
