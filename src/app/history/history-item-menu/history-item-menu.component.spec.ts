@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { HistoryItemMenuComponent } from './history-item-menu.component';
 
 describe('HistoryItemMenuComponent', () => {
@@ -8,18 +7,27 @@ describe('HistoryItemMenuComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HistoryItemMenuComponent ]
+      declarations: [HistoryItemMenuComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HistoryItemMenuComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('toggleExpand', () => {
+    it('should emit expandToggled', () => {
+      component.expandToggled.subscribe(x => {
+        expect(x).toBeNull();
+      });
+
+      component.toggleExpand();
+    });
   });
 });
