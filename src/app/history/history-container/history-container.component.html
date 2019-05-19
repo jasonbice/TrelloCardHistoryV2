@@ -6,7 +6,8 @@
     </h6>
   </div>
   <div class="history-container">
-    <div *ngIf="containsDescriptionChanges || containsPointsChanges || containsTitleChanges" class="input-group input-group-sm">
+    <div *ngIf="containsDescriptionChanges || containsPointsChanges || containsTitleChanges"
+      class="input-group input-group-sm">
       <input type="text" class="form-control" placeholder="Filter" [(ngModel)]="historyItemFilter.filterBy"
         (ngModelChange)="applyHistoryItemFilterAndSort()">
       <div class="input-group-append">
@@ -14,9 +15,11 @@
         <button *ngIf="containsDescriptionChanges" class="btn btn-outline-secondary" type="button"
           [class.active]="historyItemFilter.includeDescriptionChanges"
           (click)="historyItemFilter.includeDescriptionChanges = !historyItemFilter.includeDescriptionChanges; applyHistoryItemFilterAndSort()">description</button>
-        <button *ngIf="containsTitleChanges" class="btn btn-outline-secondary" type="button" [class.active]="historyItemFilter.includeTitleChanges"
+        <button *ngIf="containsTitleChanges" class="btn btn-outline-secondary" type="button"
+          [class.active]="historyItemFilter.includeTitleChanges"
           (click)="historyItemFilter.includeTitleChanges = !historyItemFilter.includeTitleChanges; applyHistoryItemFilterAndSort()">title</button>
-        <button *ngIf="containsPointsChanges" class="btn btn-outline-secondary" type="button" [class.active]="historyItemFilter.includePointsChanges"
+        <button *ngIf="containsPointsChanges" class="btn btn-outline-secondary" type="button"
+          [class.active]="historyItemFilter.includePointsChanges"
           (click)="historyItemFilter.includePointsChanges = !historyItemFilter.includePointsChanges; applyHistoryItemFilterAndSort()">points</button>
       </div>
       <div *ngIf="allChangeAuthors.length > 1" class="input-group-append">
@@ -50,8 +53,8 @@
       <div *ngIf="history.historyItems.length === 0">
         This card was created on a different board and has no history to display at this time.
       </div>
-      <history-item [allChangeAuthors]="allChangeAuthors" [historyItem]="historyItem" [currentHistoryItemFilter]="historyItemFilter"
-        *ngFor="let historyItem of filteredHistoryItems"
+      <history-item [allChangeAuthors]="allChangeAuthors" [history]="history" [historyItem]="historyItem"
+        [currentHistoryItemFilter]="historyItemFilter" *ngFor="let historyItem of filteredHistoryItems"
         (filterByMemberCreatorIdToggled)="onFilterByMemberCreatorIdToggled($event)"></history-item>
     </div>
     <div class="last-viewed">

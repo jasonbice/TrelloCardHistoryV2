@@ -11,6 +11,7 @@
     },
     "permissions": [
       "activeTab",
+      "cookies",
       "storage",
       "tabs",
       "https://trello.com/",

@@ -18,11 +18,14 @@
       </div>
       <div *ngIf="historyItem.updateType !== 'Converted' && historyItem.updateType !== 'Copied'"
         class="history-item-changes-new">
-        <span (click)="onNewExpandToggled(null)"
+        <span (click)="onExpandToggled(null, true)"
           [ngClass]="{'toggle-collapse' : historyItem.newValue?.length > MAX_VALUE_DISPLAY_LENGTH, 'collapsed': newValueCollapsed}"
           [innerHTML]="historyItem.updateType === 'Created' ? '' : (newValueCollapsed ? (historyItem.newValue | prettifyHistoryValue) : historyItem.newValue)">
         </span>
-        <history-item-menu class="history-item-menu-new" [historyItem]="historyItem" [isNewValue]="true" [isCollapsed]="newValueCollapsed" (expandToggled)="onNewExpandToggled($event)"></history-item-menu>
+        <history-item-menu [ngClass]="{'history-item-menu-new': !isConfirmingApplyValueNew}" [history]="history"
+          [historyItem]="historyItem" [isNewValue]="true" [isCollapsed]="newValueCollapsed"
+          (expandToggled)="onExpandToggled($event, true)" (confirmingApplyValue)="onConfirmingApplyValue($event, true)">
+        </history-item-menu>
       </div>
       <div *ngIf="historyItem.updateType === 'Converted'" class="history-item-changes-new">
         <strong>Source:</strong>&nbsp;
@@ -35,11 +38,13 @@
       </div>
       <div *ngIf="historyItem.updateType !== 'Converted' && historyItem.updateType !== 'Copied'"
         class="history-item-changes-old">
-        <span (click)="onOldExpandToggled(null)"
+        <span (click)="onExpandToggled(null, false)"
           [ngClass]="{'toggle-collapse' : historyItem.oldValue?.length > MAX_VALUE_DISPLAY_LENGTH, 'collapsed': oldValueCollapsed}"
           [innerHTML]="historyItem.updateType === 'Created' ? '' : (oldValueCollapsed ? (historyItem.oldValue | prettifyHistoryValue) : historyItem.oldValue)">
         </span>
-        <history-item-menu class="history-item-menu-old" [historyItem]="historyItem" [isNewValue]="false" [isCollapsed]="oldValueCollapsed" (expandToggled)="onOldExpandToggled($event)"></history-item-menu>
+        <history-item-menu [ngClass]="{'history-item-menu-old': !isConfirmingApplyValueOld}" [history]="history"
+          [historyItem]="historyItem" [isNewValue]="false" [isCollapsed]="oldValueCollapsed"
+          (expandToggled)="onExpandToggled($event, false)" (confirmingApplyValue)="onConfirmingApplyValue($event, false)"></history-item-menu>
       </div>
     </div>
     <div class="history-item-misc">

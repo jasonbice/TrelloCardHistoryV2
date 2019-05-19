@@ -6,6 +6,9 @@ import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-
 import { ITrelloMemberCreator } from 'src/app/shared/models/trello/trello-member-creator.model';
 import { Utils } from 'src/app/shared/utils';
 import { HistoryItemMenuComponent } from '../history-item-menu/history-item-menu.component';
+import { ToastrModule } from 'ngx-toastr';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('HistoryItemComponent', () => {
   let component: HistoryItemComponent;
@@ -14,6 +17,17 @@ describe('HistoryItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        BrowserAnimationsModule,
+        HttpClientModule,
+        ToastrModule.forRoot({
+          maxOpened: 1,
+          onActivateTick: true,
+          preventDuplicates: true,
+          progressBar: true,
+          timeOut: 2500
+        })
+      ],
       declarations: [HistoryItemComponent, HistoryItemMenuComponent, PrettifyHistoryValuePipe]
     })
       .compileComponents();

@@ -1,7 +1,7 @@
 import { HistoryItem, UpdateType } from './history-item.model';
 import { ITrelloHistoryDataObj } from '../trello/trello-history-data-obj.model';
-import { TrelloDataService } from 'src/app/services/trello-data.service';
 import { Utils } from '../../utils';
+import { ITrelloCard } from '../trello/trello-card.model';
 
 export class History {
     id: string;
@@ -9,6 +9,8 @@ export class History {
     historyItems: HistoryItem[] = new Array<HistoryItem>();
     newUpdates: number;
     title: string;
+    points?: number;
+    description?: string;
 
     get totalUpdateCount(): number {
         return this.historyItems.filter(h => h.updateType !== UpdateType.Created).length;
@@ -18,30 +20,17 @@ export class History {
         return this.historyItems.filter(h => h.trelloHistoryDataObj.date > this.lastViewed).length;
     }
 
-    constructor(trelloDataService: TrelloDataService, shortLink: string, trelloHistoryItemObjects: ITrelloHistoryDataObj[]) {
-        this.id = shortLink;
+    constructor(trelloCard: ITrelloCard, trelloHistoryItemObjects: ITrelloHistoryDataObj[]) {
+        this.id = trelloCard.shortLink;
+        this.title = trelloCard.name;
+        this.description = trelloCard.desc;
+        this.points = Utils.getSanitizedPoints(trelloCard.name);
 
-        for (let trelloHistoryItemObj of trelloHistoryItemObjects) {
-            let historyItem = new HistoryItem(trelloHistoryItemObj);
+        for (const trelloHistoryItemObj of trelloHistoryItemObjects) {
+            const historyItem = new HistoryItem(trelloHistoryItemObj);
 
             this.historyItems.push(historyItem);
         }
-
-        this.setTitle(trelloDataService);
-    }
-
-    setTitle(trelloDataService: TrelloDataService): void {
-        if (this.historyItems.length > 0) {
-            this.title = this.getMostRecentHistoryItem().sanitizedNewTitle;
-        } else {
-            trelloDataService.getName(this.id).subscribe(name => this.title = Utils.getSanitizedTitle(name));
-        }
-    }
-
-    getMostRecentHistoryItem(): HistoryItem {
-        let maxDate: Date = this.historyItems.reduce((max, p) => p.trelloHistoryDataObj.date > max ? p.trelloHistoryDataObj.date : max, this.historyItems[0].trelloHistoryDataObj.date);
-
-        return this.historyItems.filter((h) => h.trelloHistoryDataObj.date === maxDate)[0];
     }
 
     containsChangesOfType(updateType: UpdateType): boolean {

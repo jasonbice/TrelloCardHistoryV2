@@ -60,21 +60,17 @@ export const TRELLO_CARD_ID_BEGIN_IDX = BASE_OPEN_CARD_URL.length;
 @Injectable({
   providedIn: 'root'
 })
-
 export class LegacyCoreService {
-  isRunningInExtensionMode: boolean = chrome && chrome.extension && chrome.storage !== null;
-  console: Console = console;
-  storage: chrome.storage.LocalStorageArea = this.isRunningInExtensionMode ? chrome.storage.local : null;
-
-  constructor() {
-    if (this.isRunningInExtensionMode && chrome.extension) {
-      const backgroundPage: Window = chrome.extension.getBackgroundPage();
-
-      if (backgroundPage) {
-        this.console = backgroundPage.console;
-      }
+  static get console(): Console {
+    if (chrome && chrome.extension) {
+      return chrome.extension.getBackgroundPage().console;
     }
+
+    return console;
   }
+
+  isRunningInExtensionMode: boolean = chrome && chrome.extension && chrome.storage !== null;
+  storage: chrome.storage.LocalStorageArea = this.isRunningInExtensionMode ? chrome.storage.local : null;
 
   /**
    * Gets the active tab

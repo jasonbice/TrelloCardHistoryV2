@@ -4,6 +4,8 @@ import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-
 import { LegacyCoreService } from 'src/app/services/legacy-core.service';
 import { HistoryItemFilter } from 'src/app/shared/models/history/history-item-filter.model';
 import { ITrelloMemberCreator } from 'src/app/shared/models/trello/trello-member-creator.model';
+import { CardUpdatedEventArgs } from 'src/app/shared/models/card-updated-event-args.model';
+import { History } from 'src/app/shared/models/history/history.model';
 
 @Component({
   selector: 'history-item',
@@ -23,8 +25,12 @@ export class HistoryItemComponent implements OnInit {
 
   @Output() filterByMemberCreatorIdToggled = new EventEmitter<string>();
   @Input() allChangeAuthors: ITrelloMemberCreator[];
+  @Input() history: History;
   @Input() historyItem: HistoryItem;
   @Input() currentHistoryItemFilter: HistoryItemFilter;
+
+  isConfirmingApplyValueNew: boolean = false;
+  isConfirmingApplyValueOld: boolean = false;
 
   get isOnlyChangeAuthor(): boolean {
     return this.allChangeAuthors && this.allChangeAuthors.length === 1;
@@ -98,27 +104,35 @@ export class HistoryItemComponent implements OnInit {
     return null;
   }
 
-  constructor(private coreService: LegacyCoreService, private changeDetector: ChangeDetectorRef) {}
+  constructor(private coreService: LegacyCoreService, private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.onNewExpandToggled(null);
-    this.onOldExpandToggled(null);
+    this.onExpandToggled(null, true);
+    this.onExpandToggled(null, false);
   }
 
-  onNewExpandToggled(event): void {
-    if (this.historyItem.newValue && this.historyItem.newValue !== null && this.historyItem.newValue.length > this.MAX_VALUE_DISPLAY_LENGTH) {
-      this.newValueCollapsed = !this.newValueCollapsed;
+  onExpandToggled(event: string, isNewValue: boolean): void {
+    const val: string = isNewValue ? this.historyItem.newValue : this.historyItem.oldValue;
+
+    if (val && val !== null && val.length > this.MAX_VALUE_DISPLAY_LENGTH) {
+      if (isNewValue) {
+        this.newValueCollapsed = !this.newValueCollapsed;
+      } else {
+        this.oldValueCollapsed = !this.oldValueCollapsed;
+      }      
 
       this.changeDetector.detectChanges();
     }
   }
 
-  onOldExpandToggled(event): void {
-    if (this.historyItem.oldValue && this.historyItem.oldValue !== null && this.historyItem.oldValue.length > this.MAX_VALUE_DISPLAY_LENGTH) {
-      this.oldValueCollapsed = !this.oldValueCollapsed;
-
-      this.changeDetector.detectChanges();
+  onConfirmingApplyValue(event: boolean, isNewValue: boolean): void {
+    if (isNewValue) {
+      this.isConfirmingApplyValueNew = event;
+    } else {
+      this.isConfirmingApplyValueOld = event;
     }
+
+    this.changeDetector.detectChanges();
   }
 
   onFilterByMemberCreatorIdToggled(): void {

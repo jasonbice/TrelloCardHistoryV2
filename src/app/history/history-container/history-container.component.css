@@ -58,3 +58,7 @@
 .dropdown-menu-authors li div:first-of-type {
     margin-right: 10px;
 }
+
+.loading {
+    text-align: center;
+}

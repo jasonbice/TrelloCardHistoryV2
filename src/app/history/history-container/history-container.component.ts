@@ -7,6 +7,8 @@ import { HistoryItemFilter } from 'src/app/shared/models/history/history-item-fi
 import { HistoryItem, SortBy, UpdateType } from 'src/app/shared/models/history/history-item.model';
 import { ITrelloMemberCreator } from 'src/app/shared/models/trello/trello-member-creator.model';
 import { Utils } from 'src/app/shared/utils';
+import { CardUpdatedEventArgs } from 'src/app/shared/models/card-updated-event-args.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-history-container',
@@ -29,12 +31,12 @@ export class HistoryContainerComponent implements OnInit {
   get containsTitleChanges(): boolean {
     return this.history.containsChangesOfType(UpdateType.Title);
   }
-  
+
   get containsPointsChanges(): boolean {
     return this.history.containsChangesOfType(UpdateType.Points);
   }
 
-  constructor(private coreService: LegacyCoreService, private trelloDataService: TrelloDataService, private changeDetector: ChangeDetectorRef, private activatedRoute: ActivatedRoute) {
+  constructor(private coreService: LegacyCoreService, private trelloDataService: TrelloDataService, private changeDetectorRef: ChangeDetectorRef, private activatedRoute: ActivatedRoute, private toastrService: ToastrService) {
     this.sortBy = SortBy.Date;
     this.sortAscending = false;
   }
@@ -51,6 +53,10 @@ export class HistoryContainerComponent implements OnInit {
 
       this.loadHistory();
     }
+
+    this.trelloDataService.cardUpdated.subscribe((cardUpdatedEventArgs: CardUpdatedEventArgs) => {
+      this.onCardUpdated(cardUpdatedEventArgs);
+    });
   }
 
   loadHistory(): Promise<any> {
@@ -77,7 +83,7 @@ export class HistoryContainerComponent implements OnInit {
     this.filteredHistoryItems = this.historyItemFilter.filter(this.history.historyItems);
     HistoryItem.sort(this.filteredHistoryItems, this.sortBy, this.sortAscending);
 
-    this.changeDetector.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   clearChangeAuthorSelections(): void {
@@ -88,7 +94,13 @@ export class HistoryContainerComponent implements OnInit {
 
   onFilterByMemberCreatorIdToggled(memberCreatorId: string) {
     this.historyItemFilter.toggleMemberCreatorId(memberCreatorId);
-    
+
     this.applyHistoryItemFilterAndSort();
+  }
+
+  onCardUpdated(cardUpdatedEventArgs: CardUpdatedEventArgs) {
+    this.loadHistory().then(() => {
+      this.toastrService.success(`${cardUpdatedEventArgs.updateType} ${cardUpdatedEventArgs.updateType === UpdateType.Points ? 'have' : 'has'} been updated`);
+    });
   }
 }

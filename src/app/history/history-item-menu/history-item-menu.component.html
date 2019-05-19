@@ -1,7 +1,17 @@
-<div *ngIf="displayMenu">
-  <div class="btn-group btn-group-xxs" role="group">
-  <button (click)="copyValueToClipboard()" class="btn" title="Copy to clipboard" *ngIf="displayCopyButton"><i class="fa fa-clipboard"></i></button>
-  <button (click)="toggleExpand()" class="btn" [title]="isCollapsed ? 'Expand' : 'Collapse'" *ngIf="displayToggleExpandButton"><i [class]="isCollapsed ? 'fa fa-expand' : 'fa fa-compress'"></i></button>
-  <!-- <button *ngIf="!isCollapsed" class="btn" title="Make this the {{historyItem.updateType}}"><i class="fa fa-bolt"></i></button> -->
-</div>
+<div class="menu-container" *ngIf="displayMenu || displayApplyValueMenu">
+  <div class="btn-group btn-group-xs menu" role="group" *ngIf="displayMenu && !displayApplyValueMenu">
+    <button (click)="copyValueToClipboard()" class="btn" [title]="enableCopyButton ? 'Copy to clipboard' : 'Cannot copy to clipboard'" [disabled]="!enableCopyButton"><i
+        class="fa fa-clipboard"></i></button>
+    <button (click)="toggleExpand()" class="btn" [title]="enableToggleExpandButton ? (isCollapsed ? 'Expand' : 'Collapse') : 'The full ' + historyItem.updateType + ' is already displayed'"
+      [disabled]="!enableToggleExpandButton"><i [class]="isCollapsed ? 'fa fa-expand' : 'fa fa-compress'"></i></button>
+    <button (click)="applyValue()" class="btn" [title]="enableApplyValueButton ? 'Make this the ' + historyItem.updateType + '?' : 'This is already the current ' + historyItem.updateType"
+      [disabled]="!enableApplyValueButton"><i class="fa fa-bolt"></i></button>
+  </div>
+  <div class="applyValueMenu" *ngIf="displayApplyValueMenu">
+    <span>Make this the {{historyItem.updateType}}?
+    </span>
+    <button (click)="applyValueConfirm(false)" class="btn btn-xs btn-outline-secondary"><i class="fa fa-ban"></i>
+      Cancel</button>
+    <button (click)="applyValueConfirm(true)" class="btn btn-xs btn-primary"><i class="fa fa-check"></i> Confirm</button>
+  </div>
 </div>

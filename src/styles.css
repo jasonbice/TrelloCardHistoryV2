@@ -1,7 +1,8 @@
+@import '~ngx-toastr/toastr.css';
 body {
     position: relative;
     font-family: 'Roboto', sans-serif;
-    width: 650px;    
+    width: 650px;
 }
 
 .cursor-pointer {
@@ -68,9 +69,7 @@ div.avatar-small span {
     font-weight: 500;
 }
 
-.input-group-xs>.form-control,
-.input-group-xs>.input-group-addon,
-.input-group-xs>.input-group-btn>.btn {
+.input-group-xs>.form-control, .input-group-xs>.input-group-addon, .input-group-xs>.input-group-btn>.btn {
     height: 22px;
     padding: 1px 5px;
     font-size: 12px;
@@ -78,16 +77,39 @@ div.avatar-small span {
 }
 
 /* https://stackoverflow.com/questions/33911049/btn-xs-no-longer-a-valid-option-in-bootstrap-4 */
-.btn-group-xs > .btn, .btn-xs {
-    padding: .25rem .4rem;
-    font-size: .875rem;
-    line-height: .5;
-    border-radius: .2rem;
-  }
 
-  .btn-group-xxs > .btn, .btn-xs {
-    padding: .2rem .2rem;
-    font-size: .675rem;
+.btn-group-xs>.btn, .btn-xs {
+    padding: .25rem .4rem;
+    font-size: .8rem;
     line-height: .4;
     border-radius: .2rem;
-  }
+}
+
+/* Toastr overrides */
+
+.toast-container .ngx-toastr {
+    padding: 10px;
+    border-radius: 2px;
+}
+
+.toast-message {
+    font-size: 14px;
+}
+
+.toast-success {
+    background-color: #bef5cb;
+    background-image: none;
+}
+
+.toast-container > .toast-success {
+    color: green;
+}
+
+.toast-error {
+    background-color: #fdaeb7;
+    background-image: none;
+}
+
+.toast-container > .toast-error {
+    color: darkred;
+}

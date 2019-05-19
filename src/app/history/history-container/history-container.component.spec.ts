@@ -13,6 +13,8 @@ import { SortBy, HistoryItem, UpdateType } from 'src/app/shared/models/history/h
 import { HistoryMock } from 'src/app/shared/models/history/history.model.mock';
 import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-value.pipe';
 import { HistoryItemMenuComponent } from '../history-item-menu/history-item-menu.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 describe('HistoryContainerComponent', () => {
   let component: HistoryContainerComponent;
@@ -26,8 +28,16 @@ describe('HistoryContainerComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         AppRoutingModule,
+        BrowserAnimationsModule,
         FormsModule,
-        HttpClientModule
+        HttpClientModule,
+        ToastrModule.forRoot({
+          maxOpened: 1,
+          onActivateTick: true,
+          preventDuplicates: true,
+          progressBar: true,
+          timeOut: 2500
+        })
       ],
       declarations: [
         HistoryItemComponent,
@@ -40,7 +50,7 @@ describe('HistoryContainerComponent', () => {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
-              params: { shortLink: 'olZWuQJ6' }
+              params: { shortLink: 'UEJpVbdt' }
             }
           }
         },
@@ -53,7 +63,7 @@ describe('HistoryContainerComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HistoryContainerComponent);
-    component = fixture.componentInstance;
+    component = fixture.componentInstance;    
     fixture.detectChanges();
   });
 
@@ -79,7 +89,7 @@ describe('HistoryContainerComponent', () => {
       });
 
       spyOn(coreService, 'getTrelloCardIdFromCurrentUrl').and.returnValue(qShortLink);
-      spyOn(trelloDataService, 'getHistory').and.returnValue(of(new HistoryMock()));
+      spyOn(trelloDataService, 'getHistory').and.returnValue(of(HistoryMock.MOCK_HISTORY));
     });
 
     it('should load the history when running in extension mode', () => {
@@ -126,7 +136,7 @@ describe('HistoryContainerComponent', () => {
         coreService.isRunningInExtensionMode = true;
 
         component.loadHistory().then(() => {
-          expect(component.history).toBe(new HistoryMock());
+          expect(component.history).toBe(HistoryMock.MOCK_HISTORY);
         });
       });
 
@@ -229,7 +239,7 @@ describe('HistoryContainerComponent', () => {
     let spyGetHistory: jasmine.Spy;
 
     beforeEach(() => {
-      historyMock = new HistoryMock();
+      historyMock = HistoryMock.MOCK_HISTORY;
       coreService = TestBed.get(LegacyCoreService);
       trelloDataService = TestBed.get(TrelloDataService);
 
@@ -274,7 +284,7 @@ describe('HistoryContainerComponent', () => {
     let spyGetHistory: jasmine.Spy;
 
     beforeEach(() => {
-      historyMock = new HistoryMock();
+      historyMock = HistoryMock.MOCK_HISTORY;
       coreService = TestBed.get(LegacyCoreService);
       trelloDataService = TestBed.get(TrelloDataService);
 
@@ -319,11 +329,11 @@ describe('HistoryContainerComponent', () => {
     let spyGetHistory: jasmine.Spy;
 
     beforeEach(() => {
-      historyMock = new HistoryMock();
+      historyMock = HistoryMock.MOCK_HISTORY;
       coreService = TestBed.get(LegacyCoreService);
       trelloDataService = TestBed.get(TrelloDataService);
 
-      component.history = historyMock;
+      component.history = HistoryMock.MOCK_HISTORY;
 
       let qShortLink: any = new Promise((resolve, reject) => {
         resolve(HistoryMock.MOCK_SHORT_LINK);
@@ -357,7 +367,7 @@ describe('HistoryContainerComponent', () => {
     });
   });
 
-  xdescribe('applyHistoryItemFilterAndSort', () => {
+  describe('applyHistoryItemFilterAndSort', () => {
 
   });
 

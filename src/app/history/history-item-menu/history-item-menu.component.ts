@@ -1,6 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { History } from 'src/app/shared/models/history/history.model';
 import { HistoryItem, UpdateType } from 'src/app/shared/models/history/history-item.model';
 import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-value.pipe';
+import { TrelloDataService } from 'src/app/services/trello-data.service';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { CardUpdatedEventArgs } from 'src/app/shared/models/card-updated-event-args.model';
+import { ToastrService } from 'ngx-toastr';
+import { Utils } from 'src/app/shared/utils';
 
 @Component({
   selector: 'history-item-menu',
@@ -9,27 +16,68 @@ import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-
 })
 export class HistoryItemMenuComponent implements OnInit {
   @Output() expandToggled = new EventEmitter<string>();
+  @Output() confirmingApplyValue = new EventEmitter<boolean>();
+  @Input() history: History;
   @Input() historyItem: HistoryItem;
   @Input() isNewValue: boolean;
   @Input() isCollapsed: boolean;
 
   subjectValue: string;
-  displayToggleExpandButton: boolean;
-  displayCopyButton: boolean;
+  subjectValueRaw: string;
+  enableToggleExpandButton: boolean;
+  enableCopyButton: boolean;
+  enableApplyValueButton: boolean;
+  displayApplyValueMenu: boolean = false;
   displayMenu: boolean;
 
-  constructor() { }
+  constructor(private trelloDataService: TrelloDataService, private toastrService: ToastrService, private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.subjectValue = this.isNewValue ? this.historyItem.newValue : this.historyItem.oldValue;
+    this.subjectValueRaw = this.isNewValue ? this.historyItem.newValueRaw : this.historyItem.oldValueRaw;
 
-    this.displayToggleExpandButton = this.subjectValue && this.subjectValue.length > PrettifyHistoryValuePipe.DEFAULT_MAX_LENGTH;
-    this.displayCopyButton = this.subjectValue && (this.historyItem.updateType === UpdateType.Description || this.historyItem.updateType === UpdateType.Title);
-    this.displayMenu = this.displayToggleExpandButton || this.displayCopyButton;
+    this.enableToggleExpandButton = this.subjectValue && this.subjectValue.length > PrettifyHistoryValuePipe.DEFAULT_MAX_LENGTH;
+    this.enableCopyButton = this.subjectValue && (this.historyItem.updateType === UpdateType.Description || this.historyItem.updateType === UpdateType.Points || this.historyItem.updateType === UpdateType.Title);
+
+    this.enableApplyValueButton = 
+      (this.historyItem.updateType === UpdateType.Description && this.subjectValueRaw !== this.history.description) ||
+      (this.historyItem.updateType === UpdateType.Points && +this.subjectValueRaw !== this.history.points) ||
+      (this.historyItem.updateType === UpdateType.Title && this.subjectValue !== Utils.getSanitizedTitle(this.history.title));
+
+    this.displayMenu = this.enableToggleExpandButton || this.enableCopyButton || this.enableApplyValueButton;
   }
 
   toggleExpand(): void {
     this.expandToggled.emit(null);
+  }
+
+  applyValue(): void {
+    this.displayApplyValueMenu = !this.displayApplyValueMenu;
+    this.confirmingApplyValue.emit(true);
+
+    // HACK: Determine why this is needed only after an applyValueConfirm() -> reload
+    // Commented for now: this is a symptom of a larger/wider issue; disabling makes this easier to t/s
+    this.changeDetector.detectChanges();
+  }
+
+  applyValueConfirm(confirm: boolean): void {
+    if (confirm) {
+      this.trelloDataService.updateCard(this.history, this.historyItem.trelloHistoryDataObj.data.card.id, this.historyItem.updateType, this.subjectValueRaw)
+        .pipe(
+          catchError((error) => {
+            this.toastrService.error(error);
+
+            return throwError(error);
+          }))
+        .subscribe(() => {
+          const cardUpdatedEventArgs = new CardUpdatedEventArgs(this.historyItem.updateType, this.subjectValueRaw);
+
+          this.trelloDataService.cardUpdated.emit(cardUpdatedEventArgs);
+        });
+    }
+
+    this.displayApplyValueMenu = false;
+    this.confirmingApplyValue.emit(false);
   }
 
   /**
@@ -42,7 +90,7 @@ export class HistoryItemMenuComponent implements OnInit {
     const copyFrom = document.createElement("textarea");
 
     //Set the text content to be the text you wished to copy.
-    copyFrom.textContent = this.subjectValue;
+    copyFrom.textContent = this.subjectValueRaw;
 
     //Append the textbox field into the body as a child. 
     //"execCommand()" only works when there exists selected text, and the text is inside 
@@ -61,6 +109,8 @@ export class HistoryItemMenuComponent implements OnInit {
     //Remove the textbox field from the document.body, so no other JavaScript nor 
     //other elements can get access to this.
     document.body.removeChild(copyFrom);
+
+    this.toastrService.success(`${this.isNewValue ? 'New' : 'Old'} ${this.historyItem.updateType} copied`);
   }
 
 }

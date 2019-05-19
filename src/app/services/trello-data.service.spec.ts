@@ -29,15 +29,6 @@ describe('TrelloDataService', () => {
     });
   });
 
-  describe('getNameRequestUri', () => {
-    it('should return the Trello API URI formulated with the provided short link', () => {
-      const actual = service.getNameRequestUri(HistoryMock.MOCK_SHORT_LINK);
-      const expected = `https://trello.com/1/cards/${HistoryMock.MOCK_SHORT_LINK}/name`;
-
-      expect(actual).toBe(expected);
-    });
-  });
-
   describe('getHistory', () => {
     let historyMock: HistoryMock = new HistoryMock();
 

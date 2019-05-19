@@ -1,12 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { ITrelloHistoryDataObj } from '../shared/models/trello/trello-history-data-obj.model';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/internal/Observable';
-import { map } from 'rxjs/operators';
+import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { map, catchError, flatMap } from 'rxjs/operators';
 import { History } from '../shared/models/history/history.model';
 import { LegacyCoreService } from './legacy-core.service';
 import deepcopy from 'deepcopy';
-import { ITrelloValue } from '../shared/models/trello/trello-value';
+import { UpdateType } from '../shared/models/history/history-item.model';
+import { bindCallback, Observable, throwError, forkJoin } from 'rxjs';
+import { CardUpdatedEventArgs } from '../shared/models/card-updated-event-args.model';
+import { ITrelloCard } from '../shared/models/trello/trello-card.model';
+import { Utils } from '../shared/utils';
 
 /**
  * The maximium number of card data items the extension is permitted to keep in browser storage
@@ -17,38 +20,84 @@ export const STORAGE_LIMIT_CARD_DATA_ITEMS = 1000;
   providedIn: 'root'
 })
 export class TrelloDataService {
+  cardUpdated = new EventEmitter<CardUpdatedEventArgs>();
 
   constructor(private http: HttpClient, private coreService: LegacyCoreService) { }
 
+  private handleError(error: HttpErrorResponse) {
+    LegacyCoreService.console.log("Error", error);
+
+    return throwError(`Something bad happened: ${error.status} - ${error.statusText} / ${error.error}`);
+  };
+
+  private getTrellowAuthTokenCookie(): Observable<chrome.cookies.Cookie> {
+    const getCookie = bindCallback(chrome.cookies.get);
+
+    return getCookie({ url: 'https://trello.com', name: "token" });
+  }
+
   getHistoryRequestUri(shortLink: string): string {
-    return `https://trello.com/1/cards/${shortLink}/actions?filter=createCard,copyCard,convertToCardFromCheckItem,updateCard&limit=1000`;
+    return `${this.getTrelloCardRequestUri(shortLink)}/actions?filter=createCard,copyCard,convertToCardFromCheckItem,updateCard&limit=1000`;
   }
 
-  getNameRequestUri(shortLink: string): string {
-    return `https://trello.com/1/cards/${shortLink}/name`;
+  getTrelloCardRequestUri(shortLink: string): string {
+    return `https://trello.com/1/cards/${shortLink}`;
   }
 
-  getName(shortLink: string): Observable<string> {
-    const cardNameUri: string = this.getNameRequestUri(shortLink);
-
-    console.log(`Fetching card name for ${shortLink}`, cardNameUri);
-
-    return this.http.get<any>(cardNameUri).pipe(
-      map<ITrelloValue, string>(a => a._value)
-    );
+  getCardUpdateUri(id: string): string {
+    return `https://trello.com/1/cards/${id}`;
   }
 
   getHistory(shortLink: string): Observable<History> {
-    const cardDataUri: string = this.getHistoryRequestUri(shortLink);
+    const trelloCardDataUri: string = this.getTrelloCardRequestUri(shortLink);
+    const actionsDataUri: string = this.getHistoryRequestUri(shortLink);
 
-    console.log(`Fetching card data for ${shortLink}`, cardDataUri);
-
-    return this.http.get<ITrelloHistoryDataObj[]>(cardDataUri).pipe(
-      map<ITrelloHistoryDataObj[], History>(trelloHistoryDataObjects => new History(this, shortLink, trelloHistoryDataObjects.filter(t =>
+    return forkJoin({
+      trelloCard: this.http.get<ITrelloCard>(trelloCardDataUri),
+      historyData: this.http.get<ITrelloHistoryDataObj[]>(actionsDataUri)
+    }).pipe(
+      map(o => new History(o.trelloCard, o.historyData.filter(t =>
         t.data.card.shortLink == shortLink && ( // Need to filter on shortLink so convertToCardFromCheckItem entries from the *new* card are not included
-          (t.type !== 'updateCard' || (!t.data.old.idList && (t.data.old.name || t.data.card.desc || t.data.old.desc))))
-      )))
-    );
+          (t.type !== 'updateCard' || (!t.data.old.idList && (t.data.old.name || t.data.card.desc || t.data.old.desc)))))
+      )));
+  }
+
+  updateCard(history: History, id: string, updateType: UpdateType, newValue: any): Observable<any> {
+    const cardUpdateUri: string = this.getCardUpdateUri(id);
+    let paramName: string = null;
+    let _newValue: string = newValue;
+
+    switch (updateType) {
+      case UpdateType.Description:
+        paramName = "desc";
+
+        break;
+
+      case UpdateType.Points:
+        paramName = "name";
+
+        _newValue = `(${newValue}) ${Utils.getSanitizedTitle(history.title)}`;
+
+        break;
+
+      case UpdateType.Title:
+        paramName = "name";
+
+        if (history.points) {
+          _newValue = `(${history.points}) ${Utils.getSanitizedTitle(newValue)}`;
+        }
+
+        break;
+    }
+
+    return this.getTrellowAuthTokenCookie().pipe(flatMap((tokenCookie) => {
+      const token: string = decodeURIComponent(tokenCookie.value);
+      const httpParams: HttpParams = new HttpParams().set(paramName, _newValue).set("token", token);
+
+      return this.http.put(cardUpdateUri, httpParams).pipe(
+        catchError(this.handleError)
+      );
+    }));
   }
 
   applyLastViewedToHistory(history: History, refresh: boolean): Promise<any> {
@@ -61,7 +110,7 @@ export class TrelloDataService {
 
         let cardDataItemPos;
 
-        for (let i in cardData) {
+        for (const i in cardData) {
           if (cardData[i].cardId == history.id) {
             cardDataItem = cardData[i];
             cardDataItemPos = i;
@@ -87,7 +136,7 @@ export class TrelloDataService {
 
             this.saveCardDataToLocalStorage(cardData, null);
           } catch (err) {
-            this.coreService.console.error(err);
+            LegacyCoreService.console.error(err);
           }
         }
       }).catch((err) => {

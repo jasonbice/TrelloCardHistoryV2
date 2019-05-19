@@ -50,7 +50,7 @@ export class HistoryItem {
             case UpdateType.Converted: return null;
             case UpdateType.Created: return null;
             case UpdateType.Description: return this.trelloHistoryDataObj.data.old.desc;
-            case UpdateType.Points: return this.oldValue;
+            case UpdateType.Points: return String(this.sanitizedOldPoints);
             case UpdateType.Title: return this.oldValue;
             default: throw new Error(`${this.updateType} not implemented`);
         }
@@ -61,7 +61,7 @@ export class HistoryItem {
             case UpdateType.Converted: return null;
             case UpdateType.Created: return null;
             case UpdateType.Description: return this.trelloHistoryDataObj.data.card.desc;
-            case UpdateType.Points: return this.newValue;
+            case UpdateType.Points: return String(this.sanitizedNewPoints);
             case UpdateType.Title: return this.newValue;
             default: throw new Error(`${this.updateType} not implemented`);
         }

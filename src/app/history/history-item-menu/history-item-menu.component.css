@@ -1,0 +1,15 @@
+.menu-container {
+    padding-bottom: 5px;
+}
+
+.menu-container .applyValueMenu span {
+    font-weight: 500;
+}
+
+.menu-container .applyValueMenu button {
+    margin-left: 5px;
+}
+
+.menu-container button:disabled {
+    color: #999;
+}

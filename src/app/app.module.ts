@@ -10,6 +10,8 @@ import { BackgroundComponent } from './background/background.component';
 import { FormsModule } from '@angular/forms';
 import { PrettifyHistoryValuePipe } from './shared/pipes/prettify-history-value.pipe';
 import { HistoryItemMenuComponent } from './history/history-item-menu/history-item-menu.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { HistoryItemMenuComponent } from './history/history-item-menu/history-it
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
@@ -29,7 +32,14 @@ import { HistoryItemMenuComponent } from './history/history-item-menu/history-it
       { path: 'history', component: HistoryContainerComponent },
       { path: 'history/:shortLink', component: HistoryContainerComponent },
       { path: '', component: BackgroundComponent }
-    ], { useHash: true })
+    ], { useHash: true }),
+    ToastrModule.forRoot({
+      maxOpened: 1,
+      onActivateTick: true,
+      preventDuplicates: true,
+      progressBar: true,
+      timeOut: 2500
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

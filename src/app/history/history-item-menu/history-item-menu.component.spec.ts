@@ -1,5 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HistoryItemMenuComponent } from './history-item-menu.component';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('HistoryItemMenuComponent', () => {
   let component: HistoryItemMenuComponent;
@@ -7,6 +10,17 @@ describe('HistoryItemMenuComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        BrowserAnimationsModule,
+        HttpClientModule,
+        ToastrModule.forRoot({
+          maxOpened: 1,
+          onActivateTick: true,
+          preventDuplicates: true,
+          progressBar: true,
+          timeOut: 2500
+        })
+      ],
       declarations: [HistoryItemMenuComponent]
     })
       .compileComponents();
