@@ -6,7 +6,7 @@ import { Utils } from '../utils';
 })
 export class PrettifyHistoryValuePipe implements PipeTransform {
 
-  static readonly DEFAULT_MAX_LENGTH: number = 60;
+  static readonly DEFAULT_MAX_LENGTH: number = 65;
   static readonly DEFAULT_REPLACE_EMPTY_WITH: string = '(None)';
   static readonly DEFAULT_TRUNCATE_APPEND: string = '...';
 
