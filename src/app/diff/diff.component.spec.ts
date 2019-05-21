@@ -9,20 +9,26 @@ describe('DiffComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DiffComponent ]
+      declarations: [DiffComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DiffComponent);
     component = fixture.componentInstance;
     component.historyItem = HistoryMock.MOCK_HISTORY.historyItems.find(hi => hi.updateType === UpdateType.Description);
-    
+
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('ngOnInit', () => {
+    it('should create a diff', () => {
+      expect(component.diffHtml).toBeTruthy();
+    });
   });
 });
