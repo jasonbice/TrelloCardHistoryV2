@@ -12,6 +12,7 @@ import { PrettifyHistoryValuePipe } from './shared/pipes/prettify-history-value.
 import { HistoryItemMenuComponent } from './history/history-item-menu/history-item-menu.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { DiffComponent } from './diff/diff.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ToastrModule } from 'ngx-toastr';
     HistoryItemComponent,
     PrettifyHistoryValuePipe,
     BackgroundComponent,
-    HistoryItemMenuComponent
+    HistoryItemMenuComponent,
+    DiffComponent
   ],
   imports: [
     BrowserModule,

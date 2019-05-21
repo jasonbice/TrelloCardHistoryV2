@@ -31,6 +31,7 @@ export class HistoryItemComponent implements OnInit {
 
   isConfirmingApplyValueNew: boolean = false;
   isConfirmingApplyValueOld: boolean = false;
+  showDiff: boolean = false;
 
   get isOnlyChangeAuthor(): boolean {
     return this.allChangeAuthors && this.allChangeAuthors.length === 1;
@@ -139,6 +140,10 @@ export class HistoryItemComponent implements OnInit {
     if (!this.isOnlyChangeAuthor) {
       this.filterByMemberCreatorIdToggled.emit(this.historyItem.trelloHistoryDataObj.idMemberCreator);
     }
+  }
+
+  onShowDiffRequested(showDiff: boolean): void {
+    this.showDiff = showDiff;
   }
 
 }

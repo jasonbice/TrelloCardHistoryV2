@@ -103,3 +103,11 @@ i.fa-clipboard {
 .collapsed {
     font-style: italic;
 }
+
+.diff-container {
+    padding: 5px;
+    margin-bottom: 5px;
+    border-top: solid 1px lightgray;
+    border-bottom: solid 1px lightgray;
+    border-radius: 0.5em;
+}

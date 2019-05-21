@@ -17,6 +17,8 @@ import { Utils } from 'src/app/shared/utils';
 export class HistoryItemMenuComponent implements OnInit {
   @Output() expandToggled = new EventEmitter<string>();
   @Output() confirmingApplyValue = new EventEmitter<boolean>();
+  @Output() showDiffRequested = new EventEmitter<boolean>();
+
   @Input() history: History;
   @Input() historyItem: HistoryItem;
   @Input() isNewValue: boolean;
@@ -27,6 +29,7 @@ export class HistoryItemMenuComponent implements OnInit {
   enableToggleExpandButton: boolean;
   enableCopyButton: boolean;
   enableApplyValueButton: boolean;
+  enableDiffButton: boolean;
   displayApplyValueMenu: boolean = false;
   displayMenu: boolean;
 
@@ -39,10 +42,14 @@ export class HistoryItemMenuComponent implements OnInit {
     this.enableToggleExpandButton = this.subjectValue && this.subjectValue.length > PrettifyHistoryValuePipe.DEFAULT_MAX_LENGTH;
     this.enableCopyButton = this.subjectValue && (this.historyItem.updateType === UpdateType.Description || this.historyItem.updateType === UpdateType.Points || this.historyItem.updateType === UpdateType.Title);
 
-    this.enableApplyValueButton = 
+    this.enableApplyValueButton =
       (this.historyItem.updateType === UpdateType.Description && this.subjectValueRaw !== this.history.description) ||
       (this.historyItem.updateType === UpdateType.Points && +this.subjectValueRaw !== this.history.points) ||
       (this.historyItem.updateType === UpdateType.Title && this.subjectValue !== Utils.getSanitizedTitle(this.history.title));
+
+    this.enableDiffButton = (this.historyItem.updateType === UpdateType.Description || this.historyItem.updateType === UpdateType.Title) &&
+      !Utils.isNullOrWhiteSpace(this.historyItem.newValue) &&
+      !Utils.isNullOrWhiteSpace(this.historyItem.oldValue);
 
     this.displayMenu = this.enableToggleExpandButton || this.enableCopyButton || this.enableApplyValueButton;
   }
@@ -78,6 +85,10 @@ export class HistoryItemMenuComponent implements OnInit {
 
     this.displayApplyValueMenu = false;
     this.confirmingApplyValue.emit(false);
+  }
+
+  showDiff(): void {
+    this.showDiffRequested.emit(true);
   }
 
   /**
