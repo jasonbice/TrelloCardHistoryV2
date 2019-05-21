@@ -144,6 +144,8 @@ export class HistoryItemComponent implements OnInit {
 
   onShowDiffRequested(showDiff: boolean): void {
     this.showDiff = showDiff;
+
+    this.changeDetector.detectChanges();
   }
 
 }
