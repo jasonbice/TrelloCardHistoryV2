@@ -9,6 +9,7 @@ import { HistoryItemMenuComponent } from '../history-item-menu/history-item-menu
 import { ToastrModule } from 'ngx-toastr';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DiffComponent } from 'src/app/diff/diff.component';
 
 describe('HistoryItemComponent', () => {
   let component: HistoryItemComponent;
@@ -28,7 +29,7 @@ describe('HistoryItemComponent', () => {
           timeOut: 2500
         })
       ],
-      declarations: [HistoryItemComponent, HistoryItemMenuComponent, PrettifyHistoryValuePipe]
+      declarations: [DiffComponent, HistoryItemComponent, HistoryItemMenuComponent, PrettifyHistoryValuePipe]
     })
       .compileComponents();
   }));

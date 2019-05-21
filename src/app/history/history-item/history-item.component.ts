@@ -4,7 +4,6 @@ import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-
 import { LegacyCoreService } from 'src/app/services/legacy-core.service';
 import { HistoryItemFilter } from 'src/app/shared/models/history/history-item-filter.model';
 import { ITrelloMemberCreator } from 'src/app/shared/models/trello/trello-member-creator.model';
-import { CardUpdatedEventArgs } from 'src/app/shared/models/card-updated-event-args.model';
 import { History } from 'src/app/shared/models/history/history.model';
 
 @Component({

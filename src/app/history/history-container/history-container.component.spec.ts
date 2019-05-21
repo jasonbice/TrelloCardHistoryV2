@@ -15,6 +15,7 @@ import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-
 import { HistoryItemMenuComponent } from '../history-item-menu/history-item-menu.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { DiffComponent } from 'src/app/diff/diff.component';
 
 describe('HistoryContainerComponent', () => {
   let component: HistoryContainerComponent;
@@ -40,6 +41,7 @@ describe('HistoryContainerComponent', () => {
         })
       ],
       declarations: [
+        DiffComponent,
         HistoryItemComponent,
         HistoryItemMenuComponent,
         HistoryContainerComponent,
