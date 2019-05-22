@@ -17,7 +17,7 @@ export class DiffComponent implements OnInit {
 
   ngOnInit() {
     const dmp = new diff_match_patch();
-    const diff = dmp.diff_main(this.historyItem.newValueRaw, this.historyItem.oldValueRaw);
+    const diff = dmp.diff_main(this.historyItem.oldValueRaw, this.historyItem.newValueRaw);
 
     dmp.diff_cleanupSemantic(diff);
 
