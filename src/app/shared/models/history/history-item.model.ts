@@ -26,6 +26,7 @@ export class HistoryItem {
     get oldValue(): string {
         switch (this.updateType) {
             case UpdateType.Converted: return null;
+            case UpdateType.Copied: return null;
             case UpdateType.Created: return null;
             case UpdateType.Description: return this.sanitizedOldDescription;
             case UpdateType.Points: return String(this.sanitizedOldPoints ? this.sanitizedOldPoints + ' points' : '');
@@ -37,6 +38,7 @@ export class HistoryItem {
     get newValue(): string {
         switch (this.updateType) {
             case UpdateType.Converted: return null;
+            case UpdateType.Copied: return null;
             case UpdateType.Created: return null;
             case UpdateType.Description: return this.sanitizedNewDescription;
             case UpdateType.Points: return String(this.sanitizedNewPoints ? this.sanitizedNewPoints + ' points' : '');
@@ -48,6 +50,7 @@ export class HistoryItem {
     get oldValueRaw(): string {
         switch (this.updateType) {
             case UpdateType.Converted: return null;
+            case UpdateType.Copied: return null;
             case UpdateType.Created: return null;
             case UpdateType.Description: return this.trelloHistoryDataObj.data.old.desc;
             case UpdateType.Points: return String(this.sanitizedOldPoints);
@@ -59,6 +62,7 @@ export class HistoryItem {
     get newValueRaw(): string {
         switch (this.updateType) {
             case UpdateType.Converted: return null;
+            case UpdateType.Copied: return null;
             case UpdateType.Created: return null;
             case UpdateType.Description: return this.trelloHistoryDataObj.data.card.desc;
             case UpdateType.Points: return String(this.sanitizedNewPoints);

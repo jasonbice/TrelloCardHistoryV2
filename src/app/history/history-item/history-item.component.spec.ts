@@ -10,6 +10,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DiffComponent } from 'src/app/diff/diff.component';
+import { AppRoutingModule } from 'src/app/app-routing.module';
 
 describe('HistoryItemComponent', () => {
   let component: HistoryItemComponent;
@@ -19,6 +20,7 @@ describe('HistoryItemComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        AppRoutingModule,
         BrowserAnimationsModule,
         HttpClientModule,
         ToastrModule.forRoot({

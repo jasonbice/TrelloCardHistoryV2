@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BackgroundComponent } from './background.component';
 import { HttpClient, HttpHandler } from '@angular/common/http';
+import { AppRoutingModule } from '../app-routing.module';
 
 describe('BackgroundComponent', () => {
   let component: BackgroundComponent;
@@ -9,6 +10,9 @@ describe('BackgroundComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        AppRoutingModule,
+      ],
       declarations: [ BackgroundComponent ],
       providers: [
         HttpClient,

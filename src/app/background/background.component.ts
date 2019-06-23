@@ -1,24 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { LegacyCoreService } from '../services/legacy-core.service';
 import { TrelloDataService } from '../services/trello-data.service';
+import { ExtensionHostService } from '../services/extension-host.service';
 
 @Component({
   templateUrl: './background.component.html'
 })
 export class BackgroundComponent implements OnInit {
 
-  constructor(private coreService: LegacyCoreService, private trelloDataService: TrelloDataService) { }
+  constructor(private extensionHostService: ExtensionHostService, private trelloDataService: TrelloDataService) { }
 
   ngOnInit() {
-    console.log(`Tello Card History background component intialized and running in ${this.coreService.isRunningInExtensionMode ? 'EXTENSION' : 'BROWSER'} mode`);
+    console.debug(`Tello Card History background component intialized and running in ${this.extensionHostService.isRunningInExtensionMode ? 'EXTENSION' : 'BROWSER'} mode`);
 
-    if (this.coreService.isRunningInExtensionMode) {
-      this.coreService.resetExtension(null);
-      this.trelloDataService.cleanUpLocalStorage();
+    if (this.extensionHostService.isRunningInExtensionMode) {
+      this.extensionHostService.resetExtension(null);
+      this.trelloDataService.cleanUpLocalStorage().subscribe();
 
-      this.coreService.addTabsUpdatedListener((tabId, changeInfo, tab) => {
+      this.extensionHostService.addTabsUpdatedListener((tabId, changeInfo, tab) => {
         if (changeInfo.status === 'complete') {
-          this.coreService.updateBadgeForTab(tab, this.trelloDataService);
+          this.extensionHostService.updateBadgeForTab(tab, this.trelloDataService).subscribe();
         }
       });
     }

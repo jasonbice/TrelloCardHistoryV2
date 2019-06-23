@@ -8,7 +8,6 @@ import chrome from 'sinon-chrome';
 import { TrelloDataService } from 'src/app/services/trello-data.service';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { LegacyCoreService } from 'src/app/services/legacy-core.service';
 import { SortBy, HistoryItem, UpdateType } from 'src/app/shared/models/history/history-item.model';
 import { HistoryMock } from 'src/app/shared/models/history/history.model.mock';
 import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-value.pipe';
@@ -16,6 +15,8 @@ import { HistoryItemMenuComponent } from '../history-item-menu/history-item-menu
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { DiffComponent } from 'src/app/diff/diff.component';
+import { ExtensionHostService } from 'src/app/services/extension-host.service';
+import { Tab } from 'src/app/shared/models/extension-host/tab.model';
 
 describe('HistoryContainerComponent', () => {
   let component: HistoryContainerComponent;
@@ -56,7 +57,7 @@ describe('HistoryContainerComponent', () => {
             }
           }
         },
-        LegacyCoreService,
+        ExtensionHostService,
         TrelloDataService
       ]
     })
@@ -79,73 +80,78 @@ describe('HistoryContainerComponent', () => {
   });
 
   describe('ngOnInit', () => {
-    let coreService: LegacyCoreService;
+    let extensionHostService: ExtensionHostService;
     let trelloDataService: TrelloDataService;
 
     beforeEach(() => {
-      coreService = TestBed.get(LegacyCoreService);
+      extensionHostService = TestBed.get(ExtensionHostService);
       trelloDataService = TestBed.get(TrelloDataService);
 
       let qShortLink: any = new Promise((resolve, reject) => {
         resolve(HistoryMock.MOCK_SHORT_LINK);
       });
 
-      spyOn(coreService, 'getTrelloCardIdFromCurrentUrl').and.returnValue(qShortLink);
+      spyOn(trelloDataService, 'getTrelloCardIdFromCurrentUrl').and.returnValue(of(qShortLink));
       spyOn(trelloDataService, 'getHistory').and.returnValue(of(HistoryMock.MOCK_HISTORY));
     });
 
     it('should load the history when running in extension mode', () => {
-      coreService.isRunningInExtensionMode = true;
+      extensionHostService.isRunningInExtensionMode = true;
       spyOn(component, 'loadHistory').and.callThrough();
 
       component.ngOnInit();
 
       fixture.whenStable().then(() => {
         expect(component.loadHistory).toHaveBeenCalled();
+        expect(component.history).toBeTruthy();
       });
     });
 
     it('should load the history when running in browser mode', () => {
-      coreService.isRunningInExtensionMode = false;
+      extensionHostService.isRunningInExtensionMode = false;
       spyOn(component, 'loadHistory').and.callThrough();
 
       component.ngOnInit();
 
       fixture.whenStable().then(() => {
         expect(component.loadHistory).toHaveBeenCalled();
+        expect(component.history).toBeTruthy();
       });
     });
 
     describe('loadHistory', () => {
       it('should refresh the extension icon and badge', () => {
-        coreService.isRunningInExtensionMode = true;
-        spyOn(coreService, 'updateBadgeForCurrentTabByHistory').and.callThrough();
+        const tab: Tab = {id: 0, url: HistoryMock.MOCK_CARD_URL};
+        spyOn(extensionHostService, 'getActiveTab').and.returnValue(of(tab));
 
-        component.loadHistory().then(() => {
-          expect(coreService.updateBadgeForCurrentTabByHistory).toHaveBeenCalled();
+        extensionHostService.isRunningInExtensionMode = true;
+        spyOn(extensionHostService, 'updateBadgeForCurrentTabByHistory').and.callThrough();
+
+        component.loadHistory().subscribe(() => {
+          expect(extensionHostService.updateBadgeForCurrentTabByHistory).toHaveBeenCalled();
         });
       });
 
       it('should set the component\'s shortLink', () => {
-        coreService.isRunningInExtensionMode = true;
+        extensionHostService.isRunningInExtensionMode = true;
 
-        component.loadHistory().then(() => {
+        component.loadHistory().subscribe(() => {
           expect(component.shortLink).toBe(HistoryMock.MOCK_SHORT_LINK);
         });
       });
 
       it('should set the component\'s history', () => {
-        coreService.isRunningInExtensionMode = true;
+        extensionHostService.isRunningInExtensionMode = true;
 
-        component.loadHistory().then(() => {
+        component.loadHistory().subscribe(() => {
           expect(component.history).toBe(HistoryMock.MOCK_HISTORY);
         });
       });
 
       it('should set the component\'s filteredHistoryItems', () => {
-        coreService.isRunningInExtensionMode = true;
+        extensionHostService.isRunningInExtensionMode = true;
 
-        component.loadHistory().then(() => {
+        component.loadHistory().subscribe(() => {
           expect(component.filteredHistoryItems).toBeTruthy();
         });
       });
@@ -156,7 +162,7 @@ describe('HistoryContainerComponent', () => {
         spyOn(component.historyItemFilter, 'filter').and.callThrough();
         spyOn(HistoryItem, 'sort').and.callThrough();
 
-        component.loadHistory().then(() => {
+        component.loadHistory().subscribe(() => {
           expect(component.historyItemFilter.filter).toHaveBeenCalled();
           expect(HistoryItem.sort).toHaveBeenCalled();
         });
@@ -165,7 +171,7 @@ describe('HistoryContainerComponent', () => {
 
     describe('clearChangeAuthorSelections', () => {
       it('should clear the selections from the filter and then apply the filter', () => {
-        component.loadHistory().then(() => {
+        component.loadHistory().subscribe(() => {
           component.historyItemFilter.memberCreatorIds.push('nonexistentid');
 
           spyOn(component.historyItemFilter, 'filter').and.callThrough();
@@ -182,7 +188,7 @@ describe('HistoryContainerComponent', () => {
 
     describe('toggleChangeAuthorSelection', () => {
       it('should add an id to the filter when it doesn\'t exist and then apply the filter', () => {
-        component.loadHistory().then(() => {
+        component.loadHistory().subscribe(() => {
           spyOn(component.historyItemFilter, 'filter').and.callThrough();
           spyOn(HistoryItem, 'sort').and.callThrough();
 
@@ -195,7 +201,7 @@ describe('HistoryContainerComponent', () => {
       });
 
       it('should remove an id from the filter when it exists and then apply the filter', () => {
-        component.loadHistory().then(() => {
+        component.loadHistory().subscribe(() => {
           const id: string = 'nonexistentid';
 
           component.historyItemFilter.memberCreatorIds.push(id);
@@ -213,7 +219,7 @@ describe('HistoryContainerComponent', () => {
       });
 
       it('should not remove an id from the filter when another id was removed and then apply the filter', () => {
-        component.loadHistory().then(() => {
+        component.loadHistory().subscribe(() => {
           const id1: string = 'id1';
           const id2: string = 'id2';
 
@@ -236,13 +242,11 @@ describe('HistoryContainerComponent', () => {
 
   describe('containsDescriptionChanges', () => {
     let historyMock: HistoryMock;
-    let coreService: LegacyCoreService;
     let trelloDataService: TrelloDataService;
     let spyGetHistory: jasmine.Spy;
 
     beforeEach(() => {
       historyMock = HistoryMock.MOCK_HISTORY;
-      coreService = TestBed.get(LegacyCoreService);
       trelloDataService = TestBed.get(TrelloDataService);
 
       component.history = historyMock;
@@ -251,7 +255,7 @@ describe('HistoryContainerComponent', () => {
         resolve(HistoryMock.MOCK_SHORT_LINK);
       });
 
-      spyOn(coreService, 'getTrelloCardIdFromCurrentUrl').and.returnValue(qShortLink);
+      spyOn(trelloDataService, 'getTrelloCardIdFromCurrentUrl').and.returnValue(of(qShortLink));
     });
 
     it('should return true when the history contains description changes', () => {
@@ -281,13 +285,11 @@ describe('HistoryContainerComponent', () => {
 
   describe('containsPointsChanges', () => {
     let historyMock: HistoryMock;
-    let coreService: LegacyCoreService;
     let trelloDataService: TrelloDataService;
     let spyGetHistory: jasmine.Spy;
 
     beforeEach(() => {
       historyMock = HistoryMock.MOCK_HISTORY;
-      coreService = TestBed.get(LegacyCoreService);
       trelloDataService = TestBed.get(TrelloDataService);
 
       component.history = historyMock;
@@ -296,7 +298,7 @@ describe('HistoryContainerComponent', () => {
         resolve(HistoryMock.MOCK_SHORT_LINK);
       });
 
-      spyOn(coreService, 'getTrelloCardIdFromCurrentUrl').and.returnValue(qShortLink);
+      spyOn(trelloDataService, 'getTrelloCardIdFromCurrentUrl').and.returnValue(of(qShortLink));
     });
 
     it('should return true when the history contains points changes', () => {
@@ -326,13 +328,11 @@ describe('HistoryContainerComponent', () => {
 
   describe('containsTitleChanges', () => {
     let historyMock: HistoryMock;
-    let coreService: LegacyCoreService;
     let trelloDataService: TrelloDataService;
     let spyGetHistory: jasmine.Spy;
 
     beforeEach(() => {
       historyMock = HistoryMock.MOCK_HISTORY;
-      coreService = TestBed.get(LegacyCoreService);
       trelloDataService = TestBed.get(TrelloDataService);
 
       component.history = HistoryMock.MOCK_HISTORY;
@@ -341,7 +341,7 @@ describe('HistoryContainerComponent', () => {
         resolve(HistoryMock.MOCK_SHORT_LINK);
       });
 
-      spyOn(coreService, 'getTrelloCardIdFromCurrentUrl').and.returnValue(qShortLink);
+      spyOn(trelloDataService, 'getTrelloCardIdFromCurrentUrl').and.returnValue(of(qShortLink));
     });
 
     it('should return true when the history contains title changes', () => {

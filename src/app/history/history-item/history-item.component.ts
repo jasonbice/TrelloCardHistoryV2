@@ -1,10 +1,10 @@
 import { Component, Input, ChangeDetectorRef, Output, EventEmitter, OnInit } from '@angular/core';
 import { HistoryItem, UpdateType } from 'src/app/shared/models/history/history-item.model';
 import { PrettifyHistoryValuePipe } from 'src/app/shared/pipes/prettify-history-value.pipe';
-import { LegacyCoreService } from 'src/app/services/legacy-core.service';
 import { HistoryItemFilter } from 'src/app/shared/models/history/history-item-filter.model';
 import { ITrelloMemberCreator } from 'src/app/shared/models/trello/trello-member-creator.model';
 import { History } from 'src/app/shared/models/history/history.model';
+import { TrelloDataService } from 'src/app/services/trello-data.service';
 
 @Component({
   selector: 'history-item',
@@ -98,13 +98,13 @@ export class HistoryItemComponent implements OnInit {
 
   get sourceTrelloCardLink(): string {
     if (this.historyItem.trelloHistoryDataObj.data.cardSource) {
-      return this.coreService.getTrelloCardUrl(this.historyItem.trelloHistoryDataObj.data.cardSource.shortLink);
+      return this.trelloDataService.getTrelloCardUrl(this.historyItem.trelloHistoryDataObj.data.cardSource.shortLink);
     }
 
     return null;
   }
 
-  constructor(private coreService: LegacyCoreService, private changeDetector: ChangeDetectorRef) { }
+  constructor(private trelloDataService: TrelloDataService, private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.onExpandToggled(null, true);

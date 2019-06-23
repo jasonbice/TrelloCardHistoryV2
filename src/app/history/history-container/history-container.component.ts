@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { TrelloDataService } from 'src/app/services/trello-data.service';
 import { History } from 'src/app/shared/models/history/history.model';
-import { LegacyCoreService } from 'src/app/services/legacy-core.service';
 import { ActivatedRoute } from '@angular/router';
 import { HistoryItemFilter } from 'src/app/shared/models/history/history-item-filter.model';
 import { HistoryItem, SortBy, UpdateType } from 'src/app/shared/models/history/history-item.model';
@@ -9,6 +8,9 @@ import { ITrelloMemberCreator } from 'src/app/shared/models/trello/trello-member
 import { Utils } from 'src/app/shared/utils';
 import { CardUpdatedEventArgs } from 'src/app/shared/models/card-updated-event-args.model';
 import { ToastrService } from 'ngx-toastr';
+import { ExtensionHostService } from 'src/app/services/extension-host.service';
+import { Observable } from 'rxjs';
+import { tap, flatMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-history-container',
@@ -36,22 +38,22 @@ export class HistoryContainerComponent implements OnInit {
     return this.history.containsChangesOfType(UpdateType.Points);
   }
 
-  constructor(private coreService: LegacyCoreService, private trelloDataService: TrelloDataService, private changeDetectorRef: ChangeDetectorRef, private activatedRoute: ActivatedRoute, private toastrService: ToastrService) {
+  constructor(private extensionHostService: ExtensionHostService, private trelloDataService: TrelloDataService, private changeDetectorRef: ChangeDetectorRef, private activatedRoute: ActivatedRoute, private toastrService: ToastrService) {
     this.sortBy = SortBy.Date;
     this.sortAscending = false;
   }
 
   ngOnInit() {
-    if (this.coreService.isRunningInExtensionMode) {
-      this.coreService.getTrelloCardIdFromCurrentUrl().then(shortLink => {
+    if (this.extensionHostService.isRunningInExtensionMode) {
+      this.trelloDataService.getTrelloCardIdFromCurrentUrl().subscribe(shortLink => {
         this.shortLink = shortLink;
 
-        this.loadHistory();
+        this.loadHistory().subscribe();
       });
     } else {
       this.shortLink = this.activatedRoute.snapshot.params['shortLink'];
 
-      this.loadHistory();
+      this.loadHistory().subscribe();
     }
 
     this.trelloDataService.cardUpdated.subscribe((cardUpdatedEventArgs: CardUpdatedEventArgs) => {
@@ -59,24 +61,19 @@ export class HistoryContainerComponent implements OnInit {
     });
   }
 
-  loadHistory(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.trelloDataService.getHistory(this.shortLink).subscribe(history => {
-        this.history = history;
+  loadHistory(): Observable<void> {
+    return this.trelloDataService.getHistory(this.shortLink, true).pipe(
+      tap(h => {
+        this.history = h;
 
         this.allChangeAuthors = Utils.getDistinctObjectArray(this.history.historyItems.map(h => {
           return h.trelloHistoryDataObj.memberCreator;
         }), 'id');
 
         this.applyHistoryItemFilterAndSort();
-
-        this.trelloDataService.applyLastViewedToHistory(this.history, true).then(() => {
-          this.coreService.updateBadgeForCurrentTabByHistory(this.history);
-
-          resolve();
-        }).catch(err => (reject(err)));
-      });
-    });
+      }),
+      flatMap(h => this.extensionHostService.updateBadgeForCurrentTabByHistory(this.history))
+    );
   }
 
   applyHistoryItemFilterAndSort(): void {
@@ -99,7 +96,7 @@ export class HistoryContainerComponent implements OnInit {
   }
 
   onCardUpdated(cardUpdatedEventArgs: CardUpdatedEventArgs) {
-    this.loadHistory().then(() => {
+    this.loadHistory().subscribe(() => {
       this.toastrService.success(`${cardUpdatedEventArgs.updateType} ${cardUpdatedEventArgs.updateType === UpdateType.Points ? 'have' : 'has'} been updated`);
     });
   }

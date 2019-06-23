@@ -3,6 +3,7 @@ import { HistoryItemMenuComponent } from './history-item-menu.component';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { AppRoutingModule } from 'src/app/app-routing.module';
 
 describe('HistoryItemMenuComponent', () => {
   let component: HistoryItemMenuComponent;
@@ -11,6 +12,7 @@ describe('HistoryItemMenuComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        AppRoutingModule,
         BrowserAnimationsModule,
         HttpClientModule,
         ToastrModule.forRoot({
