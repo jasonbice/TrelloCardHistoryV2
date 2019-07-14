@@ -11,8 +11,8 @@
   <div class="history-item-details">
     <div class="history-item-changes">
       <div class="history-item-changes-title">
-        <strong>{{historyItem.updateType}}</strong> {{updateVerb}} by
-        <strong>{{historyItem.trelloHistoryDataObj.memberCreator.fullName}}</strong>
+        <button class="btn btn-sm btn-link" href="#">{{historyItem.updateType}}</button> {{updateVerb}} by
+        <button class="btn btn-sm btn-link" href="#" (click)="onFilterByMemberCreatorIdToggled()">{{historyItem.trelloHistoryDataObj.memberCreator.fullName}}</button>
         <div *ngIf="historyItem.isNew" class="badge badge-warning"
           title="This change occurred after your last viewing of this card's history">New</div>
       </div>

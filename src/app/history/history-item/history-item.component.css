@@ -111,3 +111,9 @@ i.fa-clipboard {
     border-bottom: solid 1px lightgray;
     border-radius: 0.5em;
 }
+
+.history-item-changes-title button {
+    padding: 0;
+    margin: 0;
+    font-size: 12px;
+}
