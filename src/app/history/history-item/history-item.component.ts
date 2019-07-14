@@ -23,6 +23,7 @@ export class HistoryItemComponent implements OnInit {
   readonly VERB_REMOVED: string = 'removed';
 
   @Output() filterByMemberCreatorIdToggled = new EventEmitter<string>();
+  @Output() filterByUpdateTypeToggled = new EventEmitter<UpdateType>();
   @Input() allChangeAuthors: ITrelloMemberCreator[];
   @Input() history: History;
   @Input() historyItem: HistoryItem;
@@ -139,6 +140,10 @@ export class HistoryItemComponent implements OnInit {
     if (!this.isOnlyChangeAuthor) {
       this.filterByMemberCreatorIdToggled.emit(this.historyItem.trelloHistoryDataObj.idMemberCreator);
     }
+  }
+
+  onFilterByUpdateTypeToggled(): void {
+    this.filterByUpdateTypeToggled.emit(this.historyItem.updateType);
   }
 
   onShowDiffRequested(showDiff: boolean): void {

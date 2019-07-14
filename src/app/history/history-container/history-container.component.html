@@ -55,7 +55,8 @@
       </div>
       <history-item [allChangeAuthors]="allChangeAuthors" [history]="history" [historyItem]="historyItem"
         [currentHistoryItemFilter]="historyItemFilter" *ngFor="let historyItem of filteredHistoryItems"
-        (filterByMemberCreatorIdToggled)="onFilterByMemberCreatorIdToggled($event)"></history-item>
+        (filterByMemberCreatorIdToggled)="onFilterByMemberCreatorIdToggled($event)"
+        (filterByUpdateTypeToggled)="onFilterByUpdateTypeToggled($event)"></history-item>
     </div>
     <div class="last-viewed">
       <span *ngIf="history.lastViewed" id="lastViewed">You last viewed this history on

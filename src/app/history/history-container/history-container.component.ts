@@ -38,7 +38,11 @@ export class HistoryContainerComponent implements OnInit {
     return this.history.containsChangesOfType(UpdateType.Points);
   }
 
-  constructor(private extensionHostService: ExtensionHostService, private trelloDataService: TrelloDataService, private changeDetectorRef: ChangeDetectorRef, private activatedRoute: ActivatedRoute, private toastrService: ToastrService) {
+  constructor(private extensionHostService: ExtensionHostService,
+              private trelloDataService: TrelloDataService,
+              private changeDetectorRef: ChangeDetectorRef,
+              private activatedRoute: ActivatedRoute,
+              private toastrService: ToastrService) {
     this.sortBy = SortBy.Date;
     this.sortAscending = false;
   }
@@ -95,9 +99,16 @@ export class HistoryContainerComponent implements OnInit {
     this.applyHistoryItemFilterAndSort();
   }
 
+  onFilterByUpdateTypeToggled(updateType: UpdateType) {
+    this.historyItemFilter.toggleUpdateType(updateType);
+
+    this.applyHistoryItemFilterAndSort();
+  }
+
   onCardUpdated(cardUpdatedEventArgs: CardUpdatedEventArgs) {
     this.loadHistory().subscribe(() => {
-      this.toastrService.success(`${cardUpdatedEventArgs.updateType} ${cardUpdatedEventArgs.updateType === UpdateType.Points ? 'have' : 'has'} been updated`);
+      this.toastrService.success(`${cardUpdatedEventArgs.updateType} ${cardUpdatedEventArgs.updateType === UpdateType.Points
+        ? 'have' : 'has'} been updated`);
     });
   }
 }

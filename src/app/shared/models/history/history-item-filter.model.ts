@@ -2,18 +2,14 @@ import { HistoryItem, UpdateType } from './history-item.model';
 
 export class HistoryItemFilter {
     filterBy: string;
-    includeDescriptionChanges: boolean = true;
-    includePointsChanges: boolean = true;
-    includeTitleChanges: boolean = true;
+    updateTypes: UpdateType[] = [];
     memberCreatorIds: string[] = [];
 
     filter(historyItems: HistoryItem[]): HistoryItem[] {
-        let filterByString: string = this.filterBy ? this.filterBy.toLowerCase() : null;
+        const filterByString: string = this.filterBy ? this.filterBy.toLowerCase() : null;
 
-        let filteredHistoryItems: HistoryItem[] = historyItems.filter(historyItem => {
-            return (this.includeDescriptionChanges || historyItem.updateType !== UpdateType.Description) &&
-                (this.includePointsChanges || historyItem.updateType !== UpdateType.Points) &&
-                (this.includeTitleChanges || historyItem.updateType !== UpdateType.Title) &&
+        const filteredHistoryItems: HistoryItem[] = historyItems.filter(historyItem => {
+            return (!this.updateTypes || this.updateTypes.length === 0 || this.updateTypes.indexOf(historyItem.updateType) > -1) &&
                 (!this.memberCreatorIds || this.memberCreatorIds.length === 0 || this.memberCreatorIds.indexOf(historyItem.trelloHistoryDataObj.memberCreator.id) > -1) &&
                 (!filterByString ||
                     (historyItem.updateType === UpdateType.Title && historyItem.sanitizedNewTitle && historyItem.sanitizedNewTitle.toLowerCase().indexOf(filterByString) > -1) ||
@@ -25,6 +21,16 @@ export class HistoryItemFilter {
         });
 
         return filteredHistoryItems;
+    }
+
+    toggleUpdateType(updateType: UpdateType) {
+        const updateTypeIndex = this.updateTypes.indexOf(updateType);
+
+        if (updateTypeIndex > -1) {
+            this.updateTypes.splice(updateTypeIndex, 1);
+        } else {
+            this.updateTypes.push(updateType);
+        }
     }
 
     toggleMemberCreatorId(memberCreatorId: string): void {

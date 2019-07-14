@@ -66,7 +66,7 @@ describe('HistoryContainerComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HistoryContainerComponent);
-    component = fixture.componentInstance;    
+    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
@@ -87,7 +87,7 @@ describe('HistoryContainerComponent', () => {
       extensionHostService = TestBed.get(ExtensionHostService);
       trelloDataService = TestBed.get(TrelloDataService);
 
-      let qShortLink: any = new Promise((resolve, reject) => {
+      const qShortLink: any = new Promise((resolve, reject) => {
         resolve(HistoryMock.MOCK_SHORT_LINK);
       });
 
@@ -202,7 +202,7 @@ describe('HistoryContainerComponent', () => {
 
       it('should remove an id from the filter when it exists and then apply the filter', () => {
         component.loadHistory().subscribe(() => {
-          const id: string = 'nonexistentid';
+          const id = 'nonexistentid';
 
           component.historyItemFilter.memberCreatorIds.push(id);
           expect(component.historyItemFilter.memberCreatorIds.length).toBe(1);
@@ -220,8 +220,8 @@ describe('HistoryContainerComponent', () => {
 
       it('should not remove an id from the filter when another id was removed and then apply the filter', () => {
         component.loadHistory().subscribe(() => {
-          const id1: string = 'id1';
-          const id2: string = 'id2';
+          const id1 = 'id1';
+          const id2 = 'id2';
 
           component.historyItemFilter.memberCreatorIds.push(id1);
           component.historyItemFilter.memberCreatorIds.push(id2);
@@ -251,7 +251,7 @@ describe('HistoryContainerComponent', () => {
 
       component.history = historyMock;
 
-      let qShortLink: any = new Promise((resolve, reject) => {
+      const qShortLink: any = new Promise((resolve, reject) => {
         resolve(HistoryMock.MOCK_SHORT_LINK);
       });
 
@@ -294,7 +294,7 @@ describe('HistoryContainerComponent', () => {
 
       component.history = historyMock;
 
-      let qShortLink: any = new Promise((resolve, reject) => {
+      const qShortLink: any = new Promise((resolve, reject) => {
         resolve(HistoryMock.MOCK_SHORT_LINK);
       });
 
@@ -337,7 +337,7 @@ describe('HistoryContainerComponent', () => {
 
       component.history = HistoryMock.MOCK_HISTORY;
 
-      let qShortLink: any = new Promise((resolve, reject) => {
+      const qShortLink: any = new Promise((resolve, reject) => {
         resolve(HistoryMock.MOCK_SHORT_LINK);
       });
 
@@ -379,14 +379,14 @@ describe('HistoryContainerComponent', () => {
     });
 
     it('should add the supplied member ID to the filter when toggled and apply the sort/filter', () => {
-      const filterByMemberId: string = 'testId';
+      const filterByMemberId = 'testId';
 
       spyOn(component, 'applyHistoryItemFilterAndSort');
 
       component.onFilterByMemberCreatorIdToggled(filterByMemberId);
 
       const actualLength: number = component.historyItemFilter.memberCreatorIds.length;
-      const expectedLength: number = 1;
+      const expectedLength = 1;
 
       expect(actualLength).toBe(expectedLength);
 
