@@ -259,4 +259,50 @@ describe('HistoryItemComponent', () => {
     });
   });
 
+  describe('onFilterByMemberCreatorIdToggled', () => {
+    it('should emit filterByMemberCreatorIdToggled event when there is more than one author', (done) => {
+      spyOn(component.filterByMemberCreatorIdToggled, 'emit').and.callThrough();
+
+      component.filterByMemberCreatorIdToggled.subscribe(f => {
+        expect(component.filterByMemberCreatorIdToggled.emit).toHaveBeenCalledTimes(1);
+        expect(f).toEqual(component.historyItem.trelloHistoryDataObj.idMemberCreator);
+
+        done();
+      });
+
+      component.onFilterByMemberCreatorIdToggled();
+    });
+
+    it('should not emit filterByMemberCreatorIdToggled event when there is only one author', (done) => {
+      spyOnProperty(component, 'isOnlyChangeAuthor', 'get').and.returnValue(true);
+      spyOn(component.filterByMemberCreatorIdToggled, 'emit').and.callThrough();
+
+      component.filterByMemberCreatorIdToggled.subscribe(f => {
+        expect(component.filterByMemberCreatorIdToggled.emit).toHaveBeenCalledTimes(0);
+
+        done();
+      });
+
+      component.onFilterByMemberCreatorIdToggled();
+
+      expect(component.filterByMemberCreatorIdToggled.emit).toHaveBeenCalledTimes(0);
+
+      done();
+    });
+  });
+
+  describe('onFilterByUpdateTypeToggled', () => {
+    it('should emit filterByUpdateTypeToggled event', (done) => {
+      spyOn(component.filterByUpdateTypeToggled, 'emit').and.callThrough();
+
+      component.filterByUpdateTypeToggled.subscribe(f => {
+        expect(component.filterByUpdateTypeToggled.emit).toHaveBeenCalledTimes(1);
+        expect(f).toEqual(component.historyItem.updateType);
+
+        done();
+      });
+
+      component.onFilterByUpdateTypeToggled();
+    });
+  });
 });

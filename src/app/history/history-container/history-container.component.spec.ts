@@ -397,4 +397,29 @@ describe('HistoryContainerComponent', () => {
       expect(component.applyHistoryItemFilterAndSort).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('onFilterByUpdateTypeToggled', () => {
+    it('should not have any update types in the filter by default', () => {
+      expect(component.historyItemFilter.updateTypes.length).toBe(0);
+    });
+
+    it('should add the supplied updateType filter when toggled and apply the sort/filter', () => {
+      const updateType = UpdateType.Description;
+
+      spyOn(component, 'applyHistoryItemFilterAndSort');
+
+      component.onFilterByUpdateTypeToggled(updateType);
+
+      const actualLength: number = component.historyItemFilter.updateTypes.length;
+      const expectedLength = 1;
+
+      expect(actualLength).toBe(expectedLength);
+
+      const actualUpdateType: UpdateType = component.historyItemFilter.updateTypes[0];
+      const expectedUpdateType: UpdateType = updateType;
+
+      expect(actualUpdateType).toBe(expectedUpdateType);
+      expect(component.applyHistoryItemFilterAndSort).toHaveBeenCalledTimes(1);
+    });
+  });
 });
