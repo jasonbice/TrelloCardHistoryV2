@@ -13,7 +13,7 @@ import { TrelloDataService } from 'src/app/services/trello-data.service';
 })
 export class HistoryItemComponent implements OnInit {
 
-  readonly MAX_VALUE_DISPLAY_LENGTH: number = PrettifyHistoryValuePipe.DEFAULT_MAX_LENGTH
+  readonly MAX_VALUE_DISPLAY_LENGTH: number = PrettifyHistoryValuePipe.DEFAULT_MAX_LENGTH;
   readonly TRUNCATE_APPEND = '...';
   readonly VERB_ADDED: string = 'added';
   readonly VERB_CHANGED: string = 'changed';
@@ -28,9 +28,9 @@ export class HistoryItemComponent implements OnInit {
   @Input() historyItem: HistoryItem;
   @Input() currentHistoryItemFilter: HistoryItemFilter;
 
-  isConfirmingApplyValueNew: boolean = false;
-  isConfirmingApplyValueOld: boolean = false;
-  showDiff: boolean = false;
+  isConfirmingApplyValueNew = false;
+  isConfirmingApplyValueOld = false;
+  showDiff = false;
 
   get isOnlyChangeAuthor(): boolean {
     return this.allChangeAuthors && this.allChangeAuthors.length === 1;
@@ -58,8 +58,8 @@ export class HistoryItemComponent implements OnInit {
     return this.historyItem.updateType === UpdateType.Description || this.historyItem.updateType === UpdateType.Title;
   }
 
-  newValueCollapsed: boolean = false;
-  oldValueCollapsed: boolean = false;
+  newValueCollapsed = false;
+  oldValueCollapsed = false;
 
   get updateVerb(): string {
     switch (this.historyItem.updateType) {
@@ -119,7 +119,7 @@ export class HistoryItemComponent implements OnInit {
         this.newValueCollapsed = !this.newValueCollapsed;
       } else {
         this.oldValueCollapsed = !this.oldValueCollapsed;
-      }      
+      }
 
       this.changeDetector.detectChanges();
     }
